@@ -3,14 +3,14 @@
 import formKitTailwind from '@formkit/themes/tailwindcss'
 
 module.exports = {
-  content: [
-    './components/**/*.{vue,js}',
-    './pages/**/*.vue',
-    './app.vue',
-    './formkit.config.{js,mjs,ts}',
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [formKitTailwind],
+	content: [
+		'./components/**/*.{vue,js}',
+		'./pages/**/*.vue',
+		'./app.vue',
+		'./formkit.config.{js,mjs,ts}',
+	],
+	theme: {
+		extend: {},
+	},
+	plugins: [formKitTailwind],
 }

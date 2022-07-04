@@ -1,9 +1,6 @@
-import { defineNuxtConfig } from 'nuxt';
+import { defineNuxtConfig } from 'nuxt'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-	modules: [
-		'@nuxtjs/tailwindcss',
-		'@formkit/nuxt',
-	],
+	modules: ['@nuxtjs/tailwindcss', '@formkit/nuxt'],
 })

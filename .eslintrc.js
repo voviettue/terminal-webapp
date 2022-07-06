@@ -7,6 +7,7 @@ const defaultRules = {
 	'prettier/prettier': 'error',
 	'vue/multi-word-component-names': 'off',
 	'no-tabs': 'off',
+	'@typescript-eslint/no-unused-vars': 'off',
 	indent: ['error', 'tab'],
 }
 
@@ -16,8 +17,8 @@ module.exports = {
 		es2021: true,
 	},
 	extends: [
-		'eslint:recommended',
 		'plugin:vue/essential',
+		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
 		'@nuxtjs/eslint-config-typescript',
 		'prettier',

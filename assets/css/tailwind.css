@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.alert-error {
+		@apply bg-red-100 p-2 rounded-md text-red-500 mb-1 text-xs
+	}
+}

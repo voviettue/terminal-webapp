@@ -9,7 +9,7 @@ const textClassification = {
 		'w-full h-10 px-3 border-none text-base text-gray-700 placeholder-gray-400',
 	help: 'text-xs text-gray-500',
 	messages: 'list-none p-0 mt-1 mb-0',
-	message: 'text-red-500 mb-1 text-xs',
+	message: 'bg-red-100 p-2 rounded-md text-red-500 mb-1 text-xs',
 }
 const boxClassification = {
 	fieldset: 'max-w-md border border-gray-400 rounded-md px-2 pb-1',
@@ -42,6 +42,7 @@ const theme = {
 	},
 	date: textClassification,
 	'datetime-local': textClassification,
+	form: { ...textClassification, messages: 'hidden' },
 	checkbox: boxClassification,
 	email: textClassification,
 	file: {

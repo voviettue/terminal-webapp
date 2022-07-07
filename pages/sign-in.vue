@@ -33,7 +33,7 @@ async function submit() {
 			email: values.value?.email,
 			password: values.value?.password,
 		})
-		// navigateTo('home');
+		navigateTo('dashboard')
 	} catch (err) {
 		error.value = err?.errors?.[0]?.message
 	}

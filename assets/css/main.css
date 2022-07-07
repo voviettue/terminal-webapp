@@ -1,0 +1,10 @@
+.nuxt-icon svg {
+	width: inherit !important;
+	height: inherit !important;
+	/* stroke-width: 2; */
+	stroke: currentcolor;
+}
+
+.nuxt-icon svg path {
+	stroke: currentcolor;
+}

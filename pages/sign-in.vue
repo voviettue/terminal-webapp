@@ -1,21 +1,29 @@
-<template lang="pug">
-div(class ='min-h-full flex items-center justify-center py-12 sm:px-6 lg:px-8')
-  div(class='max-w-md w-full space-y-8')
-    h2(class='mt-6 text-center text-3xl font-extrabold text-gray-900') STORE FRONT
-    div.mt-8.space-y-6
-      FormKit(type='form' submit-label='Sign in' :actions='false' @submit='submit()' method='POST' v-model='values')
-        input(type='hidden' name='remember' value='true')
-        div(class='rounded-md shadow-sm -space-y-px')
-          div
-            FormKit(type='text' name='email' label='Your email' validation='required')
-          div
-            FormKit(type='password' name='password' label='Password' validation='required')
-        div
-          FormKit(type='submit' label='Sign in' input-class='w-full')
-        div(class='flex justify-center')
-          div(class='text-sm')
-            a(href='#' class='font-medium text-indigo-600 hover:text-indigo-500')  Forgot your password?
-    .alert-error(v-if='error') {{ error }}
+<template>
+<div class="min-h-full flex items-center justify-center py-12 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">STORE FRONT</h2>
+    <div class="mt-8 space-y-6">
+      <FormKit v-model="values" type="form" method="POST" submit-label="Sign in" :actions="false" @submit="submit()">
+        <input type="hidden" name="remember" value="true" />
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <FormKit type="text" name="email" label="Your email" validation="required"></FormKit>
+          </div>
+          <div>
+            <FormKit type="password" name="password" label="Password" validation="required"></FormKit>
+          </div>
+        </div>
+        <div>
+          <FormKit type="submit" label="Sign in" input-class="w-full"></FormKit>
+        </div>
+        <div class="flex justify-center">
+          <div class="text-sm"><a class="font-medium text-indigo-600 hover:text-indigo-500" href="#"> Forgot your password?</a></div>
+        </div>
+      </FormKit>
+    </div>
+    <div v-if="error" class="alert-error">{{ error }}</div>
+  </div>
+</div>
 </template>
 
 <script setup>

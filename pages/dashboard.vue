@@ -1,23 +1,23 @@
 <template>
-<div>
-	<PageTopbar></PageTopbar>
-	<div class="p-6 pt-8">
-		<div class="mb-8">
-			<PageHeading></PageHeading>
-		</div>
-		<div class="grid grid-cols-3 gap-6 mb-8">
-			<div>
-				<TwCardList></TwCardList>
+	<div>
+		<PageTopbar></PageTopbar>
+		<div class="p-6 pt-8">
+			<div class="mb-8">
+				<PageHeading></PageHeading>
 			</div>
-			<div class="col-span-2">
-				<TwCardList></TwCardList>
+			<div class="grid grid-cols-3 gap-6 mb-8">
+				<div>
+					<TwCardList></TwCardList>
+				</div>
+				<div class="col-span-2">
+					<TwCardList></TwCardList>
+				</div>
 			</div>
-		</div>
-		<div class="mb-8">
-			<TwCardTable></TwCardTable>
+			<div class="mb-8">
+				<TwCardTable></TwCardTable>
+			</div>
 		</div>
 	</div>
-</div>
 </template>
 
 <script setup>

@@ -3,12 +3,8 @@ const defaultRules = {
 	'no-console': process.env.NODE_ENV !== 'development' ? 'error' : 'off',
 	// No debugger statements in production
 	'no-debugger': process.env.NODE_ENV !== 'development' ? 'error' : 'off',
-	// Enforce prettier formatting
-	'prettier/prettier': 'error',
-	'vue/multi-word-component-names': 'off',
-	'no-tabs': 'off',
+
 	'@typescript-eslint/no-unused-vars': 'off',
-	indent: ['error', 'tab'],
 }
 
 module.exports = {
@@ -21,13 +17,13 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
 		'@nuxtjs/eslint-config-typescript',
-		'prettier',
+		'eslint-config-prettier',
 	],
 	parserOptions: {
 		ecmaVersion: 'latest',
 		parser: '@typescript-eslint/parser',
 		sourceType: 'module',
 	},
-	plugins: ['vue', '@typescript-eslint', 'prettier'],
+	plugins: ['vue', '@typescript-eslint', 'eslint-plugin-prettier'],
 	rules: defaultRules,
 }

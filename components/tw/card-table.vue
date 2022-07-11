@@ -3,19 +3,16 @@
 		<div class="p-4 sm:px-6 lg:px-8">
 			<div class="sm:flex sm:items-center">
 				<div class="sm:flex-auto">
-					<h1 class="text-xl font-semibold text-gray-900">Users</h1>
-					<p class="mt-2 text-sm text-gray-700">
-						A list of all the users in your account including their name, title,
-						email and role.
+					<h1 v-if="title" class="text-xl font-semibold text-gray-900">
+						{{ title }}
+					</h1>
+					<p v-if="description" class="mt-2 text-sm text-gray-700">
+						{{ description }}
 					</p>
 				</div>
+
 				<div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-					<button
-						class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-						type="button"
-					>
-						Add user
-					</button>
+					<slot name="actions" />
 				</div>
 			</div>
 			<div class="mt-8 flex flex-col">
@@ -27,60 +24,27 @@
 							<thead>
 								<tr>
 									<th
+										v-for="header in normalizedHeaders"
+										:key="`th-${header?.value}`"
 										class="pl-4 pr-3 text-left text-sm font-semibold text-gray-900 py-3.5 sm:pl-6 md:pl-0"
 										scope="col"
 									>
-										Name
-									</th>
-									<th
-										class="px-3 text-left text-sm font-semibold text-gray-900 py-3.5"
-										scope="col"
-									>
-										Title
-									</th>
-									<th
-										class="px-3 text-left text-sm font-semibold text-gray-900 py-3.5"
-										scope="col"
-									>
-										Email
-									</th>
-									<th
-										class="px-3 text-left text-sm font-semibold text-gray-900 py-3.5"
-										scope="col"
-									>
-										Role
-									</th>
-									<th
-										class="relative pl-3 pr-4 py-3.5 sm:pr-6 md:pr-0"
-										scope="col"
-									>
-										<span class="sr-only">Edit</span>
+										<slot :name="`header-${header?.value}`" :header="header">
+											{{ header?.text }}
+										</slot>
 									</th>
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-gray-200">
-								<tr v-for="person in people" :key="person.email">
+								<tr v-for="(item, index) in items" :key="`tr-${index}`">
 									<td
-										class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0"
+										v-for="header in normalizedHeaders"
+										:key="`td-${header}`"
+										class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0"
 									>
-										{{ person.name }}
-									</td>
-									<td class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-										{{ person.title }}
-									</td>
-									<td class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-										{{ person.email }}
-									</td>
-									<td class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-										{{ person.role }}
-									</td>
-									<td
-										class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0"
-									>
-										<a class="text-indigo-600 hover:text-indigo-900" href="#">
-											Edit
-											<span class="sr-only">, {{ person.name }}</span>
-										</a>
+										<slot :name="`item-${header?.value}`" :item="item">
+											{{ item?.[header?.value] }}
+										</slot>
 									</td>
 								</tr>
 							</tbody>
@@ -92,14 +56,22 @@
 	</div>
 </template>
 
-<script setup>
-const people = [
-	{
-		name: 'Lindsay Walton',
-		title: 'Front-end Developer',
-		email: 'lindsay.walton@example.com',
-		role: 'Member',
-	},
-	// More people...
-]
+<script setup lang="ts">
+interface TableHeader {
+	value: string
+	text: string
+}
+
+const props = defineProps<{
+	title: string
+	description?: string
+	headers: (string | Partial<TableHeader>)[]
+	items?: Record<string, any>[]
+}>()
+
+const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
+	return props.headers.map((header: any) =>
+		header instanceof Object ? header : { value: header, text: header }
+	)
+})
 </script>

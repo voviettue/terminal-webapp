@@ -4,7 +4,7 @@ const defaultRules = {
 	// No debugger statements in production
 	'no-debugger': process.env.NODE_ENV !== 'development' ? 'error' : 'off',
 
-	'@typescript-eslint/no-unused-vars': 'off',
+	'@typescript-eslint/no-explicit-any': 'off',
 }
 
 module.exports = {

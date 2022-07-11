@@ -5,6 +5,7 @@ const defaultRules = {
 	'no-debugger': process.env.NODE_ENV !== 'development' ? 'error' : 'off',
 
 	'@typescript-eslint/no-explicit-any': 'off',
+	'vue/multi-word-component-names': 'off',
 }
 
 module.exports = {

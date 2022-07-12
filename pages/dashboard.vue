@@ -43,6 +43,7 @@
 <script setup>
 definePageMeta({
 	title: 'Dashboard',
+	middleware: ['auth'],
 })
 
 const item = {

@@ -219,15 +219,14 @@ import {
 	MenuItems,
 } from '@headlessui/vue'
 
-function logout() {
-	navigateTo('sign-in')
-	// const directus = useDirectus()
-	// try {
-	// 	await directus.auth.logout()
-	// } catch (err) {
-	// 	// do nothing
-	// } finally {
-	// 	navigateTo('sign-in')
-	// }
+async function logout() {
+	const directus = useDirectus()
+	try {
+		await directus.auth.logout()
+	} catch (err) {
+		// do nothing
+	} finally {
+		navigateTo('sign-in')
+	}
 }
 </script>

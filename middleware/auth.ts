@@ -5,6 +5,6 @@ export default defineNuxtRouteMiddleware(() => {
 	const token = directus.auth?.token
 
 	if (!token) {
-		navigateTo('/sign-in')
+		return navigateTo('/sign-in')
 	}
 })

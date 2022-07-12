@@ -6,7 +6,7 @@
 
 		<div class="grid grid-cols-3 gap-6 mb-8">
 			<div>
-				<Card
+				<TwCard
 					title="Title A"
 					description="Description here............."
 					:body-padding="false"
@@ -22,16 +22,16 @@
 							</button>
 						</template>
 					</TwList>
-				</Card>
+				</TwCard>
 			</div>
 			<div class="col-span-2">
-				<Card
+				<TwCard
 					title="Title B"
 					description="Description ..."
 					:body-padding="false"
 				>
 					<TwList :headers="['name', 'description']" :item="item"></TwList>
-				</Card>
+				</TwCard>
 			</div>
 		</div>
 		<div class="mb-8">

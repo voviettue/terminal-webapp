@@ -59,10 +59,16 @@
 </template>
 
 <script setup>
+definePageMeta({
+	layout: 'auth',
+	title: 'Sign in page',
+})
+
 const values = ref({
 	email: '',
 	password: '',
 })
+
 const error = ref(null)
 
 async function submit() {

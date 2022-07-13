@@ -11,7 +11,7 @@
 						/>
 						<img
 							class="hidden lg:block h-8 w-auto"
-							src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+							src="~/public/img/logo.png"
 							alt="Workflow"
 						/>
 					</div>

@@ -11,7 +11,7 @@
 						/>
 						<img
 							class="hidden lg:block h-8 w-auto"
-							src="~/public/img/logo.png"
+							src="/img/logo.png"
 							alt="Workflow"
 						/>
 					</div>

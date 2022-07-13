@@ -3,7 +3,17 @@
 @tailwind utilities;
 
 @layer components {
+	.alert {
+		@apply p-2 rounded-md text-xs
+	}
+
 	.alert-error {
-		@apply bg-red-100 p-2 rounded-md text-red-500 mb-1 text-xs
+		@apply alert;
+		@apply bg-red-100 text-red-800;
+	}
+
+	.alert-success {
+		@apply alert;
+		@apply bg-green-100 text-green-800;
 	}
 }

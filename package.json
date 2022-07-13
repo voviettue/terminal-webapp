@@ -36,6 +36,7 @@
 	"dependencies": {
 		"@directus/sdk": "^9.13.0",
 		"@headlessui/vue": "^1.6.5",
+		"base-64": "^1.0.0",
 		"nuxt-icons": "^2.0.1"
 	}
 }

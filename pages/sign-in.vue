@@ -1,28 +1,23 @@
 <template>
 	<div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
 		<div class="sm:mx-auto sm:w-full sm:max-w-md">
-			<img
-				class="mx-auto h-12 w-auto"
-				src="~/public/img/logo.png"
-				alt="Workflow"
-			/>
-			<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+			<img class="mx-auto h-12 w-auto" src="/img/logo.png" alt="Workflow" />
+			<h1 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
 				Front Office
-			</h2>
+			</h1>
 		</div>
 
 		<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 			<div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+				<h2 class="text-xl mb-6 font-medium text-gray-600">
+					Sign in to your account
+				</h2>
 				<FormKit
 					v-model="values"
 					type="form"
 					method="POST"
 					submit-label="Sign in"
-					input-class="space-y-6"
-					outer-class="space-y-6"
-					inner-class="space-y-6"
-					label-class="space-y-6"
-					:wrapper-class="'space-y-6'"
+					:incomplete-message="false"
 					:actions="false"
 					@submit="submit()"
 				>
@@ -43,13 +38,13 @@
 
 						<FormKit type="submit" label="Sign in" input-class="w-full" />
 
-						<div class="text-center text-sm">
-							<a
-								href="#"
-								class="font-medium text-indigo-600 hover:text-indigo-500"
+						<div>
+							<NuxtLink
+								to="/reset-password"
+								class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
 							>
 								Forgot your password?
-							</a>
+							</NuxtLink>
 						</div>
 
 						<div v-if="error" class="alert-error">{{ error }}</div>
@@ -63,7 +58,7 @@
 <script setup>
 definePageMeta({
 	layout: 'auth',
-	title: 'Sign in page',
+	title: 'Sign in',
 })
 
 const values = ref({

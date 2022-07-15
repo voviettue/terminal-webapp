@@ -8,7 +8,9 @@ variables:
 
 stages:
   - build
+  - delivery
 
+# Template
 .push_image_template:
   image: docker:20
   stage: build
@@ -26,5 +28,32 @@ push image@dev:
     - docker build --no-cache -t $IMAGE:dev .
     - docker tag $IMAGE:dev $REGISTRY/$IMAGE:dev
     - docker push $REGISTRY/$IMAGE:dev
+  only:
+    - dev
+
+# Template
+.deploy_template:
+  image: "ubuntu"
+  stage: delivery
+  before_script:
+    - "command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+    - mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
+    - ssh-keyscan $DEV_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  cache: []
+
+deploy dev:
+  extends: .deploy_template
+  script:
+    - ssh ubuntu@$DEV_IP "aws ecr get-login-password --profile catex | docker login --username AWS --password-stdin $REGISTRY"
+    - ssh ubuntu@$DEV_IP "cd terminal/www/webapp && docker-compose pull && docker-compose up -d"
   only:
     - dev

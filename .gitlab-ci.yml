@@ -23,7 +23,7 @@ stages:
 push image@dev:
   extends: .push_image_template
   script:
-    - docker build --no-cache -t $IMAGE:dev -f .
+    - docker build --no-cache -t $IMAGE:dev .
     - docker tag $IMAGE:dev $REGISTRY/$IMAGE:dev
     - docker push $REGISTRY/$IMAGE:dev
   only:

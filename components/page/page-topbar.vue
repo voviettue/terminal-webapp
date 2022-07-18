@@ -27,30 +27,36 @@
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
-						<a
-							href="#"
-							class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+						<NuxtLink
+							to="/dashboard"
+							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
+								route.name === 'dashboard'
+									? 'border-indigo-500 border-b-2 font-medium'
+									: ''
+							}`"
 						>
 							Dashboard
-						</a>
-						<a
-							href="#"
-							class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+						</NuxtLink>
+						<NuxtLink
+							to="/songs"
+							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
+								route.name.startsWith('songs')
+									? 'border-indigo-500 border-b-2 font-medium'
+									: ''
+							}`"
 						>
 							Song
-						</a>
-						<a
+						</NuxtLink>
+						<NuxtLink
 							href="#"
-							class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
+								route.name.startsWith('catalogs')
+									? 'border-indigo-500 border-b-2 font-medium'
+									: ''
+							}`"
 						>
 							Catalog
-						</a>
-						<a
-							href="#"
-							class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-						>
-							Other
-						</a>
+						</NuxtLink>
 					</div>
 				</div>
 				<div class="flex items-center">
@@ -79,7 +85,7 @@
 							<MenuItems
 								class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							>
-								<MenuItem v-slot="{ active }">
+								<MenuItem v-slot="{ active }" as="div">
 									<!-- <a
 										href="#"
 										:class="[
@@ -98,7 +104,7 @@
 										Your Profile
 									</NuxtLink>
 								</MenuItem>
-								<MenuItem v-slot="{ active }">
+								<MenuItem v-slot="{ active }" as="div">
 									<a
 										:class="[
 											active ? 'bg-gray-100' : '',
@@ -162,6 +168,8 @@ import {
 	MenuItem,
 	MenuItems,
 } from '@headlessui/vue'
+
+const route = useRoute()
 
 async function logout() {
 	const directus = useDirectus()

@@ -1,7 +1,7 @@
 <template>
-	<div>
-		<PageTopbar></PageTopbar>
-		<div class="p-8">
+	<div id="layout-wrapper">
+		<PageTopbar class="mb-6"></PageTopbar>
+		<div class="container mx-auto px-4">
 			<slot></slot>
 		</div>
 	</div>

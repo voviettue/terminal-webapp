@@ -1,12 +1,8 @@
 <template>
-	<div class="space-y-8">
-		<h1
-			class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate"
-		>
-			Songs
-		</h1>
+	<PageWrapper>
+		<template #title>Songs</template>
 		<SongList></SongList>
-	</div>
+	</PageWrapper>
 </template>
 
 <script setup>

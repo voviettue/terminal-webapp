@@ -1,10 +1,8 @@
 <template>
-	<div>
-		<div class="mb-8">
-			<PageHeading></PageHeading>
-		</div>
+	<PageWrapper>
+		<PageHeading></PageHeading>
 
-		<div class="grid grid-cols-3 gap-6 mb-8">
+		<div class="grid grid-cols-3 gap-6">
 			<div>
 				<TwCard
 					title="Title A"
@@ -34,10 +32,9 @@
 				</TwCard>
 			</div>
 		</div>
-		<div class="mb-8">
-			<DashboardListUser></DashboardListUser>
-		</div>
-	</div>
+
+		<DashboardListUser></DashboardListUser>
+	</PageWrapper>
 </template>
 
 <script setup>

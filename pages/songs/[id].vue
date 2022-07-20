@@ -1,11 +1,8 @@
 <template>
-	<div class="space-y-8">
-		<h1
-			class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate"
-		>
-			{{ item.song_name }}
-		</h1>
-		<div class="grid grid-cols-3 gap-6 mb-8">
+	<PageWrapper>
+		<template #breadcrumb>SONG SUMMARY</template>
+		<template #title>{{ item.song_name }}</template>
+		<div class="grid grid-cols-3 gap-6">
 			<div>
 				<TwCard title="Song information" description="" :body-padding="false">
 					<TwList :headers="headers" :item="item" />
@@ -21,7 +18,7 @@
 				</TwCard>
 			</div>
 		</div>
-	</div>
+	</PageWrapper>
 </template>
 
 <script setup>

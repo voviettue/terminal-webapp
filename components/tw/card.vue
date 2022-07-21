@@ -1,6 +1,6 @@
 <template>
 	<div class="bg-white shadow overflow-hidden rounded-lg">
-		<div class="p-4 sm:px-6 lg:px-8">
+		<div v-if="title || description" class="p-4 sm:px-6 lg:px-8">
 			<div class="sm:flex sm:items-center">
 				<div class="sm:flex-auto">
 					<slot name="title">

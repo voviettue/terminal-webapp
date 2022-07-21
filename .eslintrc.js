@@ -6,6 +6,7 @@ const defaultRules = {
 
 	'@typescript-eslint/no-explicit-any': 'off',
 	'vue/multi-word-component-names': 'off',
+	'vue/no-setup-props-destructure': 'off',
 }
 
 module.exports = {

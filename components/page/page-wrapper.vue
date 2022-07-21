@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="mb-16">
 		<div v-if="hasSlotBreadCrumb" class="text-sm text-gray-500 mb-2">
 			<slot name="breadcrumb"></slot>
 		</div>

@@ -2,6 +2,7 @@
 	<PageWrapper>
 		<template #breadcrumb>SONG SUMMARY</template>
 		<template #title>{{ item.song_name }}</template>
+
 		<div class="grid grid-cols-3 gap-6">
 			<div>
 				<TwCard title="Song information" description="" :body-padding="false">

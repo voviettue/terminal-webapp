@@ -74,18 +74,6 @@ watchEffect(() => {
 	}
 	visiblePages.value = pages
 })
-
-// console.log({page})
-// const visiblePages = computed(() => {
-// 	const pages = []
-// 	const start: number = page - 3;
-// 	console.log({start})
-// 	for (let i = start; i <= totalPage; i++) {
-// 		if (pages.length === 7) break;
-// 		if (i > 0 && i <= totalPage) pages.push(i)
-// 	}
-// 	return pages;
-// })
 </script>
 
 <style scoped>

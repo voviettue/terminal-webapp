@@ -4,8 +4,17 @@
 			<CollectionTable
 				:collection="collection"
 				:headers="headers"
-				:fields="headers.map((e) => e.value)"
-			/>
+				:fields="fields"
+			>
+				<template #item-actions="{ item }">
+					<NuxtLink
+						:to="`/${collection}/${item.id}`"
+						class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+					>
+						View
+					</NuxtLink>
+				</template>
+			</CollectionTable>
 		</TwCard>
 	</div>
 </template>
@@ -21,4 +30,5 @@ const headers = [
 	{ value: 'ipn', text: 'IPN' },
 	{ value: 'actions', text: 'aaas' },
 ]
+const fields = ['id', ...headers.map((e) => e.value)]
 </script>

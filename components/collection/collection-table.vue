@@ -1,16 +1,12 @@
-<!-- eslint-disable vue/no-v-model-argument -->
 <template>
 	<div>
-		<TwTable :headers="headers" :items="items">
-			<template #item-actions="{ item }">
-				<NuxtLink
-					:to="`/songs/${item.id}`"
-					class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-				>
-					View
-				</NuxtLink>
-			</template>
-		</TwTable>
+		<slot name="table" :headers="headers" :items="items">
+			<TwTable :headers="headers" :items="items">
+				<template v-for="(_, name) in ($slots as {})" #[name]="slotData">
+					<slot :name="name" v-bind="slotData || {}" />
+				</template>
+			</TwTable>
+		</slot>
 		<TwPagination v-model:page="page" :total-page="pageTotal"></TwPagination>
 	</div>
 </template>
@@ -27,7 +23,6 @@ const props = defineProps<Props>()
 const directus = useDirectus()
 const { items, page, pageTotal, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
-const meta = ['filter_count']
 
 setLimit(20)
 onPageChanged(() => fetchItems())
@@ -40,7 +35,7 @@ async function fetchItems() {
 		page: page.value,
 		limit: limit.value,
 		fields: props.fields,
-		meta,
+		meta: ['filter_count'],
 	})
 	setTotalItem(data?.meta?.filter_count)
 	items.value = data.data

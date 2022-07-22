@@ -14,16 +14,7 @@
 						</DisclosureButton>
 					</div>
 					<div class="flex-shrink-0 flex items-center">
-						<img
-							class="block lg:hidden h-8 w-auto"
-							src="/img/logo.png"
-							alt="Workflow"
-						/>
-						<img
-							class="hidden lg:block h-8 w-auto"
-							src="/img/logo.png"
-							alt="Workflow"
-						/>
+						<img class="h-8 w-auto" :src="projectLogoImg" alt="Project Logo" />
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
@@ -64,13 +55,19 @@
 					<Menu as="div" class="relative">
 						<div>
 							<MenuButton
-								class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+								class="text-transparent bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 							>
 								<span class="sr-only">Open user menu</span>
 								<img
+									v-if="avatarImg"
 									class="h-8 w-8 rounded-full"
-									src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-									alt=""
+									:src="avatarImg"
+									:alt="user?.avatar?.title || 'User Avatar'"
+								/>
+								<nuxt-icon
+									v-else
+									name="user-circle"
+									class="avatar-icon h-8 w-8 rounded-full"
 								/>
 							</MenuButton>
 						</div>
@@ -168,8 +165,14 @@ import {
 	MenuItem,
 	MenuItems,
 } from '@headlessui/vue'
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
+const { useUserStore, useSettingStore } = useStore()
+const userStore = useUserStore()
+const settingStore = useSettingStore()
+const { user, avatarImg } = storeToRefs(userStore)
+const { projectLogoImg } = storeToRefs(settingStore)
 
 async function logout() {
 	const directus = useDirectus()
@@ -182,3 +185,9 @@ async function logout() {
 	}
 }
 </script>
+
+<style scoped>
+.avatar-icon::v-deep(path) {
+	stroke: #a0aec0;
+}
+</style>

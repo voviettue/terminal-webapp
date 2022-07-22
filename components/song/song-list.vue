@@ -5,16 +5,8 @@
 				:collection="collection"
 				:headers="headers"
 				:fields="fields"
-			>
-				<template #item-actions="{ item }">
-					<NuxtLink
-						:to="`/${collection}/${item.id}`"
-						class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-					>
-						View
-					</NuxtLink>
-				</template>
-			</CollectionTable>
+				:row-click="(item) => navigateTo(`/songs/${item.id}`)"
+			/>
 		</TwCard>
 	</div>
 </template>

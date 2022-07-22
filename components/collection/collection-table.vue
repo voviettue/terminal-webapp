@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<slot name="table" :headers="headers" :items="items">
-			<TwTable :headers="headers" :items="items">
+			<TwTable :headers="headers" :items="items" :row-click="rowClick">
 				<template v-for="(_, name) in ($slots as {})" #[name]="slotData">
 					<slot :name="name" v-bind="slotData || {}" />
 				</template>
@@ -17,6 +17,7 @@ interface Props {
 	headers: Record<string, any>[]
 	fields: string[]
 	limit: number
+	rowClick: (item: any) => void
 }
 
 const props = defineProps<Props>()

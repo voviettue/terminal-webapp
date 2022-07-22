@@ -17,7 +17,12 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-200">
-					<tr v-for="(item, index) in items" :key="`tr-${index}`">
+					<tr
+						v-for="(item, index) in items"
+						:key="`tr-${index}`"
+						:class="{ 'hover:bg-gray-100 cursor-pointer': clickable }"
+						@click="onRowClick(item)"
+					>
 						<td
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
@@ -43,6 +48,7 @@ interface TableHeader {
 const props = defineProps<{
 	headers: (string | Partial<TableHeader>)[]
 	items?: Record<string, any>[]
+	rowClick: (item: any) => void
 }>()
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
@@ -50,4 +56,10 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 		header instanceof Object ? header : { value: header, text: header }
 	)
 })
+
+const clickable = !!props.rowClick
+
+function onRowClick(item) {
+	props.rowClick(item)
+}
 </script>

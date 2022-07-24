@@ -1,6 +1,6 @@
 <template>
-	<div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-		<div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+	<div class="overflow-x-auto">
+		<div class="inline-block min-w-full align-middle">
 			<table class="min-w-full divide-y divide-gray-300">
 				<thead>
 					<tr>
@@ -11,7 +11,7 @@
 							scope="col"
 						>
 							<slot :name="`header-${header?.value}`" :header="header">
-								{{ header?.text }}
+								{{ get(header, 'text') ?? '--' }}
 							</slot>
 						</th>
 					</tr>
@@ -29,7 +29,7 @@
 							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0"
 						>
 							<slot :name="`item-${header?.value}`" :item="item">
-								{{ item?.[header?.value] }}
+								{{ get(item, `${header?.value}`) ?? '--' }}
 							</slot>
 						</td>
 					</tr>
@@ -58,6 +58,7 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 })
 
 const clickable = !!props.rowClick
+const { get } = useLodash()
 
 function onRowClick(item) {
 	props.rowClick(item)

@@ -4,16 +4,16 @@
 			<div
 				v-for="header in normalizedHeaders"
 				:key="header?.value"
-				class="p-4 sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 lg:px-8"
+				class="sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4"
 			>
 				<dt class="text-sm font-medium text-gray-500">
 					<slot :name="`header-${header?.value}`">
-						{{ header?.text }}
+						{{ get(header, 'text') ?? '--' }}
 					</slot>
 				</dt>
 				<dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
 					<slot :name="`item-${header?.value}`">
-						{{ item?.[header?.value] }}
+						{{ get(item, `${header?.value}`) ?? '--' }}
 					</slot>
 				</dd>
 			</div>
@@ -37,4 +37,6 @@ const normalizedHeaders = computed<Partial<ListHeader>[]>(() => {
 		header instanceof Object ? header : { value: header, text: header }
 	)
 })
+
+const { get } = useLodash()
 </script>

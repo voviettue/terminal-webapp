@@ -4,7 +4,7 @@
 			<div class="sm:flex sm:items-center">
 				<div class="sm:flex-auto">
 					<slot name="title">
-						<h1 v-if="title" class="text-xl font-semibold text-gray-900">
+						<h1 v-if="title" class="text-xl font-medium text-gray-800">
 							{{ title }}
 						</h1>
 					</slot>
@@ -17,7 +17,7 @@
 				</div>
 			</div>
 		</div>
-		<div :class="bodyPadding ? 'p-4 sm:px-6 lg:px-8' : ''">
+		<div :class="bodyPadding ? 'p-4 sm:px-6 lg:px-8 pt-0' : ''">
 			<slot></slot>
 		</div>
 	</div>

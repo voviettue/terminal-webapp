@@ -18,14 +18,17 @@ interface Props {
 	fields: string[]
 	limit: number
 	rowClick: (item: any) => void
+	filter: Record<string, any>
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+	limit: 20,
+})
 const directus = useDirectus()
 const { items, page, pageTotal, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
 
-setLimit(20)
+setLimit(props.limit)
 onPageChanged(() => fetchItems())
 
 await fetchItems()
@@ -37,6 +40,7 @@ async function fetchItems() {
 		limit: limit.value,
 		fields: props.fields,
 		meta: ['filter_count'],
+		filter: props.filter,
 	})
 	setTotalItem(data?.meta?.filter_count)
 	items.value = data.data

@@ -14,13 +14,11 @@
 <script setup lang="ts">
 const collection = 'songs'
 const headers = [
-	{ value: 'song_id', text: 'Song Number' },
+	{ value: 'song_id', text: 'Song ID' },
 	{ value: 'song_name', text: 'Song Name' },
+	{ value: 'artist.contact_name', text: 'Artist' },
 	{ value: 'release_date', text: 'Release Date' },
-	{ value: 'ipi', text: 'IPI' },
-	{ value: 'isni', text: 'ISNI' },
-	{ value: 'ipn', text: 'IPN' },
-	{ value: 'actions', text: 'aaas' },
+	{ value: 'type', text: 'Type' },
 ]
 const fields = ['id', ...headers.map((e) => e.value)]
 </script>

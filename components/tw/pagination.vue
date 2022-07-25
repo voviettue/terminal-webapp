@@ -4,10 +4,11 @@
 		class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
 	>
 		<div class="-mt-px w-0 flex-1 flex">
-			<a
+			<button
+				v-if="totalPage > 1 && page > 1"
 				:disabled="page === 1"
 				href="#"
-				class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+				class="cursor-pointer border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
 				@click="toPage(page - 1)"
 			>
 				<NuxtIcon
@@ -16,25 +17,24 @@
 					aria-hidden="true"
 				/>
 				Prev
-			</a>
+			</button>
 		</div>
-		<div class="hidden md:-mt-px md:flex">
-			<a
+		<div v-if="totalPage > 1" class="hidden md:-mt-px md:flex">
+			<page
 				v-for="i of visiblePages"
 				:key="`page-${i}`"
-				href="#"
-				:class="{ page, active: i === page }"
+				:class="{ 'cursor-pointer': 1, page, active: i === page }"
 				aria-current="page"
 				@click="toPage(i)"
 			>
 				{{ i }}
-			</a>
+			</page>
 		</div>
 		<div class="-mt-px w-0 flex-1 flex justify-end">
-			<a
+			<button
+				v-if="totalPage > 1 && page < totalPage"
 				:disabled="page >= totalPage"
-				href="#"
-				class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+				class="cursor-pointer border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
 				@click="toPage(page + 1)"
 			>
 				Next
@@ -43,7 +43,7 @@
 					class="ml-3 h-5 w-5 text-gray-400"
 					aria-hidden="true"
 				/>
-			</a>
+			</button>
 		</div>
 	</nav>
 </template>

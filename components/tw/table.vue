@@ -28,15 +28,29 @@
 							:key="`td-${header}`"
 							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0"
 						>
-							<slot :name="`item-${header?.value}`" :item="item">
+							<slot
+								:name="`item-${header?.value}`"
+								:item="item"
+								:value="get(item, `${[header.value]}`)"
+							>
 								<RenderDisplay
 									v-if="header?.display"
 									:name="header.display"
-									:value="item?.[header.value]"
+									:value="get(item, `${[header.value]}`)"
 									:options="header?.displayOptions"
 								></RenderDisplay>
-								<template v-else>{{ item?.[header.value] || '—' }}</template>
+								<template v-else>
+									{{ get(item, `${[header.value]}`) ?? '—' }}
+								</template>
 							</slot>
+						</td>
+					</tr>
+					<tr v-if="items.length === 0">
+						<td
+							:colspan="headers.length"
+							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
+						>
+							No data
 						</td>
 					</tr>
 				</tbody>

@@ -23,6 +23,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
 	limit: 20,
+	rowClick: undefined,
 	filter: undefined,
 })
 const directus = useDirectus()

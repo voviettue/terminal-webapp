@@ -7,13 +7,20 @@
 				:fields="fields"
 				:row-click="(item) => navigateTo(`/songs/${item.id}`)"
 				:filter="filter"
-			/>
+			>
+				<template #[ipiSlot]="{ value }">
+					{{ value ? value.map((e) => e.writer_ipi).join(', ') : '—' }}
+				</template>
+			</CollectionTable>
 		</TwCard>
 	</div>
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
+const props = defineProps<{
+	id: string | number
+}>()
+
 const collection = 'share_tables'
 const headers = [
 	{ value: 'catalogue.catalog_number', text: 'Cat No.' },
@@ -44,5 +51,7 @@ const headers = [
 	{ value: 'multiple_publishers', text: 'Teritory ??' },
 ]
 const fields = ['id', ...headers.map((e) => e.value)]
-const filter = { songs_id: { _eq: route.params.id } }
+const filter = { related_songs: { id: { _eq: props.id } } }
+
+const ipiSlot = 'item-writer_name.ipi'
 </script>

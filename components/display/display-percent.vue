@@ -5,7 +5,7 @@
 <script setup lang="ts">
 interface Props {
 	value: any
-	options?: Required<{ format: string }>
+	options?: Partial<{ format: string }>
 }
 const props = defineProps<Props>()
 

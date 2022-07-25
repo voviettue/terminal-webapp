@@ -5,6 +5,12 @@ export default defineNuxtConfig({
 	ssr: false,
 	modules: ['@nuxtjs/tailwindcss', '@formkit/nuxt', 'nuxt-icons'],
 	buildModules: ['@pinia/nuxt'],
+	components: {
+		dirs: [
+			"~/components",
+			"~/components/display",
+		],
+	},
 	runtimeConfig: {
 		public: {
 			url: 'http://localhost:3000',

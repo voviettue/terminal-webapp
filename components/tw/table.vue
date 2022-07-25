@@ -11,7 +11,7 @@
 							scope="col"
 						>
 							<slot :name="`header-${header?.value}`" :header="header">
-								{{ get(header, 'text') ?? '--' }}
+								{{ get(header, 'text') ?? '—' }}
 							</slot>
 						</th>
 					</tr>
@@ -29,7 +29,7 @@
 							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0"
 						>
 							<slot :name="`item-${header?.value}`" :item="item">
-								{{ get(item, `${header?.value}`) ?? '--' }}
+								{{ get(item, `${header?.value}`) ?? '—' }}
 							</slot>
 						</td>
 					</tr>

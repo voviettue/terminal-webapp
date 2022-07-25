@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 interface Props {
-	name: 'string'
+	name: string
 	value: any
 	options?: Record<string, any>
 }

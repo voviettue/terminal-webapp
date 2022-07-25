@@ -33,7 +33,6 @@ setLimit(props.limit)
 onPageChanged(() => fetchItems())
 
 await fetchItems()
-
 // functions
 async function fetchItems() {
 	const data = await directus.items(props.collection).readByQuery({

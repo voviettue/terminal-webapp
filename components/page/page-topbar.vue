@@ -39,14 +39,14 @@
 							Song
 						</NuxtLink>
 						<NuxtLink
-							href="#"
+							to="/acquisitions"
 							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
-								route.name.startsWith('catalogs')
+								route.name.startsWith('acquisitions')
 									? 'border-indigo-500 border-b-2 font-medium'
 									: ''
 							}`"
 						>
-							Catalog
+							Acquisitions
 						</NuxtLink>
 					</div>
 				</div>

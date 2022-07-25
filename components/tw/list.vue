@@ -13,7 +13,15 @@
 				</dt>
 				<dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
 					<slot :name="`item-${header?.value}`">
-						{{ get(item, `${header?.value}`) ?? '—' }}
+						<RenderDisplay
+							v-if="header?.display"
+							:name="header.display"
+							:value="item?.[header.value]"
+							:options="header?.displayOptions"
+						></RenderDisplay>
+						<template v-else>
+							{{ get(item, `${header?.value}`) ?? '—' }}
+						</template>
 					</slot>
 				</dd>
 			</div>
@@ -22,21 +30,17 @@
 </template>
 
 <script setup lang="ts">
-interface ListHeader {
-	value: string
-	text: string
-}
+import { TableHeader } from '~~/shared/types'
 
 const props = defineProps<{
-	headers: (string | Partial<ListHeader>)[]
+	headers: (string | Partial<TableHeader>)[]
 	item?: Record<string, any>
 }>()
 
-const normalizedHeaders = computed<Partial<ListHeader>[]>(() => {
+const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 	return props.headers.map((header: any) =>
 		header instanceof Object ? header : { value: header, text: header }
 	)
 })
-
 const { get } = useLodash()
 </script>

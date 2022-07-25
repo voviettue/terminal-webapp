@@ -48,6 +48,16 @@
 						>
 							Acquisitions
 						</NuxtLink>
+						<NuxtLink
+							to="/deals"
+							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
+								route.name.startsWith('deals')
+									? 'border-indigo-500 border-b-2 font-medium'
+									: ''
+							}`"
+						>
+							Deals
+						</NuxtLink>
 					</div>
 				</div>
 				<div class="flex items-center">

@@ -16,13 +16,14 @@ interface Props {
 	collection: string
 	headers: Record<string, any>[]
 	fields: string[]
-	limit: number
+	limit?: number
 	rowClick: (item: any) => void
-	filter: Record<string, any>
+	filter?: Record<string, any>
 }
 
 const props = withDefaults(defineProps<Props>(), {
 	limit: 20,
+	filter: undefined,
 })
 const directus = useDirectus()
 const { items, page, pageTotal, limit, setLimit, setTotalItem, onPageChanged } =

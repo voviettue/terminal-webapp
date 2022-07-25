@@ -29,7 +29,13 @@
 							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0"
 						>
 							<slot :name="`item-${header?.value}`" :item="item">
-								{{ get(item, `${header?.value}`) ?? '—' }}
+								<RenderDisplay
+									v-if="header?.display"
+									:name="header.display"
+									:value="item?.[header.value]"
+									:options="header?.displayOptions"
+								></RenderDisplay>
+								<template v-else>{{ item?.[header.value] || '—' }}</template>
 							</slot>
 						</td>
 					</tr>
@@ -40,10 +46,7 @@
 </template>
 
 <script setup lang="ts">
-interface TableHeader {
-	value: string
-	text: string
-}
+import { TableHeader } from '~/shared/types'
 
 const props = defineProps<{
 	headers: (string | Partial<TableHeader>)[]

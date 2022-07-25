@@ -26,12 +26,15 @@
 			</div>
 			<TabPanels>
 				<TabPanel v-for="tab in tabs" :key="`tab-panel-${tab.label}`">
-					<iframe
-						:src="tab.scr"
-						width="100%"
-						height="100%"
-						allowfullscreen
-					></iframe>
+					<div class="aspect-square">
+						<iframe
+							:src="tab.src"
+							class="min-h-[500px]"
+							width="100%"
+							height="100%"
+							allowfullscreen
+						></iframe>
+					</div>
 				</TabPanel>
 			</TabPanels>
 		</TabGroup>
@@ -49,15 +52,15 @@ definePageMeta({
 const tabs = [
 	{
 		label: 'Synch Deal',
-		scr: 'https://app.powerbi.com/reportEmbed?reportId=75b7b39f-4103-4488-bbb8-fb1028899488&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
+		src: 'https://app.powerbi.com/reportEmbed?reportId=75b7b39f-4103-4488-bbb8-fb1028899488&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
 	},
 	{
 		label: 'Synch Pitch',
-		scr: 'https://app.powerbi.com/reportEmbed?reportId=75b7b39f-4103-4488-bbb8-fb1028899488&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
+		src: 'https://app.powerbi.com/reportEmbed?reportId=189b4c19-9480-435b-b017-ef8362e90596&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
 	},
 	{
 		label: 'Synch Report',
-		scr: 'https://app.powerbi.com/reportEmbed?reportId=75b7b39f-4103-4488-bbb8-fb1028899488&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
+		src: 'https://app.powerbi.com/reportEmbed?reportId=71dd76ae-2c4d-4d84-86b9-90bfcce0ff96&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
 	},
 ]
 </script>

@@ -1,50 +1,63 @@
 <template>
 	<PageWrapper>
-		<PageHeading></PageHeading>
+		<h1>Dashboard</h1>
 
-		<div class="grid grid-cols-3 gap-6">
-			<div>
-				<TwCard
-					title="Title A"
-					description="Description here............."
-					:body-padding="false"
-				>
-					<TwList :headers="['name', 'description']" :item="item">
-						<template #header-description>Custom Description</template>
-						<template #item-description>
-							<button
-								class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-								type="button"
-							>
-								View
-							</button>
-						</template>
-					</TwList>
-				</TwCard>
+		<TabGroup>
+			<div class="border-b border-gray-200">
+				<TabList class="-mb-px flex space-x-8">
+					<Tab
+						v-for="tab in tabs"
+						:key="tab.label"
+						v-slot="{ selected }"
+						as="template"
+					>
+						<a
+							:class="[
+								selected
+									? 'border-indigo-500 text-indigo-600'
+									: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+								'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+							]"
+						>
+							{{ tab.label }}
+						</a>
+					</Tab>
+				</TabList>
 			</div>
-			<div class="col-span-2">
-				<TwCard
-					title="Title B"
-					description="Description ..."
-					:body-padding="false"
-				>
-					<TwList :headers="['name', 'description']" :item="item"></TwList>
-				</TwCard>
-			</div>
-		</div>
-
-		<DashboardListUser></DashboardListUser>
+			<TabPanels>
+				<TabPanel v-for="tab in tabs" :key="`tab-panel-${tab.label}`">
+					<iFrame
+						:src="tab.scr"
+						width="100%"
+						height="100%"
+						allowfullscreen
+					></iFrame>
+				</TabPanel>
+			</TabPanels>
+		</TabGroup>
 	</PageWrapper>
 </template>
 
 <script setup>
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
+
 definePageMeta({
 	title: 'Dashboard',
 	middleware: ['auth'],
 })
 
-const item = {
-	name: 'Omega Mario',
-	description: '..............',
-}
+const tabs = [
+	{
+		label: 'Synch Deal',
+		scr: 'https://app.powerbi.com/reportEmbed?reportId=75b7b39f-4103-4488-bbb8-fb1028899488&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
+	},
+	{
+		label: 'Synch Pitch',
+		scr: 'https://app.powerbi.com/reportEmbed?reportId=75b7b39f-4103-4488-bbb8-fb1028899488&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
+	},
+	{
+		label: 'Synch Report',
+		scr: 'https://app.powerbi.com/reportEmbed?reportId=75b7b39f-4103-4488-bbb8-fb1028899488&autoAuth=true&ctid=0ce2e605-da89-440d-90d5-d89219937ca4&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1rLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D',
+	},
+]
 </script>

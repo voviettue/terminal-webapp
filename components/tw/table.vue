@@ -62,7 +62,6 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 
 const clickable = !!props.rowClick
 const { get } = useLodash()
-
 function onRowClick(item) {
 	props.rowClick(item)
 }

@@ -10,6 +10,6 @@ interface Props {
 const props = defineProps<Props>()
 
 const displayValue = computed(() =>
-	Number.isNaN(props.value) ? '—' : `${props.value * 100}%`
+	Number.isNaN(props.value) ? '—-' : `${props.value * 100}%`
 )
 </script>

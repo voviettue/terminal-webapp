@@ -1,27 +1,25 @@
 <template>
-	<div class="bg-white shadow overflow-hidden sm:rounded">
-		<TwCard title="Song summary">
-			<CollectionTable
-				:collection="collection"
-				:headers="headers"
-				:fields="fields"
-				:filter="filter"
-				:limit="5"
-			>
-				<template #item-share_controlled="{ value }">
-					<span class="uppercase">{{ value }}</span>
-				</template>
+	<TwCard title="Song summary">
+		<CollectionTable
+			:collection="collection"
+			:headers="headers"
+			:fields="fields"
+			:filter="filter"
+			:limit="5"
+		>
+			<template #item-share_controlled="{ value }">
+				<span class="uppercase">{{ value }}</span>
+			</template>
 
-				<template #[dealsSlot]="{ item }">
-					{{
-						(item.related_deals ?? [])
-							.map((e) => e?.deals_id?.deal_name)
-							.join(', ')
-					}}
-				</template>
-			</CollectionTable>
-		</TwCard>
-	</div>
+			<template #[dealsSlot]="{ item }">
+				{{
+					(item.related_deals ?? [])
+						.map((e) => e?.deals_id?.deal_name)
+						.join(', ')
+				}}
+			</template>
+		</CollectionTable>
+	</TwCard>
 </template>
 
 <script setup lang="ts">

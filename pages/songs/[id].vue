@@ -3,12 +3,14 @@
 		<template #breadcrumb>SONG SUMMARY</template>
 		<template #title>{{ item.song_name }}</template>
 
-		<div class="space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0">
+		<div
+			class="space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:justify-items-stretch lg:space-y-0"
+		>
 			<div>
-				<SongGeneral :id="id" />
+				<SongGeneral :id="id" class="h-full" />
 			</div>
 			<div class="lg:col-span-2">
-				<SongSummary :id="id" />
+				<SongSummary :id="id" class="h-full" />
 			</div>
 		</div>
 

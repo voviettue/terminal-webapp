@@ -1,9 +1,16 @@
 <template>
 	<div class="bg-white shadow overflow-hidden sm:rounded">
 		<TwCard title="Song information">
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-x-10 gap-y-2">
-				<TwList :headers="leftHeaders" :item="item" />
-				<TwList :headers="midHeaders" :item="item" />
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-2">
+				<TwList :headers="leftHeaders" :item="item">
+					<template #[iswcSlot]="{ item }">
+						{{ (item.iswc_codes ?? []).map((e) => e?.iswc_code).join(', ') }}
+					</template>
+
+					<template #[isrcSlot]="{ item }">
+						{{ (item.isrc_codes ?? []).map((e) => e?.isrc_code).join(', ') }}
+					</template>
+				</TwList>
 				<TwList :headers="rightHeaders" :item="item" />
 			</div>
 		</TwCard>
@@ -18,27 +25,25 @@ const props = defineProps<{
 const directus = useDirectus()
 
 const leftHeaders = [
-	{ value: 'isrc', text: 'ISRC ??' },
-	{ value: 'iswc', text: 'ISWC ??' },
-	{ value: 'catalogue_manager.contact_name', text: 'Catalog Manager' },
-	{ value: 'listed_on_spotify', text: 'Listed on Spotify ??' },
-]
-const midHeaders = [
-	{ value: 'co_pub_1_work_id', text: 'Co-Pub Work ID ??' },
-	{ value: 'new_usage', text: 'New Usage ??' },
-	{ value: 'new_usage_received', text: 'New Usage Received ??' },
+	{ value: 'iswc_codes.iswc_code', text: 'ISWC' },
+	{ value: 'isrc_codes.isrc_code', text: 'ISRC' },
 ]
 const rightHeaders = [
-	{ value: 'pro_1_song_code', text: 'Pro 1 song code ??' },
-	{ value: 'pro_2_song_code', text: 'Pro 2 song code ??' },
+	{ value: 'catalogue_manager', text: 'Catalog Manager' },
+	{ value: 'publisher_ids.publisher_id', text: 'Co-Pub Work ID' },
 ]
 const fields = [
 	'song_name',
-	...leftHeaders
-		.concat(midHeaders)
-		.concat(rightHeaders)
-		.map((e) => e.value),
+	'catalogue_manager.first_name',
+	'catalogue_manager.last_name',
+	...leftHeaders.concat(rightHeaders).map((e) => e.value),
 ]
 const songs = directus.items('songs')
 const item = await songs.readOne(props.id, { fields })
+item.catalogue_manager = item?.catalogue_manager
+	? item.catalogue_manager?.first_name + ' ' + item.catalogue_manager?.last_name
+	: null
+
+const iswcSlot = 'item-iswc_codes.iswc_code'
+const isrcSlot = 'item-isrc_codes.isrc_code'
 </script>

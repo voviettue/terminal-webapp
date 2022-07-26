@@ -2,7 +2,7 @@
 	<div class="overflow-x-auto">
 		<div class="inline-block min-w-full align-middle">
 			<table class="min-w-full divide-y divide-gray-300">
-				<thead>
+				<thead v-if="!hideHeader">
 					<tr>
 						<th
 							v-for="header in normalizedHeaders"
@@ -66,6 +66,7 @@ const props = defineProps<{
 	headers: (string | Partial<TableHeader>)[]
 	items?: Record<string, any>[]
 	rowClick: (item: any) => void
+	hideHeader: boolean
 }>()
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
@@ -77,6 +78,6 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 const clickable = !!props.rowClick
 const { get } = useLodash()
 function onRowClick(item) {
-	props.rowClick(item)
+	if (props.rowClick) props.rowClick(item)
 }
 </script>

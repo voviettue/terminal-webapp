@@ -7,7 +7,7 @@
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.value}`"
-							class="pl-4 pr-3 text-left text-sm font-semibold text-gray-900 py-3.5 sm:pl-6 md:pl-0"
+							class="pl-4 pr-3 text-left font-semibold text-gray-900 py-3.5 sm:pl-6 md:pl-0"
 							scope="col"
 						>
 							<slot :name="`header-${header?.value}`" :header="header">
@@ -26,7 +26,7 @@
 						<td
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
-							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0"
+							class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0"
 						>
 							<slot
 								:name="`item-${header?.value}`"
@@ -48,7 +48,7 @@
 					<tr v-if="items.length === 0">
 						<td
 							:colspan="headers.length"
-							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
+							class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
 						>
 							No data
 						</td>

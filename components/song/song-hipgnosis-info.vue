@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+	<div class="bg-white shadow overflow-hidden sm:rounded">
 		<TwCard title="Hipgnosis information">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-2">
 				<TwList :headers="leftHeaders" :item="item" />

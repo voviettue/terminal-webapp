@@ -4,12 +4,12 @@
 		<template #title>{{ data.catalog_name }}</template>
 		<div class="grid grid-cols-5 gap-6 mb-8 font-sans">
 			<div class="col-span-3">
-				<TwCard title="Deal Description" class="mb-5">
+				<TwCard title="Deal Description" class="mb-6">
 					<p class="text-sm">
 						{{ data.catalog_headline }}
 					</p>
 				</TwCard>
-				<div class="grid grid-cols-2 gap-6 mb-5">
+				<div class="grid grid-cols-2 gap-6 mb-6">
 					<TwMedia icon="thermometer">
 						<template #description>
 							<p>Catalogue Status</p>
@@ -29,10 +29,10 @@
 						</template>
 					</TwMedia>
 				</div>
-				<TwCard title="Additional comments" class="mb-5">
+				<TwCard title="Additional comments" class="mb-6">
 					<div v-if="data.notes" v-html="data.notes"></div>
 				</TwCard>
-				<TwCard title="Deals within acquisition" class="mb-5">
+				<TwCard title="Deals within acquisition" class="mb-6">
 					<TwTable :headers="dealHeader" :items="deals">
 						<template #item-actions="{ item }">
 							<NuxtLink
@@ -44,15 +44,15 @@
 						</template>
 					</TwTable>
 				</TwCard>
-				<TwCard title="Contacts" class="mb-5">
+				<TwCard title="Contacts" class="mb-6">
 					<TwTable :headers="contactHeader" :items="contacts" />
 				</TwCard>
-				<TwCard title="Document" class="mb-5">
+				<TwCard title="Document" class="mb-6">
 					<TwTable :headers="docHeader" :items="docs" />
 				</TwCard>
 			</div>
 			<div class="col-span-2">
-				<TwCard title="Deal information" class="mb-5">
+				<TwCard title="Deal information" class="mb-6">
 					<TwList :headers="dealInfoHeader" :item="dealInfo">
 						<template #item-hipgnosis_fund>
 							{{
@@ -70,11 +70,11 @@
 						</template>
 					</TwList>
 				</TwCard>
-				<TwCard title="Royalty Rates" class="mb-5">
+				<TwCard title="Royalty Rates" class="mb-6">
 					<TwList :headers="rateHeader" :item="rates"></TwList>
 				</TwCard>
-				<TwCard title="Waiter" class="mb-5">Waiting confirm</TwCard>
-				<TwCard title="Connected Acquisitions" class="mb-5">
+				<TwCard title="Waiter" class="mb-6">Waiting confirm</TwCard>
+				<TwCard title="Connected Acquisitions" class="mb-6">
 					<div
 						v-for="(item, index) in connects"
 						:key="`connects_${index}`"
@@ -91,10 +91,10 @@
 						</NuxtLink>
 					</div>
 				</TwCard>
-				<TwCard title="Exclusions" class="mb-5">
+				<TwCard title="Exclusions" class="mb-6">
 					<div v-if="data.exclusions" v-html="data.exclusions"></div>
 				</TwCard>
-				<TwCard title="Links" class="mb-5">
+				<TwCard title="Links" class="mb-6">
 					<div class="w-full">
 						<a
 							v-for="(item, index) in links"

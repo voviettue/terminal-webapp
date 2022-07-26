@@ -7,7 +7,7 @@
 			>
 				<img :src="`../../../assets/icons/${icon}.svg`" alt="" />
 			</div>
-			<div class="text-sm">
+			<div>
 				<slot name="description"></slot>
 			</div>
 		</div>

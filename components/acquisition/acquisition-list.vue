@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+	<div class="bg-white shadow overflow-hidden sm:rounded">
 		<div class="p-4 sm:px-6 lg:px-8">
 			<CollectionTable
 				:collection="collection"

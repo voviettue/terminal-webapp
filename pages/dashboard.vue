@@ -1,6 +1,6 @@
 <template>
 	<PageWrapper>
-		<h1>Dashboard</h1>
+		<template #title>Dashboard</template>
 
 		<TabGroup>
 			<div class="border-b border-gray-200">

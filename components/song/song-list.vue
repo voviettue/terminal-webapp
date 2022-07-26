@@ -1,14 +1,12 @@
 <template>
-	<div class="bg-white shadow overflow-hidden sm:rounded-lg">
-		<TwCard>
-			<CollectionTable
-				:collection="collection"
-				:headers="headers"
-				:fields="fields"
-				:row-click="(item) => navigateTo(`/songs/${item.id}`)"
-			/>
-		</TwCard>
-	</div>
+	<TwCard>
+		<CollectionTable
+			:collection="collection"
+			:headers="headers"
+			:fields="fields"
+			:row-click="(item) => navigateTo(`/songs/${item.id}`)"
+		/>
+	</TwCard>
 </template>
 
 <script setup lang="ts">

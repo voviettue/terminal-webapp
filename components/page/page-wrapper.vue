@@ -4,10 +4,7 @@
 			<slot name="breadcrumb"></slot>
 		</div>
 		<div class="space-y-6">
-			<h1
-				v-if="hasSlotTitle"
-				class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate"
-			>
+			<h1 v-if="hasSlotTitle" class="text-gray-900 sm:truncate">
 				<slot name="title"></slot>
 			</h1>
 

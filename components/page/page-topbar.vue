@@ -63,7 +63,7 @@
 				<div class="flex items-center">
 					<a
 						:href="adminUrl"
-						class="border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm"
+						class="hidden sm:flex border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm"
 					>
 						Go to Back Office
 					</a>
@@ -98,20 +98,22 @@
 							<MenuItems
 								class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							>
-								<MenuItem v-slot="{ active }" as="div">
-									<!-- <a
-										href="#"
+								<MenuItem v-slot="{ active }" as="div" class="sm:hidden">
+									<a
+										:href="adminUrl"
 										:class="[
 											active ? 'bg-gray-100' : '',
-											'block px-4 py-2 text-sm text-gray-700',
+											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
 										]"
 									>
-										Your Profile
-									</a> -->
+										Go to Back Office
+									</a>
+								</MenuItem>
+								<MenuItem v-slot="{ active }" as="div">
 									<NuxtLink
 										:class="[
 											active ? 'bg-gray-100' : '',
-											'block px-4 py-2 text-sm text-gray-700',
+											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
 										]"
 									>
 										Your Profile
@@ -121,7 +123,7 @@
 									<a
 										:class="[
 											active ? 'bg-gray-100' : '',
-											'block px-4 py-2 text-sm text-gray-700',
+											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
 										]"
 										@click="logout()"
 									>
@@ -137,34 +139,49 @@
 
 		<DisclosurePanel class="sm:hidden">
 			<div class="pt-2 pb-3 space-y-1">
-				<!-- Current: 'bg-indigo-50 border-indigo-500 text-indigo-700', Default: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' -->
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('dashboard')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('dashboard')"
 				>
 					Dashboard
 				</DisclosureButton>
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('songs')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('songs')"
 				>
-					Team
+					Songs
 				</DisclosureButton>
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('acquisitions')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('acquisitions')"
 				>
-					Projects
+					Acquisitions
 				</DisclosureButton>
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('deals')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('deals')"
 				>
-					Calendar
+					Deals
 				</DisclosureButton>
 			</div>
 		</DisclosurePanel>

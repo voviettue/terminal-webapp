@@ -13,7 +13,7 @@
 							<nuxt-icon v-else class="h-6 w-6" name="OutlineX" />
 						</DisclosureButton>
 					</div>
-					<div class="flex-shrink-0 flex items-center">
+					<div class="flex-shrink-0 flex items-center w-16 justify-center background-logo">
 						<img class="h-8 w-auto" :src="projectLogoImg" alt="Project Logo" />
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -206,7 +206,7 @@ const { useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 const { user, avatarImg } = storeToRefs(userStore)
-const { projectLogoImg } = storeToRefs(settingStore)
+const { logoBackgroundColor, projectLogoImg } = storeToRefs(settingStore)
 const adminUrl = config.terminal.adminUrl
 
 async function logout() {
@@ -224,5 +224,9 @@ async function logout() {
 <style scoped>
 .avatar-icon::v-deep(path) {
 	stroke: #a0aec0;
+}
+
+.background-logo {
+	background-color: v-bind('logoBackgroundColor');
 }
 </style>

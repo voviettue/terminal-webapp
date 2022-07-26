@@ -3,16 +3,18 @@
 		<template #breadcrumb>SONG SUMMARY</template>
 		<template #title>{{ item.song_name }}</template>
 
-		<div class="grid grid-cols-3 gap-6">
+		<div class="space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0">
 			<div>
 				<SongGeneral :id="id" />
 			</div>
-			<div class="col-span-2">
-				<SongRoyalties :id="id" />
+			<div class="lg:col-span-2">
+				<SongSummary :id="id" />
 			</div>
 		</div>
 
-		<SongShareTables :id="id" />
+		<SongPublisherShare :id="id" />
+		<SongWriterShare :id="id" />
+		<SongCollectibleShare :id="id" />
 		<SongSynchRequests :id="id" />
 		<SongInformation :id="id" />
 		<SongHipgnosisInfo :id="id" />

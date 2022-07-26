@@ -1,6 +1,6 @@
 <template>
 	<Disclosure v-slot="{ open }" as="nav" class="bg-white shadow">
-		<div class="mx-auto px-8">
+		<div class="mx-auto px-4 md:px-8">
 			<div class="flex justify-between h-16">
 				<div class="flex">
 					<div class="flex items-center sm:hidden">
@@ -13,7 +13,9 @@
 							<nuxt-icon v-else class="h-6 w-6" name="OutlineX" />
 						</DisclosureButton>
 					</div>
-					<div class="flex-shrink-0 flex items-center w-16 justify-center background-logo">
+					<div
+						class="flex-shrink-0 flex items-center w-16 justify-center background-logo"
+					>
 						<img class="h-8 w-auto" :src="projectLogoImg" alt="Project Logo" />
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">

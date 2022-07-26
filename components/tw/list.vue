@@ -7,20 +7,24 @@
 				class="sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4"
 			>
 				<dt>
-					<slot :name="`header-${header?.value}`">
+					<slot :name="`header-${header.value}`">
 						{{ get(header, 'text') ?? '—' }}
 					</slot>
 				</dt>
 				<dd class="mt-1 text-right sm:mt-0 sm:col-span-2 font-bold">
-					<slot :name="`item-${header?.value}`">
+					<slot
+						:name="`item-${header?.value}`"
+						:item="item"
+						:value="get(item, header?.value)"
+					>
 						<RenderDisplay
 							v-if="header?.display"
 							:name="header.display"
-							:value="item?.[header.value]"
+							:value="get(item, header.value)"
 							:options="header?.displayOptions"
-						></RenderDisplay>
+						/>
 						<template v-else>
-							{{ get(item, `${header?.value}`) ?? '—' }}
+							{{ get(item, header.value) ?? '—' }}
 						</template>
 					</slot>
 				</dd>

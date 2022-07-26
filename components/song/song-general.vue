@@ -1,6 +1,6 @@
 <template>
 	<TwCard title="General song information" description="">
-		<TwList :headers="headers" :item="item" />
+		<TwList :headers="headers" :item="item"></TwList>
 	</TwCard>
 </template>
 
@@ -12,12 +12,12 @@ const props = defineProps<{
 const directus = useDirectus()
 
 const headers = [
-	{ value: 'song_id', text: 'Song Number' },
 	{ value: 'artist.contact_name', text: 'Artist' },
+	{ value: 'featured_artist.contact_name', text: 'Featured artist' },
 	{ value: 'type', text: 'Type' },
-	{ value: 'is_derivative', text: 'Is Derivative' },
-	{ value: 'release_date', text: 'Release Date' },
-	{ value: 'primary_work.song_id', text: 'Primary Work ID' },
+	{ value: 'is_derivative', text: 'Is derivative' },
+	{ value: 'release_date', text: 'Release date' },
+	{ value: 'primary_work.song_id', text: 'Primary work ID' },
 	{ value: 'label.entity_name', text: 'Label' },
 ]
 const fields = ['song_name', ...headers.map((e) => e.value)]

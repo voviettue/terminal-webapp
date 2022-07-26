@@ -3,7 +3,7 @@
 		<template #breadcrumb>DEAL SUMMARY</template>
 		<template #title>{{ dealItem.deal_name }}</template>
 
-		<div class="grid grid-cols-2 gap-6 mb-8">
+		<div class="lg:grid lg:grid-cols-2 gap-6 mb-8">
 			<div class="space-y-6">
 				<TwCard title="Deal Information">
 					<TwList :headers="dealInformationHeaders" :item="dealItem">

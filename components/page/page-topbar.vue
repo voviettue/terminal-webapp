@@ -148,7 +148,7 @@
 							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 					}`"
-					@click="navigateTo('dashboard')"
+					@click="navigateTo('/dashboard')"
 				>
 					Dashboard
 				</DisclosureButton>
@@ -159,7 +159,7 @@
 							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 					}`"
-					@click="navigateTo('songs')"
+					@click="navigateTo('/songs')"
 				>
 					Songs
 				</DisclosureButton>
@@ -170,7 +170,7 @@
 							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 					}`"
-					@click="navigateTo('acquisitions')"
+					@click="navigateTo('/acquisitions')"
 				>
 					Acquisitions
 				</DisclosureButton>
@@ -181,7 +181,7 @@
 							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
 					}`"
-					@click="navigateTo('deals')"
+					@click="navigateTo('/deals')"
 				>
 					Deals
 				</DisclosureButton>

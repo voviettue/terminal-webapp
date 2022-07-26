@@ -2,14 +2,14 @@
 	<PageWrapper>
 		<template #breadcrumb>ACQUISITION SUMMARY</template>
 		<template #title>{{ data.catalog_name }}</template>
-		<div class="grid grid-cols-5 gap-6 mb-8 font-sans">
-			<div class="col-span-3">
+		<div class="lg:grid lg:grid-cols-5 gap-6">
+			<div class="space-y-6 col-span-3">
 				<AcquisitionInfo :data="data" :list="list"></AcquisitionInfo>
 				<AcquisitionDeal :id="data.catalog_id"></AcquisitionDeal>
 				<AcquisitionContact :data="data"></AcquisitionContact>
 				<AcquisitionDoc :data="data"></AcquisitionDoc>
 			</div>
-			<div class="col-span-2">
+			<div class="space-y-6 col-span-2">
 				<AcquisitionDealInfo :data="data" :list="list"></AcquisitionDealInfo>
 				<AcquisitionRate :data="data"></AcquisitionRate>
 				<AcquisitionWriter :id="id"></AcquisitionWriter>

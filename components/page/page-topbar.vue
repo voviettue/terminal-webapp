@@ -36,7 +36,7 @@
 									: ''
 							}`"
 						>
-							Song
+							Songs
 						</NuxtLink>
 						<NuxtLink
 							to="/acquisitions"
@@ -61,11 +61,17 @@
 					</div>
 				</div>
 				<div class="flex items-center">
+					<a
+						:href="adminUrl"
+						class="border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm"
+					>
+						Go to Back Office
+					</a>
 					<!-- Profile dropdown -->
 					<Menu as="div" class="relative">
 						<div>
 							<MenuButton
-								class="text-transparent bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+								class="text-transparent bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-4"
 							>
 								<span class="sr-only">Open user menu</span>
 								<img
@@ -178,11 +184,13 @@ import {
 import { storeToRefs } from 'pinia'
 
 const route = useRoute()
+const config = useRuntimeConfig()
 const { useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 const { user, avatarImg } = storeToRefs(userStore)
 const { projectLogoImg } = storeToRefs(settingStore)
+const adminUrl = config.terminal.adminUrl
 
 async function logout() {
 	const directus = useDirectus()

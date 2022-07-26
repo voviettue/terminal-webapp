@@ -14,6 +14,9 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			url: 'http://localhost:3000',
+			terminal: {
+				adminUrl: 'https://stag.hipgnosis.catex.se/admin'
+			},
 			api: {
 				baseUrl: 'http://localhost:8055',
 			}

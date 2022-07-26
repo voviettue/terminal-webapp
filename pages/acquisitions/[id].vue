@@ -1,6 +1,6 @@
 <template>
 	<PageWrapper>
-		<template #breadcrumb>ACQUISTION SUMMARY</template>
+		<template #breadcrumb>ACQUISITION SUMMARY</template>
 		<template #title>{{ data.catalog_name }}</template>
 		<div class="grid grid-cols-5 gap-6 mb-8 font-sans">
 			<div class="col-span-3">

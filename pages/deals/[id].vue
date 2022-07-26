@@ -7,14 +7,33 @@
 			<div class="space-y-6">
 				<TwCard title="Deal Information">
 					<TwList :headers="dealInformationHeaders" :item="dealItem">
-						<template #item-type>{{ upperCase(dealItem.type) }}</template>
+						<template #item-type>
+							{{
+								dealTypeChoices?.find(
+									(l) => upperCase(l.value) === upperCase(dealItem.type)
+								)?.text || '—'
+							}}
+						</template>
 						<template #item-sub_type>
-							{{ upperCase(dealItem.sub_type) }}
+							{{
+								dealSubTypeChoices?.find(
+									(l) => upperCase(l.value) === upperCase(dealItem.sub_type)
+								)?.text || '—'
+							}}
 						</template>
 					</TwList>
 				</TwCard>
 				<TwCard title="Catalog">
-					<TwList :headers="dealCatalogHeaders" :item="dealItem" />
+					<TwList :headers="dealCatalogHeaders" :item="dealItem">
+						<template #item-agreement_status>
+							{{
+								dealAgreementStatusChoices?.find(
+									(l) =>
+										upperCase(l.value) === upperCase(dealItem.agreement_status)
+								)?.text || '—'
+							}}
+						</template>
+					</TwList>
 				</TwCard>
 				<TwCard
 					v-if="dealItem.notes"
@@ -24,7 +43,17 @@
 					<span v-html="dealItem.notes" />
 				</TwCard>
 				<TwCard title="Agreement Party">
-					<TwList :headers="dealAgreementPartyHeaders" :item="dealItem" />
+					<TwList :headers="dealAgreementPartyHeaders" :item="dealItem">
+						<template #[agreementPartyLawyerIpi]>
+							{{
+								dealItem.agreement_party_lawyer?.ipi
+									? dealItem.agreement_party_lawyer?.ipi
+											.map((e) => e.writer_ipi)
+											.join(', ')
+									: '—'
+							}}
+						</template>
+					</TwList>
 				</TwCard>
 				<TwCard title="Songs">
 					<TwList :headers="dealSongHeaders" :item="dealItem" />
@@ -69,6 +98,14 @@
 									: '—'
 							}}
 						</template>
+						<template #item-portal_access>
+							{{
+								dealPortalAccessChoices?.find(
+									(l) =>
+										upperCase(l.value) === upperCase(dealItem.portal_access)
+								)?.text || '—'
+							}}
+						</template>
 						<template #item-royalty_contact>
 							{{ dealItem?.royalty_contact?.contact_name ?? '—' }}
 						</template>
@@ -87,7 +124,16 @@
 					</TwList>
 				</TwCard>
 				<TwCard title="Notifications">
-					<TwList :headers="dealNotificationsHeader" :item="dealItem" />
+					<TwList :headers="dealNotificationsHeader" :item="dealItem">
+						<template #item-option_letter_due>
+							{{
+								dealOptionLetterDueChoices?.find(
+									(l) =>
+										upperCase(l.value) === upperCase(dealItem.option_letter_due)
+								)?.text || '—'
+							}}
+						</template>
+					</TwList>
 				</TwCard>
 				<TwCard title="Agreement Dates">
 					<TwList :headers="dealAgreementDatesHeader" :item="dealItem" />
@@ -100,15 +146,15 @@
 </template>
 
 <script setup>
-const { getFile } = useUtils()
-const { upperCase } = useLodash()
-
 definePageMeta({
-	title: 'Deal Detail',
 	middleware: ['auth'],
+	title: 'Deals',
 })
 const directus = useDirectus()
 const route = useRoute()
+const { getFile } = useUtils()
+const { upperCase } = useLodash()
+
 const id = route.params.id
 const collection = 'deals'
 
@@ -142,6 +188,7 @@ const dealAgreementPartyHeaders = [
 	},
 	{ value: 'agreement_party_lawyer.ipi', text: 'Agreement Party IPI' },
 ]
+const agreementPartyLawyerIpi = 'item-agreement_party_lawyer.ipi'
 
 const dealSongHeaders = [
 	{ value: 'number_of_songs', text: 'Number of Songs' },
@@ -240,4 +287,20 @@ const dealItem = await deals.readOne(id, {
 const connectedDealsItem = dealItem.connected_deals.map(
 	(deal) => deal.related_deals_id
 )
+
+const dealFields = await directus.fields.readMany(collection)
+const dealTypeChoices = dealFields.find((field) => field.field === 'type')?.meta
+	?.options?.choices
+const dealSubTypeChoices = dealFields.find(
+	(field) => field.field === 'sub_type'
+)?.meta?.options?.choices
+const dealAgreementStatusChoices = dealFields.find(
+	(field) => field.field === 'agreement_status'
+)?.meta?.options?.choices
+const dealPortalAccessChoices = dealFields.find(
+	(field) => field.field === 'portal_access'
+)?.meta?.options?.choices
+const dealOptionLetterDueChoices = dealFields.find(
+	(field) => field.field === 'option_letter_due'
+)?.meta?.options?.choices
 </script>

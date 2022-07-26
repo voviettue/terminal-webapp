@@ -7,10 +7,18 @@
 			:filter="dealPeriodsFilter"
 		>
 			<template #item-period_type="{ item }">
-				{{ upperCase(item?.period_type) }}
+				{{
+					dealPeriodTypeChoices?.find(
+						(l) => upperCase(l.value) === upperCase(item.period_type)
+					)?.text || '—'
+				}}
 			</template>
 			<template #item-period_status="{ item }">
-				{{ upperCase(item?.period_status) }}
+				{{
+					dealPeriodStatusChoices?.find(
+						(l) => upperCase(l.value) === upperCase(item.period_status)
+					)?.text || '—'
+				}}
 			</template>
 		</CollectionTable>
 	</TwCard>
@@ -22,6 +30,8 @@ const props = defineProps<{
 }>()
 
 const { upperCase } = useLodash()
+const directus = useDirectus()
+
 const collection = 'periods'
 const dealPeriodsHeader = [
 	{ value: 'period_type', text: 'Period Type' },
@@ -33,4 +43,12 @@ const dealPeriodsHeader = [
 
 const dealPeriodsFields = ['id', ...dealPeriodsHeader.map((e) => e.value)]
 const dealPeriodsFilter = { related_deal: { id: { _eq: props.id } } }
+
+const periodsFields: any = await directus.fields.readMany(collection)
+const dealPeriodTypeChoices = periodsFields.find(
+	(field) => field.field === 'period_type'
+)?.meta?.options?.choices
+const dealPeriodStatusChoices = periodsFields.find(
+	(field) => field.field === 'period_status'
+)?.meta?.options?.choices
 </script>

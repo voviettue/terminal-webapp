@@ -5,7 +5,11 @@
 			:headers="dealContactsHeaders"
 			:fields="dealContactsFields"
 			:filter="dealContactsFilter"
-		/>
+		>
+			<template #[roleSlot]="{ item }">
+				{{ item.contacts_id?.roles?.join(', ') }}
+			</template>
+		</CollectionTable>
 	</TwCard>
 </template>
 
@@ -23,4 +27,5 @@ const dealContactsHeaders = [
 ]
 const dealContactsFields = [...dealContactsHeaders.map((e) => e.value)]
 const dealContactsFilter = { deals_id: { id: { _eq: props.id } } }
+const roleSlot = 'item-contacts_id.roles'
 </script>

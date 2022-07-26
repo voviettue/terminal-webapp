@@ -2,15 +2,15 @@
 	<div class="overflow-x-auto">
 		<div class="inline-block min-w-full align-middle">
 			<table class="min-w-full divide-y divide-gray-300">
-				<thead>
+				<thead v-if="!hideHeader">
 					<tr>
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.value}`"
-							class="pl-4 pr-3 text-left text-sm font-semibold text-gray-900 py-3.5 sm:pl-6 md:pl-0"
+							class="pl-4 pr-3 text-left py-3.5 sm:pl-6 md:pl-0 font-normal"
 							scope="col"
 						>
-							<slot :name="`header-${header?.value}`" :header="header">
+							<slot :name="`header-${header.value}`" :header="header">
 								{{ get(header, 'text') ?? '—' }}
 							</slot>
 						</th>
@@ -26,21 +26,21 @@
 						<td
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
-							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0"
+							class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0"
 						>
 							<slot
 								:name="`item-${header?.value}`"
 								:item="item"
-								:value="get(item, `${[header.value]}`)"
+								:value="get(item, header.value)"
 							>
 								<RenderDisplay
 									v-if="header?.display"
 									:name="header.display"
-									:value="get(item, `${[header.value]}`)"
+									:value="get(item, header.value)"
 									:options="header?.displayOptions"
 								></RenderDisplay>
 								<template v-else>
-									{{ get(item, `${[header.value]}`) ?? '—' }}
+									{{ get(item, header.value) ?? '—' }}
 								</template>
 							</slot>
 						</td>
@@ -48,7 +48,7 @@
 					<tr v-if="items.length === 0">
 						<td
 							:colspan="headers.length"
-							class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
+							class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
 						>
 							No data
 						</td>
@@ -66,6 +66,7 @@ const props = defineProps<{
 	headers: (string | Partial<TableHeader>)[]
 	items?: Record<string, any>[]
 	rowClick: (item: any) => void
+	hideHeader: boolean
 }>()
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
@@ -77,6 +78,6 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 const clickable = !!props.rowClick
 const { get } = useLodash()
 function onRowClick(item) {
-	props.rowClick(item)
+	if (props.rowClick) props.rowClick(item)
 }
 </script>

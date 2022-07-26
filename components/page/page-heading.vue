@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="p-8 bg-white lg:flex lg:items-center lg:justify-between shadow overflow-hidden rounded-lg"
+		class="p-8 bg-white lg:flex lg:items-center lg:justify-between shadow overflow-hidden rounded"
 	>
 		<div class="flex-1 min-w-0">
 			<h2

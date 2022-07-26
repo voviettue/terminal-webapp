@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+	<div class="bg-white shadow overflow-hidden sm:rounded">
 		<TwCard title="Synch">
 			<CollectionTable
 				:collection="collection"

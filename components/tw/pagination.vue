@@ -8,12 +8,12 @@
 				v-if="totalPage > 1 && page > 1"
 				:disabled="page === 1"
 				href="#"
-				class="cursor-pointer border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+				class="cursor-pointer border-t-2 border-transparent pt-4 pr-1 inline-flex items-center font-medium hover:border-gray-300"
 				@click="toPage(page - 1)"
 			>
 				<NuxtIcon
 					name="arrow-narrow-left"
-					class="mr-3 h-5 w-5 text-gray-400"
+					class="mr-3 h-5 w-5 text-gray-500"
 					aria-hidden="true"
 				/>
 				Prev
@@ -34,13 +34,13 @@
 			<button
 				v-if="totalPage > 1 && page < totalPage"
 				:disabled="page >= totalPage"
-				class="cursor-pointer border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+				class="cursor-pointer border-t-2 border-transparent pt-4 pl-1 inline-flex items-center font-medium hover:border-gray-300"
 				@click="toPage(page + 1)"
 			>
 				Next
 				<NuxtIcon
 					name="arrow-narrow-right"
-					class="ml-3 h-5 w-5 text-gray-400"
+					class="ml-3 h-5 w-5 text-gray-500"
 					aria-hidden="true"
 				/>
 			</button>
@@ -78,8 +78,9 @@ watchEffect(() => {
 
 <style scoped>
 .page {
-	@apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium;
+	@apply border-transparent hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium;
 }
+
 .active {
 	@apply border-indigo-500 text-indigo-600 border-t-2;
 }

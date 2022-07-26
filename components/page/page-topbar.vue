@@ -1,6 +1,6 @@
 <template>
 	<Disclosure v-slot="{ open }" as="nav" class="bg-white shadow">
-		<div class="mx-auto px-8">
+		<div class="mx-auto px-4 md:px-8">
 			<div class="flex justify-between h-16">
 				<div class="flex">
 					<div class="flex items-center sm:hidden">
@@ -13,7 +13,9 @@
 							<nuxt-icon v-else class="h-6 w-6" name="OutlineX" />
 						</DisclosureButton>
 					</div>
-					<div class="flex-shrink-0 flex items-center">
+					<div
+						class="flex-shrink-0 flex items-center w-16 justify-center background-logo"
+					>
 						<img class="h-8 w-auto" :src="projectLogoImg" alt="Project Logo" />
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -36,7 +38,7 @@
 									: ''
 							}`"
 						>
-							Song
+							Songs
 						</NuxtLink>
 						<NuxtLink
 							to="/acquisitions"
@@ -48,14 +50,30 @@
 						>
 							Acquisitions
 						</NuxtLink>
+						<NuxtLink
+							to="/deals"
+							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
+								route.name.startsWith('deals')
+									? 'border-indigo-500 border-b-2 font-medium'
+									: ''
+							}`"
+						>
+							Deals
+						</NuxtLink>
 					</div>
 				</div>
 				<div class="flex items-center">
+					<a
+						:href="adminUrl"
+						class="hidden sm:flex border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm"
+					>
+						Go to Back Office
+					</a>
 					<!-- Profile dropdown -->
 					<Menu as="div" class="relative">
 						<div>
 							<MenuButton
-								class="text-transparent bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+								class="text-transparent bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-4"
 							>
 								<span class="sr-only">Open user menu</span>
 								<img
@@ -82,20 +100,22 @@
 							<MenuItems
 								class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							>
-								<MenuItem v-slot="{ active }" as="div">
-									<!-- <a
-										href="#"
+								<MenuItem v-slot="{ active }" as="div" class="sm:hidden">
+									<a
+										:href="adminUrl"
 										:class="[
 											active ? 'bg-gray-100' : '',
-											'block px-4 py-2 text-sm text-gray-700',
+											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
 										]"
 									>
-										Your Profile
-									</a> -->
+										Go to Back Office
+									</a>
+								</MenuItem>
+								<MenuItem v-slot="{ active }" as="div">
 									<NuxtLink
 										:class="[
 											active ? 'bg-gray-100' : '',
-											'block px-4 py-2 text-sm text-gray-700',
+											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
 										]"
 									>
 										Your Profile
@@ -105,7 +125,7 @@
 									<a
 										:class="[
 											active ? 'bg-gray-100' : '',
-											'block px-4 py-2 text-sm text-gray-700',
+											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
 										]"
 										@click="logout()"
 									>
@@ -121,34 +141,49 @@
 
 		<DisclosurePanel class="sm:hidden">
 			<div class="pt-2 pb-3 space-y-1">
-				<!-- Current: 'bg-indigo-50 border-indigo-500 text-indigo-700', Default: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' -->
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('dashboard')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('dashboard')"
 				>
 					Dashboard
 				</DisclosureButton>
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('songs')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('songs')"
 				>
-					Team
+					Songs
 				</DisclosureButton>
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('acquisitions')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('acquisitions')"
 				>
-					Projects
+					Acquisitions
 				</DisclosureButton>
 				<DisclosureButton
-					as="a"
-					href="#"
-					class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					as="button"
+					:class="`w-full text-left ${
+						route.name.startsWith('deals')
+							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+					}`"
+					@click="navigateTo('deals')"
 				>
-					Calendar
+					Deals
 				</DisclosureButton>
 			</div>
 		</DisclosurePanel>
@@ -168,11 +203,13 @@ import {
 import { storeToRefs } from 'pinia'
 
 const route = useRoute()
+const config = useRuntimeConfig()
 const { useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 const { user, avatarImg } = storeToRefs(userStore)
-const { projectLogoImg } = storeToRefs(settingStore)
+const { logoBackgroundColor, projectLogoImg } = storeToRefs(settingStore)
+const adminUrl = config.terminal.adminUrl
 
 async function logout() {
 	const directus = useDirectus()
@@ -189,5 +226,9 @@ async function logout() {
 <style scoped>
 .avatar-icon::v-deep(path) {
 	stroke: #a0aec0;
+}
+
+.background-logo {
+	background-color: v-bind('logoBackgroundColor');
 }
 </style>

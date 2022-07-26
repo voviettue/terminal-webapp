@@ -6,21 +6,25 @@
 				:key="header?.value"
 				class="sm:py-4 flex justify-between items-start gap-6"
 			>
-				<dt class="text-sm font-medium text-gray-500">
-					<slot :name="`header-${header?.value}`">
+				<dt>
+					<slot :name="`header-${header.value}`">
 						{{ get(header, 'text') ?? '—' }}
 					</slot>
 				</dt>
-				<dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
-					<slot :name="`item-${header?.value}`">
+				<dd class="mt-1 text-right sm:mt-0 sm:col-span-2 font-bold">
+					<slot
+						:name="`item-${header?.value}`"
+						:item="item"
+						:value="get(item, header?.value)"
+					>
 						<RenderDisplay
 							v-if="header?.display"
 							:name="header.display"
-							:value="item?.[header.value]"
+							:value="get(item, header.value)"
 							:options="header?.displayOptions"
-						></RenderDisplay>
+						/>
 						<template v-else>
-							{{ get(item, `${header?.value}`) ?? '—' }}
+							{{ get(item, header.value) ?? '—' }}
 						</template>
 					</slot>
 				</dd>

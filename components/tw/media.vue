@@ -11,7 +11,7 @@
 					aria-hidden="true"
 				/>
 			</div>
-			<div class="text-sm">
+			<div>
 				<slot name="description"></slot>
 			</div>
 		</div>

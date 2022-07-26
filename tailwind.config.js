@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 // const formKitTailwind = require('@formkit/themes/tailwindcss');
 import formKitTailwind from '@formkit/themes/tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 module.exports = {
 	content: [
@@ -12,6 +13,12 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['Lato', ...defaultTheme.fontFamily.sans],
+			},
+			borderRadius: {
+				DEFAULT: '0.125rem',
+			},
 			colors: {
 				keppel: {
 					DEFAULT: '#6DC2B6',
@@ -67,6 +74,14 @@ module.exports = {
 				},
 			},
 		},
+		// boderRadius: {
+		// 	'none': '0',
+		// 	'sm': '0.125rem',
+		// 	DEFAULT: '0.125rem',
+		// 	'md': '0.25rem',
+		// 	'lg': '0.5rem',
+		// 	'full': '9999px',
+		// },
 	},
 	plugins: [formKitTailwind],
 }

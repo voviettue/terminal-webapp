@@ -14,13 +14,16 @@ export const useSettingStore = defineStore({
 		projectLogoImg(): string | null {
 			return getProjectLogo(this.settings)
 		},
+		logoBackgroundColor(): string | null {
+			return this.settings.project_color || 'transparent'
+		},
 	},
 	actions: {
 		async hydrate() {
 			const directus = useDirectus()
 			this.loading = true
 
-			const fields = ['project_name', 'project_logo']
+			const fields = ['project_name', 'project_logo', 'project_color']
 
 			try {
 				this.settings = await directus.settings.read({ fields })

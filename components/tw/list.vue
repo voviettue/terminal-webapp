@@ -6,12 +6,12 @@
 				:key="header?.value"
 				class="sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4"
 			>
-				<dt class="font-bold text-gray-500">
+				<dt>
 					<slot :name="`header-${header?.value}`">
 						{{ get(header, 'text') ?? '—' }}
 					</slot>
 				</dt>
-				<dd class="mt-1 text-right text-gray-900 sm:mt-0 sm:col-span-2">
+				<dd class="mt-1 text-right sm:mt-0 sm:col-span-2 font-bold">
 					<slot :name="`item-${header?.value}`">
 						<RenderDisplay
 							v-if="header?.display"

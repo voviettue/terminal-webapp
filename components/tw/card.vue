@@ -1,16 +1,16 @@
 <template>
-	<div class="bg-white shadow overflow-hidden rounded">
+	<div class="bg-white shadow-md overflow-hidden rounded">
 		<div v-if="title || description" class="p-4 sm:px-6 lg:px-8">
 			<div class="sm:flex sm:items-center">
 				<div class="sm:flex-auto">
 					<slot name="title">
-						<h3 v-if="title" class="text-[17px] font-bold text-gray-800">
+						<h3 v-if="title" class="text-md font-bold">
 							{{ title }}
 						</h3>
 					</slot>
 
 					<slot name="description">
-						<p v-if="description" class="mt-2 text-gray-700">
+						<p v-if="description" class="mt-2">
 							{{ description }}
 						</p>
 					</slot>

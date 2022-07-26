@@ -7,7 +7,7 @@
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.value}`"
-							class="pl-4 pr-3 text-left font-semibold text-gray-900 py-3.5 sm:pl-6 md:pl-0"
+							class="pl-4 pr-3 text-left py-3.5 sm:pl-6 md:pl-0 font-normal"
 							scope="col"
 						>
 							<slot :name="`header-${header?.value}`" :header="header">

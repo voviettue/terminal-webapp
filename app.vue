@@ -3,10 +3,11 @@
 		<Head>
 			<Link
 				rel="stylesheet"
-				href="http://fonts.googleapis.com/css?family=Lato:400,700"
+				href="https://fonts.googleapis.com/css?family=Lato:400,700"
 			/>
 		</Head>
-		<Body>
+
+		<Body class="bg-zinc-50 text-sm text-zinc-800">
 			<div class="min-h-screen">
 				<NuxtLayout>
 					<NuxtPage />

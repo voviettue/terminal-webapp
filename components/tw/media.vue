@@ -5,7 +5,11 @@
 				v-if="icon"
 				class="w-9 h-9 rounded-full bg-gray-300 flex justify-center items-center mr-4"
 			>
-				<img :src="`../../../assets/icons/${icon}.svg`" alt="" />
+				<NuxtIcon
+					:name="icon"
+					class="h-5 w-5 text-gray-400"
+					aria-hidden="true"
+				/>
 			</div>
 			<div class="text-sm">
 				<slot name="description"></slot>

@@ -1,18 +1,12 @@
 <template>
-	<Disclosure v-slot="{ open }" as="nav" class="bg-white shadow">
-		<div class="mx-auto px-4 md:px-8">
+	<Disclosure
+		v-slot="{ open }"
+		as="nav"
+		class="bg-white shadow fixed bottom-0 w-full sm:static"
+	>
+		<div class="mx-auto px-4 md:px-8 bg-white border-t">
 			<div class="flex justify-between h-16">
 				<div class="flex">
-					<div class="flex items-center sm:hidden">
-						<!-- Mobile menu button -->
-						<DisclosureButton
-							class="mr-4 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-						>
-							<span class="sr-only">Open main menu</span>
-							<nuxt-icon v-if="!open" class="h-6 w-6" name="menu" />
-							<nuxt-icon v-else class="h-6 w-6" name="OutlineX" />
-						</DisclosureButton>
-					</div>
 					<div
 						class="flex-shrink-0 flex items-center w-16 justify-center background-logo"
 					>
@@ -69,6 +63,7 @@
 					>
 						Go to Back Office
 					</a>
+
 					<!-- Profile dropdown -->
 					<Menu as="div" class="relative">
 						<div>
@@ -98,7 +93,7 @@
 							leave-to-class="transform opacity-0 scale-95"
 						>
 							<MenuItems
-								class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+								class="origin-top-right absolute right-0 -mt-[160px] sm:mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							>
 								<MenuItem v-slot="{ active }" as="div" class="sm:hidden">
 									<a
@@ -135,11 +130,24 @@
 							</MenuItems>
 						</transition>
 					</Menu>
+
+					<div class="flex items-center sm:hidden">
+						<!-- Mobile menu button -->
+						<DisclosureButton
+							class="ml-6 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+						>
+							<span class="sr-only">Open main menu</span>
+							<nuxt-icon v-if="!open" class="h-6 w-6" name="menu" />
+							<nuxt-icon v-else class="h-6 w-6" name="OutlineX" />
+						</DisclosureButton>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<DisclosurePanel class="sm:hidden">
+		<DisclosurePanel
+			class="sm:hidden fixed bottom-[64px] w-full bg-white border-b"
+		>
 			<div class="pt-2 pb-3 space-y-1">
 				<DisclosureButton
 					as="button"

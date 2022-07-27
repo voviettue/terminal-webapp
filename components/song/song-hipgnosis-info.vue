@@ -18,7 +18,7 @@ const directus = useDirectus()
 
 const leftHeaders = [
 	{ value: 'hipgnosis_fund', text: 'Hipnosis Fund' },
-	{ value: 'hipgnosis_entity', text: 'Hipnosis Entity.entity_name' },
+	{ value: 'hipgnosis_entity', text: 'Hipnosis Entity' },
 	{ value: 'catalog.catalog_number', text: 'Catalog' },
 	{ value: 'catalog.catalogue_name', text: 'Catalog Name' },
 ]

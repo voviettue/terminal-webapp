@@ -9,8 +9,9 @@
 
 <script setup>
 const route = useRoute()
-const { useUserStore, useSettingStore } = useStore()
+const { useUserStore, useSettingStore, usePageStore } = useStore()
 const { hydrate: userHydrate } = useUserStore()
+const { hydrate: pageHydrate } = usePageStore()
 const { hydrate: settingHydrate } = useSettingStore()
 
 useHead({
@@ -21,7 +22,7 @@ await init()
 
 async function init() {
 	try {
-		await Promise.all([userHydrate(), settingHydrate()])
+		await Promise.all([userHydrate(), settingHydrate(), pageHydrate()])
 	} catch (err) {
 		// do nothing
 	}

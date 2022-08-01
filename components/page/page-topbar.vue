@@ -14,56 +14,14 @@
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
-						<NuxtLink
-							to="/dashboard"
-							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
-								route.name === 'dashboard'
-									? 'border-indigo-500 border-b-2 font-medium'
-									: ''
-							}`"
-						>
-							Dashboard
-						</NuxtLink>
-						<NuxtLink
-							to="/songs"
-							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
-								route.name.startsWith('songs')
-									? 'border-indigo-500 border-b-2 font-medium'
-									: ''
-							}`"
-						>
-							Songs
-						</NuxtLink>
-						<NuxtLink
-							to="/acquisitions"
-							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
-								route.name.startsWith('acquisitions')
-									? 'border-indigo-500 border-b-2 font-medium'
-									: ''
-							}`"
-						>
-							Acquisitions
-						</NuxtLink>
-						<NuxtLink
-							to="/deals"
-							:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
-								route.name.startsWith('deals')
-									? 'border-indigo-500 border-b-2 font-medium'
-									: ''
-							}`"
-						>
-							Deals
-						</NuxtLink>
+						<RenderMenu
+							v-for="menu in settings.menus"
+							:key="menu.id"
+							v-bind="menu"
+						/>
 					</div>
 				</div>
 				<div class="flex items-center">
-					<a
-						:href="adminUrl"
-						class="hidden sm:flex border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm"
-					>
-						Go to Back Office
-					</a>
-
 					<!-- Profile dropdown -->
 					<Menu as="div" class="relative">
 						<div>
@@ -198,7 +156,7 @@
 	</Disclosure>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
 	Disclosure,
 	DisclosureButton,
@@ -212,11 +170,15 @@ import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const config = useRuntimeConfig()
+
 const { useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
+
 const { user, avatarImg } = storeToRefs(userStore)
-const { logoBackgroundColor, projectLogoImg } = storeToRefs(settingStore)
+const { settings, logoBackgroundColor, projectLogoImg } =
+	storeToRefs(settingStore)
+
 const adminUrl = config.terminal.adminUrl
 
 async function logout() {
@@ -234,6 +196,11 @@ async function logout() {
 <style scoped>
 .avatar-icon::v-deep(path) {
 	stroke: #a0aec0;
+}
+
+.avatar-icon::v-deep(svg) {
+	width: 2rem;
+	height: 2rem;
 }
 
 .background-logo {

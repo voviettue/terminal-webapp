@@ -1,7 +1,8 @@
 <template>
-	<div>
-		<h1>Page {{ endpoint }} in comming</h1>
-	</div>
+	<PageWrapper>
+		<template #title>{{ pageInfo?.title }}</template>
+		<RenderPage :page="pageInfo" :params="params" />
+	</PageWrapper>
 </template>
 
 <script setup>
@@ -18,15 +19,43 @@ const pageStore = usePageStore()
 const { pages } = storeToRefs(pageStore)
 
 const pageInfo = ref(null)
-const endpoint = route.params?.endpoint[0]
+const endpoint = route.params?.endpoint
+const params = ref({})
 
 onBeforeMount(() => {
-	pageInfo.value = pages.value.find((e) => e.endpoint === `/${endpoint}`)
+	detectPage()
 })
+
+function detectPage() {
+	pageInfo.value = pages.value.find((e) => {
+		const clearEndpoint = e.endpoint.replace(/^\//, '')
+		const paths = clearEndpoint.split('/')
+
+		const result =
+			paths.length === endpoint.length &&
+			endpoint.every((item, index) => {
+				if (paths[index].startsWith(':')) {
+					params.value[paths[index].substring(1)] = endpoint[index]
+				}
+
+				return paths[index].startsWith(':') || paths[index] === item
+			})
+
+		if (!result) {
+			params.value = {}
+		}
+
+		return result
+	})
+
+	if (!pageInfo.value) {
+		throwError({ statusCode: 404, statusMessage: `Page not found` })
+	}
+}
 
 watch(pageInfo, () => {
 	useHead({
-		title: pageInfo.value.title,
+		title: pageInfo.value?.title,
 	})
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<NuxtLink
 		:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
-			`/${route.params?.endpoint[0]}` === detailsPage?.endpoint
+			`/${endpoint}` === detailsPage?.endpoint
 				? 'border-indigo-500 border-b-2 font-medium'
 				: ''
 		}`"
@@ -22,6 +22,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const detailsPage = ref(null)
+const endpoint = ref('')
 
 const { usePageStore } = useStore()
 const route = useRoute()
@@ -31,6 +32,14 @@ const { pages } = storeToRefs(pageStore)
 onBeforeMount(() => {
 	detailsPage.value = getDetailsPage()
 })
+
+watch(
+	route,
+	() => {
+		endpoint.value = (route.params.endpoint && route.params.endpoint[0]) || ''
+	},
+	{ immediate: true }
+)
 
 function getDetailsPage() {
 	const result = pages.value?.find((e) => e.id.toString() === props.page)

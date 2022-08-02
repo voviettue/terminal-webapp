@@ -24,6 +24,7 @@ export const useSettingStore = defineStore({
 			this.loading = true
 
 			const fields = [
+				'homepage',
 				'project_name',
 				'project_logo',
 				'project_background',

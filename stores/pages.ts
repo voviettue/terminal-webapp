@@ -24,7 +24,13 @@ export const usePageStore = defineStore({
 			this.loading = true
 
 			try {
-				const { data } = await directus.items('cms_pages').readByQuery()
+				const { data } = await directus.items('cms_pages').readByQuery({
+					filter: {
+						hidden: {
+							_neq: true,
+						},
+					},
+				})
 				this.pages = data ?? ([] as Page[])
 			} catch (error) {
 				this.error = error

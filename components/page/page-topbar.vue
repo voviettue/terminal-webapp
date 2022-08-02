@@ -168,11 +168,6 @@ async function logout() {
 	stroke: #a0aec0;
 }
 
-.avatar-icon::v-deep(svg) {
-	width: 2rem;
-	height: 2rem;
-}
-
 .background-logo {
 	background-color: v-bind('logoBackgroundColor');
 }

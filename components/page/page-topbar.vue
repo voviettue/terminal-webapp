@@ -10,14 +10,21 @@
 					<div
 						class="flex-shrink-0 flex items-center w-16 justify-center background-logo"
 					>
-						<img class="h-8 w-auto" :src="projectLogoImg" alt="Project Logo" />
+						<NuxtLink :to="homePage.endpoint ?? '/homepage'">
+							<img
+								class="h-8 w-auto"
+								:src="projectLogoImg"
+								alt="Project Logo"
+							/>
+						</NuxtLink>
 					</div>
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
 						<RenderMenu
 							v-for="menu in settings.menus"
 							:key="menu.id"
-							v-bind="menu"
+							:menu="menu"
+							class="border-b-2"
 						/>
 					</div>
 				</div>
@@ -107,50 +114,12 @@
 			class="sm:hidden fixed bottom-[64px] w-full bg-white border-b"
 		>
 			<div class="pt-2 pb-3 space-y-1">
-				<DisclosureButton
-					as="button"
-					:class="`w-full text-left ${
-						route.name.startsWith('dashboard')
-							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-					}`"
-					@click="navigateTo('/dashboard')"
-				>
-					Dashboard
-				</DisclosureButton>
-				<DisclosureButton
-					as="button"
-					:class="`w-full text-left ${
-						route.name.startsWith('songs')
-							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-					}`"
-					@click="navigateTo('/songs')"
-				>
-					Songs
-				</DisclosureButton>
-				<DisclosureButton
-					as="button"
-					:class="`w-full text-left ${
-						route.name.startsWith('acquisitions')
-							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-					}`"
-					@click="navigateTo('/acquisitions')"
-				>
-					Acquisitions
-				</DisclosureButton>
-				<DisclosureButton
-					as="button"
-					:class="`w-full text-left ${
-						route.name.startsWith('deals')
-							? 'bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-							: 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-					}`"
-					@click="navigateTo('/deals')"
-				>
-					Deals
-				</DisclosureButton>
+				<RenderMenu
+					v-for="menu in settings.menus"
+					:key="menu.id"
+					:menu="menu"
+					class="w-full text-left border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+				/>
 			</div>
 		</DisclosurePanel>
 	</Disclosure>
@@ -168,12 +137,13 @@ import {
 } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 
-const route = useRoute()
 const config = useRuntimeConfig()
 
-const { useUserStore, useSettingStore } = useStore()
+const { usePageStore, useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
+const pageStore = usePageStore()
+const homePage = pageStore.getHome
 
 const { user, avatarImg } = storeToRefs(userStore)
 const { settings, logoBackgroundColor, projectLogoImg } =

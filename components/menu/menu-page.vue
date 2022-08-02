@@ -1,48 +1,41 @@
 <template>
 	<NuxtLink
-		:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm ${
-			`/${endpoint}` === detailsPage?.endpoint
-				? 'border-indigo-500 border-b-2 font-medium'
-				: ''
+		:class="`border-transparent text-gray-500 inline-flex items-center px-1 pt-1 text-sm  ${
+			route.path.startsWith(endpoint) ? 'active' : ''
 		}`"
-		:to="detailsPage?.endpoint"
+		:to="endpoint"
 	>
-		{{ detailsPage?.name }}
+		{{ menu.label }}
 	</NuxtLink>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { MenuPage } from '~/shared/types'
 
 interface Props {
-	label: string
-	page: string | number
+	menu: MenuPage
 }
 
 const props = defineProps<Props>()
-
-const detailsPage = ref(null)
-const endpoint = ref('')
-
 const { usePageStore } = useStore()
-const route = useRoute()
 const pageStore = usePageStore()
 const { pages } = storeToRefs(pageStore)
+const route = useRoute()
 
-onBeforeMount(() => {
-	detailsPage.value = getDetailsPage()
-})
-
-watch(
-	route,
-	() => {
-		endpoint.value = (route.params.endpoint && route.params.endpoint[0]) || ''
-	},
-	{ immediate: true }
+const page = pages.value.find(
+	(e) => e.id.toString() === props.menu.page?.toString()
 )
 
-function getDetailsPage() {
-	const result = pages.value?.find((e) => e.id.toString() === props.page)
-	return result
-}
+if (!page) navigateTo('/404')
+
+const endpoint = page.endpoint.startsWith('/')
+	? page.endpoint
+	: `/${page.endpoint}`
 </script>
+
+<style scoped>
+.active {
+	@apply font-medium border-indigo-500;
+}
+</style>

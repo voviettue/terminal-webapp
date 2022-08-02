@@ -1,13 +1,15 @@
 <template>
-	<component :is="`menu-${menu}`" :label="label" v-bind="options"></component>
+	<component :is="`menu-${menu.menu}`" :menu="menuType"></component>
 </template>
 
 <script setup lang="ts">
+import { Menu } from '~/shared/types'
+
 interface Props {
-	menu: string
-	label?: string
-	options?: Record<string, any>
+	menu: Menu
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const menuType = { ...props.menu, ...props.menu.options }
 </script>

@@ -1,14 +1,23 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { Page } from '~/shared/types'
 
 export const usePageStore = defineStore({
 	id: 'pagesStore',
 	state: () => ({
-		pages: null as Page[] | null,
+		pages: [] as Page[],
 		loading: false,
 		error: null,
 	}),
-	getters: {},
+	getters: {
+		getHome(state): Page {
+			const { useSettingStore } = useStore()
+			const settingsStore = useSettingStore()
+			const { settings } = storeToRefs(settingsStore)
+			return settings.value.homepage
+				? state.pages.find((e) => e.id === settings.value.homepage)
+				: state.pages?.[0]
+		},
+	},
 	actions: {
 		async hydrate() {
 			const directus = useDirectus()
@@ -16,7 +25,7 @@ export const usePageStore = defineStore({
 
 			try {
 				const { data } = await directus.items('cms_pages').readByQuery()
-				this.pages = data as unknown as Page[]
+				this.pages = data ?? ([] as Page[])
 			} catch (error) {
 				this.error = error
 			} finally {

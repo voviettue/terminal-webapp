@@ -31,6 +31,15 @@ push image@dev:
   only:
     - dev
 
+push image@staging:
+  extends: .push_image_template
+  script:
+    - docker build --no-cache -t $IMAGE:staging .
+    - docker tag $IMAGE:dev $REGISTRY/$IMAGE:staging
+    - docker push $REGISTRY/$IMAGE:staging
+  only:
+    - staging
+
 # Template
 .deploy_template:
   image: "ubuntu"
@@ -54,6 +63,14 @@ deploy dev:
   extends: .deploy_template
   script:
     - ssh ubuntu@$DEV_IP "aws ecr get-login-password --profile catex | docker login --username AWS --password-stdin $REGISTRY"
-    - ssh ubuntu@$DEV_IP "cd terminal/www/webapp && docker-compose pull && docker-compose up -d"
+    - ssh ubuntu@$DEV_IP "cd terminal/www/front-office && docker-compose pull && docker-compose up -d"
   only:
     - dev
+
+deploy staging:
+  extends: .deploy_template
+  script:
+    - ssh ubuntu@$DEV_IP "aws ecr get-login-password --profile catex | docker login --username AWS --password-stdin $REGISTRY"
+    - ssh ubuntu@$DEV_IP "cd terminal/www/webapp && docker-compose pull && docker-compose up -d"
+  only:
+    - staging

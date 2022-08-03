@@ -86,7 +86,7 @@ async function submit() {
 
 		const { usePageStore } = useStore()
 		const pageStore = usePageStore()
-		const page = pageStore.getHome
+		const page = pageStore.homepage
 		navigateTo(page ? page.endpoint : '/homepage')
 	} catch (err) {
 		error.value = err?.errors?.[0]?.message

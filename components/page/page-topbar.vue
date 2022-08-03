@@ -10,7 +10,7 @@
 					<div
 						class="flex-shrink-0 flex items-center w-16 justify-center background-logo"
 					>
-						<NuxtLink :to="homePage.endpoint ?? '/homepage'">
+						<NuxtLink :to="homePage?.endpoint ?? '/homepage'">
 							<img
 								class="h-8 w-auto"
 								:src="projectLogoImg"
@@ -143,7 +143,7 @@ const { usePageStore, useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 const pageStore = usePageStore()
-const homePage = pageStore.getHome
+const homePage = pageStore.homepage
 
 const { user, avatarImg } = storeToRefs(userStore)
 const { settings, logoBackgroundColor, projectLogoImg } =

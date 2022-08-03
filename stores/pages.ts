@@ -9,7 +9,7 @@ export const usePageStore = defineStore({
 		error: null,
 	}),
 	getters: {
-		getHome(state): Page {
+		homepage(state): Page {
 			const { useSettingStore } = useStore()
 			const settingsStore = useSettingStore()
 			const { settings } = storeToRefs(settingsStore)
@@ -26,9 +26,13 @@ export const usePageStore = defineStore({
 			try {
 				const { data } = await directus.items('cms_pages').readByQuery({
 					filter: {
-						hidden: {
-							_neq: true,
-						},
+						_and: [
+							{
+								hidden: {
+									_neq: true,
+								},
+							},
+						],
 					},
 				})
 				this.pages = data ?? ([] as Page[])
@@ -37,6 +41,9 @@ export const usePageStore = defineStore({
 			} finally {
 				this.loading = false
 			}
+		},
+		find(id: number | string): Page | undefined {
+			return this.pages.find((page) => page.id.toString() === id.toString())
 		},
 	},
 })

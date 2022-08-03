@@ -23,15 +23,14 @@ const pageStore = usePageStore()
 const { pages } = storeToRefs(pageStore)
 const route = useRoute()
 
-const page = pages.value.find(
-	(e) => e.id.toString() === props.menu.page?.toString()
-)
+const endpoint = computed(() => {
+	const page = pages.value.find(
+		(page) => page.id.toString() === props.menu.page.toString()
+	)
+	if (!page) return '/homepage'
 
-if (!page) navigateTo('/404')
-
-const endpoint = page.endpoint.startsWith('/')
-	? page.endpoint
-	: `/${page.endpoint}`
+	return page.endpoint.startsWith('/') ? page.endpoint : `/${page.endpoint}`
+})
 </script>
 
 <style scoped>

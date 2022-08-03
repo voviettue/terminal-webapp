@@ -111,15 +111,17 @@
 		</div>
 
 		<DisclosurePanel
-			class="sm:hidden fixed bottom-[64px] w-full bg-white border-b"
+			class="disclosure-panel sm:hidden fixed w-full border-b bg-white"
 		>
-			<div class="pt-2 pb-3 space-y-1">
-				<RenderMenu
-					v-for="menu in settings.menus"
-					:key="menu.id"
-					:menu="menu"
-					class="w-full text-left border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-				/>
+			<div class="pt-2 pb-3 space-y-1 flex flex-col justify-end h-full">
+				<DisclosureButton>
+					<RenderMenu
+						v-for="menu in settings.menus"
+						:key="menu.id"
+						:menu="menu"
+						class="w-full text-left border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+					/>
+				</DisclosureButton>
 			</div>
 		</DisclosurePanel>
 	</Disclosure>
@@ -170,5 +172,9 @@ async function logout() {
 
 .background-logo {
 	background-color: v-bind('logoBackgroundColor');
+}
+.disclosure-panel {
+	height: calc(100% - 64px);
+	bottom: 64px;
 }
 </style>

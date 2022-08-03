@@ -21,7 +21,7 @@
 					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
 						<RenderMenu
-							v-for="menu in settings.menus"
+							v-for="menu in menus"
 							:key="menu.id"
 							:menu="menu"
 							class="border-b-2"
@@ -148,7 +148,7 @@ const homePage = pageStore.homepage
 const { user, avatarImg } = storeToRefs(userStore)
 const { settings, logoBackgroundColor, projectLogoImg } =
 	storeToRefs(settingStore)
-
+const menus = settingStore.menus
 const adminUrl = config.terminal.adminUrl
 
 async function logout() {

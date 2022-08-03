@@ -11,11 +11,14 @@ export const useSettingStore = defineStore({
 		error: null,
 	}),
 	getters: {
+		menus(): any[] {
+			return this.settings?.menus || []
+		},
 		projectLogoImg(): string | null {
 			return getProjectLogo(this.settings)
 		},
 		logoBackgroundColor(): string | null {
-			return this.settings.project_background || 'transparent'
+			return this.settings?.project_background || 'transparent'
 		},
 	},
 	actions: {

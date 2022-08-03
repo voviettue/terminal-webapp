@@ -13,7 +13,7 @@ export const usePageStore = defineStore({
 			const { useSettingStore } = useStore()
 			const settingsStore = useSettingStore()
 			const { settings } = storeToRefs(settingsStore)
-			return settings.value.homepage
+			return settings.value?.homepage
 				? state.pages.find((e) => e.id === settings.value.homepage)
 				: state.pages?.[0]
 		},

@@ -61,6 +61,11 @@ definePageMeta({
 	title: 'Sign in',
 })
 
+const { useUserStore, useSettingStore, usePageStore } = useStore()
+const { hydrate: userHydrate } = useUserStore()
+const { hydrate: pageHydrate } = usePageStore()
+const { hydrate: settingHydrate } = useSettingStore()
+
 const values = ref({
 	email: '',
 	password: '',
@@ -76,7 +81,13 @@ async function submit() {
 			email: values.value?.email,
 			password: values.value?.password,
 		})
-		navigateTo('dashboard')
+
+		await Promise.all([userHydrate(), settingHydrate(), pageHydrate()])
+
+		const { usePageStore } = useStore()
+		const pageStore = usePageStore()
+		const page = pageStore.getHome
+		navigateTo(page ? page.endpoint : '/homepage')
 	} catch (err) {
 		error.value = err?.errors?.[0]?.message
 	}

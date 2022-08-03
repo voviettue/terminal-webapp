@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Settings } from '@directus/shared/types'
+import { Settings } from '~/shared/types'
 
 const { getProjectLogo } = useUtils()
 
@@ -15,7 +15,7 @@ export const useSettingStore = defineStore({
 			return getProjectLogo(this.settings)
 		},
 		logoBackgroundColor(): string | null {
-			return this.settings.project_color || 'transparent'
+			return this.settings.project_background || 'transparent'
 		},
 	},
 	actions: {
@@ -23,10 +23,19 @@ export const useSettingStore = defineStore({
 			const directus = useDirectus()
 			this.loading = true
 
-			const fields = ['project_name', 'project_logo', 'project_color']
+			const fields = [
+				'homepage',
+				'project_name',
+				'project_logo',
+				'project_background',
+				'menus.*',
+			]
 
 			try {
-				this.settings = await directus.settings.read({ fields })
+				const { data } = await directus
+					.items('cms_settings')
+					.readByQuery({ fields })
+				this.settings = data
 			} catch (error) {
 				this.error = error
 			} finally {

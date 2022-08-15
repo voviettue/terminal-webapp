@@ -1,6 +1,7 @@
 import { Menu } from './menu'
 
 export * from './menu'
+export * from './widget'
 
 export interface Display {
 	value: any
@@ -20,6 +21,7 @@ export interface Page {
 	id: string | number
 	name: string
 	title: string
+	widgets?: number[]
 }
 
 export type Settings = {

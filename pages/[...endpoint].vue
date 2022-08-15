@@ -1,6 +1,5 @@
 <template>
 	<PageWrapper>
-		<template #title>{{ pageInfo?.title }}</template>
 		<RenderPage :page="pageInfo" :params="params" />
 	</PageWrapper>
 </template>

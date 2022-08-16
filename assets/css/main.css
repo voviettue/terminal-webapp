@@ -1,10 +1,17 @@
-.nuxt-icon svg {
-	width: inherit !important;
-	height: inherit !important;
-	/* stroke-width: 2; */
-	stroke: currentcolor;
+/* Icons */
+
+@font-face {
+	font-weight: 400;
+	font-family: 'Material Icons';
+	font-style: normal;
+	src: url('../fonts/material-icons.woff2') format('woff2');
+	font-display: block;
 }
 
-.nuxt-icon svg path {
-	stroke: currentcolor;
+@font-face {
+	font-weight: 400;
+	font-family: 'Material Icons Outline';
+	font-style: normal;
+	src: url('../fonts/material-icons-outline.woff2') format('woff2');
+	font-display: block;
 }

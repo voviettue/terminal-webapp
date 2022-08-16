@@ -6,6 +6,7 @@ export interface Menu {
 	hidden: boolean
 	label: string
 	options: Record<string, any>
+	icon?: string
 }
 
 export interface MenuPage extends Menu {
@@ -15,3 +16,5 @@ export interface MenuPage extends Menu {
 export interface MenuLink extends Menu {
 	url: string
 }
+
+export type MenuCategory = Menu

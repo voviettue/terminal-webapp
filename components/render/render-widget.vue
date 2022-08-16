@@ -1,7 +1,7 @@
 <template>
 	<component
 		:is="`widget-${widget.widget}`"
-		:class="`${widget.htmlClass ?? ''} width-${widget.width}`"
+		:class="`overflow-auto  ${widget.htmlClass ?? ''} width-${widget.width}`"
 		:widget="detailsWidget"
 	/>
 </template>

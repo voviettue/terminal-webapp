@@ -2,7 +2,7 @@
 	<Disclosure
 		v-slot="{ open }"
 		as="nav"
-		class="bg-white shadow fixed bottom-0 w-full sm:static"
+		class="bg-white shadow fixed bottom-0 w-full sm:static z-50"
 	>
 		<div class="mx-auto px-4 md:px-8 bg-white border-t">
 			<div class="flex justify-between h-16">
@@ -18,14 +18,9 @@
 							/>
 						</NuxtLink>
 					</div>
-					<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+					<div class="hidden sm:ml-4 sm:space-x-6 sm:flex">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
-						<RenderMenu
-							v-for="menu in menus"
-							:key="menu.id"
-							:menu="menu"
-							class="border-b-2"
-						/>
+						<RenderMenu v-for="menu in menus" :key="menu.id" :menu="menu" />
 					</div>
 				</div>
 				<div class="flex items-center">
@@ -33,19 +28,20 @@
 					<Menu as="div" class="relative">
 						<div>
 							<MenuButton
-								class="text-transparent bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-4"
+								class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-4"
 							>
 								<span class="sr-only">Open user menu</span>
 								<img
-									v-if="avatarImg"
+									v-if="!avatarImg"
 									class="h-8 w-8 rounded-full"
 									:src="avatarImg"
 									:alt="user?.avatar?.title || 'User Avatar'"
 								/>
-								<nuxt-icon
+								<TwIcon
 									v-else
-									name="user-circle"
-									class="avatar-icon h-8 w-8 rounded-full"
+									name="account_circle"
+									filled
+									class="text-gray-400 hover:text-gray-500 text-4xl rounded-full"
 								/>
 							</MenuButton>
 						</div>
@@ -102,8 +98,8 @@
 							class="ml-6 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
 						>
 							<span class="sr-only">Open main menu</span>
-							<nuxt-icon v-if="!open" class="h-6 w-6" name="menu" />
-							<nuxt-icon v-else class="h-6 w-6" name="OutlineX" />
+							<TwIcon v-if="!open" name="menu" class="text-2xl" />
+							<TwIcon v-else name="close" class="text-2xl" />
 						</DisclosureButton>
 					</div>
 				</div>
@@ -111,17 +107,17 @@
 		</div>
 
 		<DisclosurePanel
+			v-slot="{ close }"
 			class="disclosure-panel sm:hidden fixed w-full border-b bg-white"
 		>
 			<div class="pt-2 pb-3 space-y-1 flex flex-col justify-end h-full">
-				<DisclosureButton>
-					<RenderMenu
-						v-for="menu in settings.menus"
-						:key="menu.id"
-						:menu="menu"
-						class="w-full text-left border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-					/>
-				</DisclosureButton>
+				<RenderMenu
+					v-for="menu in menus"
+					:key="menu.id"
+					:menu="menu"
+					class=""
+					@click="onClickMenu(menu, close)"
+				/>
 			</div>
 		</DisclosurePanel>
 	</Disclosure>
@@ -148,9 +144,8 @@ const pageStore = usePageStore()
 const homePage = pageStore.homepage
 
 const { user, avatarImg } = storeToRefs(userStore)
-const { settings, logoBackgroundColor, projectLogoImg } =
-	storeToRefs(settingStore)
-const menus = settingStore.menus
+const { logoBackgroundColor, projectLogoImg } = storeToRefs(settingStore)
+const menus = settingStore.menus.filter((e) => e.parent === null)
 const adminUrl = config.terminal.adminUrl
 
 async function logout() {
@@ -163,18 +158,21 @@ async function logout() {
 		navigateTo('sign-in')
 	}
 }
+
+function onClickMenu(menu, close) {
+	if (menu.menu !== 'category') {
+		close()
+	}
+}
 </script>
 
 <style scoped>
-.avatar-icon::v-deep(path) {
-	stroke: #a0aec0;
-}
-
 .background-logo {
 	background-color: v-bind('logoBackgroundColor');
 }
 .disclosure-panel {
 	height: calc(100% - 64px);
 	bottom: 64px;
+	z-index: 10000;
 }
 </style>

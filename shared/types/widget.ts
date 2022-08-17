@@ -6,6 +6,7 @@ export interface Widget {
 	htmlClass: string
 	options: Record<string, any>
 	parent: number
+	page?: number
 }
 
 export interface TextWidget extends Widget {

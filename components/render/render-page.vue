@@ -21,12 +21,9 @@ const directus = useDirectus()
 const items = (await fetchWidgets()) as Widget[]
 
 async function fetchWidgets() {
-	const widgetIds = props.page?.widgets ?? []
-	if (widgetIds.length === 0) return []
-
 	const cmsWidgets = directus.items('cms_widgets')
 	const res = await cmsWidgets.readByQuery({
-		filter: { _and: [{ id: { _in: widgetIds } }] },
+		filter: { page: props.page.id },
 	})
 
 	return res.data

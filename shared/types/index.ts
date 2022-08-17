@@ -9,8 +9,8 @@ export interface Display {
 }
 
 export interface TableHeader {
-	value: string
-	text?: string
+	key: string
+	label?: string
 	display?: string
 	displayOptions?: Record<string, any>
 }

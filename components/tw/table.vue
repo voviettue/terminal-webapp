@@ -6,12 +6,12 @@
 					<tr>
 						<th
 							v-for="header in normalizedHeaders"
-							:key="`th-${header?.value}`"
+							:key="`th-${header?.key}`"
 							class="pl-4 pr-3 text-left py-3.5 sm:pl-6 md:pl-0 font-normal"
 							scope="col"
 						>
-							<slot :name="`header-${header.value}`" :header="header">
-								{{ get(header, 'text') ?? '—' }}
+							<slot :name="`header-${header.key}`" :header="header">
+								{{ get(header, 'label') ?? '—' }}
 							</slot>
 						</th>
 					</tr>
@@ -29,18 +29,18 @@
 							class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0"
 						>
 							<slot
-								:name="`item-${header?.value}`"
+								:name="`item-${header?.key}`"
 								:item="item"
-								:value="get(item, header.value)"
+								:value="get(item, header.key)"
 							>
 								<RenderDisplay
 									v-if="header?.display"
 									:name="header.display"
-									:value="get(item, header.value)"
+									:value="get(item, header.key)"
 									:options="header?.displayOptions"
 								></RenderDisplay>
 								<template v-else>
-									{{ get(item, header.value) ?? '—' }}
+									{{ get(item, header.key) ?? '—' }}
 								</template>
 							</slot>
 						</td>
@@ -71,7 +71,7 @@ const props = defineProps<{
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 	return props.headers.map((header: any) =>
-		header instanceof Object ? header : { value: header, text: header }
+		header instanceof Object ? header : { key: header, label: header }
 	)
 })
 

@@ -10,24 +10,28 @@
 
 <script setup lang="ts">
 import { provide } from 'vue'
-import { Page } from '~/shared/types'
+import { Page, Widget } from '~/shared/types'
 interface Props {
 	params: object | null
 	page?: Page
 }
 
 const props = defineProps<Props>()
-
 const directus = useDirectus()
+const items = (await fetchWidgets()) as Widget[]
 
-const cmsWidgets = directus.items('cms_widgets')
+async function fetchWidgets() {
+	const widgetIds = props.page?.widgets ?? []
+	if (widgetIds.length === 0) return []
 
-const res = await cmsWidgets.readByQuery({
-	filter: { _and: [{ id: { _in: props.page?.widgets } }] },
-})
-const items: any[] = res.data
-	? res.data.sort((a: any, b: any) => (a.sort ?? 1000) - (b.sort ?? 1000))
-	: []
+	const cmsWidgets = directus.items('cms_widgets')
+	const res = await cmsWidgets.readByQuery({
+		filter: { _and: [{ id: { _in: widgetIds } }] },
+	})
 
+	return res.data
+		? res.data.sort((a: any, b: any) => (a.sort ?? 1000) - (b.sort ?? 1000))
+		: []
+}
 provide('widgets', items)
 </script>

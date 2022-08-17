@@ -12,7 +12,10 @@ export const useSettingStore = defineStore({
 	}),
 	getters: {
 		menus(): any[] {
-			return this.settings?.menus || []
+			const menus = this.settings?.menus || []
+			return menus
+				.filter((e) => e.hidden !== true)
+				.sort((a: any, b: any) => (a.sort ?? 1000) - (b.sort ?? 1000))
 		},
 		projectLogoImg(): string | null {
 			return getProjectLogo(this.settings)

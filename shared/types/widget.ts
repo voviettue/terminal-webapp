@@ -25,6 +25,9 @@ export interface ImageWidget extends Widget {
 	objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 	ratioWidth?: number
 	ratioHeight?: number
+	borderRadius?: string
+	zoom?: number
+	shadow?: string
 }
 
 export interface BoxWidget extends Widget {

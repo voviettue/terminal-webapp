@@ -1,6 +1,11 @@
 <template>
 	<div class="p-4">
-		<img :class="`w-full shadow-${shadow}`" :style="styles" :src="url" />
+		<img
+			:class="`w-full shadow-${shadow}`"
+			:style="styles"
+			:src="url"
+			@error="onError()"
+		/>
 	</div>
 </template>
 
@@ -12,11 +17,26 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const { url, objectFit, zoom, borderRadius, shadow, ratioWidth, ratioHeight } =
-	props.widget as any
+const {
+	objectFit,
+	defaultImage,
+	zoom,
+	borderRadius,
+	shadow,
+	ratioWidth,
+	ratioHeight,
+} = props.widget as any
 const styles = getStyles()
+const url = ref(props.widget?.url)
 
 // functions
+function onError() {
+	if (!defaultImage) return
+
+	const { getFileSrc } = useUtils()
+	url.value = getFileSrc(defaultImage)
+}
+
 function getStyles() {
 	const styles = {
 		'aspect-ratio':

@@ -1,4 +1,4 @@
-export default function getUserAvatar(key: string): string {
+export default function getFileSrc(key: string): string {
 	if (key) {
 		const directus = useDirectus()
 		const config = useRuntimeConfig()

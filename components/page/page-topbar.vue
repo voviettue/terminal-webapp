@@ -18,10 +18,10 @@
 							/>
 						</NuxtLink>
 					</div>
-					<div class="hidden sm:ml-4 sm:space-x-6 sm:flex">
+					<nav class="hidden sm:ml-4 sm:space-x-6 sm:flex">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
 						<RenderMenu v-for="menu in menus" :key="menu.id" :menu="menu" />
-					</div>
+					</nav>
 				</div>
 				<div class="flex items-center">
 					<!-- Profile dropdown -->
@@ -110,7 +110,7 @@
 			v-slot="{ close }"
 			class="disclosure-panel sm:hidden fixed w-full border-b bg-white"
 		>
-			<div class="pt-2 pb-3 space-y-1 flex flex-col justify-end h-full">
+			<nav class="pt-2 pb-3 space-y-1 flex flex-col justify-end h-full">
 				<RenderMenu
 					v-for="menu in menus"
 					:key="menu.id"
@@ -118,7 +118,7 @@
 					class=""
 					@click="onClickMenu(menu, close)"
 				/>
-			</div>
+			</nav>
 		</DisclosurePanel>
 	</Disclosure>
 </template>
@@ -174,5 +174,20 @@ function onClickMenu(menu, close) {
 	height: calc(100% - 64px);
 	bottom: 64px;
 	z-index: 10000;
+}
+</style>
+
+<style scoped>
+nav :deep(.menu) {
+	@apply p-4 py-2 border-transparent border-l-4 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit  sm:p-0 hover:sm:border-transparent;
+}
+nav :deep(.menu.sub) {
+	@apply p-4 py-2 w-full sm:p-4 sm:py-2 border-b-0;
+}
+nav :deep(.menu.active) {
+	@apply bg-indigo-50 border-indigo-500 font-medium sm:border-b-2 sm:border-l-0 sm:bg-inherit;
+}
+nav :deep(.menu.sub.active) {
+	@apply border-l-4 border-b-0;
 }
 </style>

@@ -1,10 +1,5 @@
 <template>
-	<NuxtLink
-		:class="`p-4 py-2 border-transparent border-l-4 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit sm:border-l-0 sm:p-0 ${
-			active ? 'active' : ''
-		}`"
-		:to="endpoint"
-	>
+	<NuxtLink :class="{ menu: true, active, sub: nested }" :to="endpoint">
 		<TwIcon
 			v-if="menu.icon"
 			:name="menu.icon"
@@ -20,6 +15,7 @@ import { MenuPage } from '~/shared/types'
 
 interface Props {
 	menu: MenuPage
+	nested: boolean
 }
 
 const props = defineProps<Props>()
@@ -38,9 +34,3 @@ const endpoint = computed(() => {
 })
 const active = computed(() => route.path.startsWith(endpoint.value))
 </script>
-
-<style scoped>
-.active {
-	@apply bg-indigo-50 border-indigo-500 font-medium sm:border-b-2 sm:border-l-0 sm:bg-inherit;
-}
-</style>

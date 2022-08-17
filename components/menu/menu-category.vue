@@ -21,7 +21,11 @@
 			class="bg-white ml-4 sm:ml-0 sm:absolute sm:top-[100%] sm:mt-1 sm:min-w-[200px] sm:shadow sm:rounded-lg"
 		>
 			<div v-for="childMenu in childMenus" :key="childMenu.id">
-				<RenderMenu :menu="childMenu" class="p-4 py-2 w-full sm:p-4 sm:py-2" />
+				<RenderMenu
+					:menu="childMenu"
+					:nested="true"
+					class="p-4 py-2 w-full sm:p-4 sm:py-2"
+				/>
 			</div>
 		</DisclosurePanel>
 	</Disclosure>

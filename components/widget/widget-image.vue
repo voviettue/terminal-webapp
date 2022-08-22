@@ -1,12 +1,10 @@
 <template>
-	<div class="p-4">
-		<img
-			:class="`w-full shadow-${shadow}`"
-			:style="styles"
-			:src="url"
-			@error="onError()"
-		/>
-	</div>
+	<img
+		:class="`w-full shadow-${shadow}`"
+		:style="styles"
+		:src="url"
+		@error="onError()"
+	/>
 </template>
 
 <script setup lang="ts">

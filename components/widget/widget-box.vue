@@ -1,12 +1,10 @@
 <template>
-	<div>
-		<div class="lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6">
-			<RenderWidget
-				v-for="item in items"
-				:key="`widget-${item.id}`"
-				:widget="item"
-			></RenderWidget>
-		</div>
+	<div class="lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6">
+		<RenderWidget
+			v-for="item in items"
+			:key="`widget-${item.id}`"
+			:widget="item"
+		></RenderWidget>
 	</div>
 </template>
 

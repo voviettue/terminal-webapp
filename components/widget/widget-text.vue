@@ -1,7 +1,5 @@
 <template>
-	<div>
-		<p :style="styles">{{ widget.text }}</p>
-	</div>
+	<p :style="styles">{{ widget.text }}</p>
 </template>
 
 <script setup lang="ts">
@@ -33,7 +31,7 @@ function getStyles() {
 		'text-align': textAlign,
 		background,
 		'font-weight': textStyle?.includes('bold') ? 'bold' : null,
-		'text-style': textStyle?.includes('italic') ? 'italic' : null,
+		'font-style': textStyle?.includes('italic') ? 'italic' : null,
 		'text-decoration': textStyle?.includes('underline') ? 'underline' : null,
 		'font-family': fontFamily,
 		border: border ? `1px solid ${border}` : null,

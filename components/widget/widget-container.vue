@@ -10,10 +10,10 @@
 
 <script setup lang="ts">
 import { inject } from 'vue'
-import { Widget, BoxWidget } from '~~/shared/types'
+import { Widget, ContainerWidget } from '~~/shared/types'
 
 interface Props {
-	widget: BoxWidget
+	widget: ContainerWidget
 }
 
 const props = defineProps<Props>()

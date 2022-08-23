@@ -31,7 +31,8 @@ export interface ImageWidget extends Widget {
 	shadow?: string
 }
 
-export interface BoxWidget extends Widget {
+export interface ContainerWidget extends Widget {
+	gap?: string
 	background?: string
 	borderRadius?: string
 	shadow?: boolean

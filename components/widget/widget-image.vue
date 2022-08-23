@@ -26,10 +26,15 @@ const {
 } = props.widget as any
 const styles = getStyles()
 const url = ref(props.widget?.url)
-
+if (!url.value) {
+	onError()
+}
 // functions
 function onError() {
-	if (!defaultImage) return
+	if (!defaultImage) {
+		url.value = 'img/default-img.png'
+		return
+	}
 
 	const { getFileSrc } = useUtils()
 	url.value = getFileSrc(defaultImage)

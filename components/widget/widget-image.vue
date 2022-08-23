@@ -15,20 +15,14 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const {
-	objectFit,
-	defaultImage,
-	zoom,
-	borderRadius,
-	shadow,
-	ratioWidth,
-	ratioHeight,
-} = props.widget as any
-const styles = getStyles()
+const { defaultImage, shadow } = props.widget as any
+const { getStyles } = useUtils()
+const styles = getStyles(props.widget.options)
 const url = ref(props.widget?.url)
 if (!url.value) {
 	onError()
 }
+
 // functions
 function onError() {
 	if (!defaultImage) {
@@ -38,26 +32,5 @@ function onError() {
 
 	const { getFileSrc } = useUtils()
 	url.value = getFileSrc(defaultImage)
-}
-
-function getStyles() {
-	const styles = {
-		'aspect-ratio':
-			ratioWidth && ratioHeight ? `${ratioWidth}/${ratioHeight}` : 'auto',
-		'object-fit': objectFit ?? 'contain',
-		transform: zoom ? `scale(${zoom})` : null,
-		'border-radius': borderRadius ?? null,
-	}
-
-	Object.keys(styles).forEach((k) => {
-		if (
-			styles[k] === null ||
-			styles[k] === undefined ||
-			String(styles[k]).trim() === ''
-		) {
-			delete styles[k]
-		}
-	})
-	return styles
 }
 </script>

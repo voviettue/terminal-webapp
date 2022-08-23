@@ -2,6 +2,7 @@ import jwtPayload from './utils/jwt-payload'
 import getUserAvatar from './utils/get-user-avatar'
 import getProjectLogo from './utils/get-project-logo'
 import getFileSrc from './utils/get-file-src'
+import getStyles from './utils/get-styles'
 
 export const useUtils = () => {
 	return {
@@ -9,5 +10,6 @@ export const useUtils = () => {
 		getUserAvatar,
 		getProjectLogo,
 		getFileSrc,
+		getStyles,
 	}
 }

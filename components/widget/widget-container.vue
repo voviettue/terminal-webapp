@@ -1,5 +1,8 @@
 <template>
-	<div class="lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6">
+	<div
+		:class="`lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6 shadow-${widget?.shadow}`"
+		:style="styles"
+	>
 		<RenderWidget
 			v-for="item in items"
 			:key="`widget-${item.id}`"
@@ -20,4 +23,6 @@ const props = defineProps<Props>()
 
 const widgets: Widget[] = inject('widgets')
 const items = widgets.filter((e) => e.parent === props.widget.id)
+const { getStyles } = useUtils()
+const styles = getStyles(props.widget.options)
 </script>

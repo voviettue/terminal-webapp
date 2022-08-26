@@ -20,6 +20,11 @@ export interface TextWidget extends Widget {
 	border?: string
 }
 
+export interface RichTextWidget extends Widget {
+	content?: string
+	fontFamily?: string
+}
+
 export interface ImageWidget extends Widget {
 	url?: string
 	defaultImage?: string

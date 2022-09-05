@@ -2,7 +2,7 @@
 	<section
 		:data-id="id"
 		:class="`widget overflow-auto width-${widget.width} ${
-			widget.htmlClass ?? ''
+			widget?.html_class ?? ''
 		}`"
 	>
 		<component :is="`widget-${widget.widget}`" :widget="detailsWidget" />
@@ -19,7 +19,7 @@ interface Props {
 
 const props: any = defineProps<Props>()
 const detailsWidget = { ...props.widget, ...props.widget.options }
-const customCss = props.widget.customCss
+const customCss = props.widget.custom_css
 const id = (Math.random() + 1).toString(36).substring(7)
 
 onMounted(() => {

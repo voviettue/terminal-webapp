@@ -3,7 +3,7 @@ export interface Widget {
 	name: string
 	width: string
 	widget: string
-	htmlClass: string
+	html_class: string
 	options: Record<string, any>
 	parent: number
 	page?: number

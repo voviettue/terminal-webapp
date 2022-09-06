@@ -2,6 +2,7 @@ import { Menu } from './menu'
 
 export * from './menu'
 export * from './widget'
+export * from './query'
 
 export interface Display {
 	value: any

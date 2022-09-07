@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { User } from '@directus/shared/types'
 
-const { getUserAvatar } = useUtils()
+const { getFileSrc } = useUtils()
 
 export const useUserStore = defineStore({
 	id: 'userStore',
@@ -12,7 +12,7 @@ export const useUserStore = defineStore({
 	}),
 	getters: {
 		avatarImg(): string | null {
-			return getUserAvatar(this.user)
+			return getFileSrc(this.user?.avatar?.id)
 		},
 	},
 	actions: {

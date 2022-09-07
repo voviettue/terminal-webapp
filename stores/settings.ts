@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Settings } from '~/shared/types'
 
-const { getProjectLogo } = useUtils()
+const { getFileSrc } = useUtils()
 
 export const useSettingStore = defineStore({
 	id: 'settingsStore',
@@ -18,7 +18,7 @@ export const useSettingStore = defineStore({
 				.sort((a: any, b: any) => (a.sort ?? 1000) - (b.sort ?? 1000))
 		},
 		projectLogoImg(): string | null {
-			return getProjectLogo(this.settings)
+			return getFileSrc(this.settings?.project_logo) ?? '/img/logo.png'
 		},
 		logoBackgroundColor(): string | null {
 			return this.settings?.project_background || 'transparent'

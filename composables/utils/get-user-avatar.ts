@@ -6,7 +6,7 @@ export default function getUserAvatar(user: Partial<User>): string {
 		const config = useRuntimeConfig()
 		const token = directus.auth?.token
 
-		const url = new URL(`/assets/${user.avatar.id}`, config.public.api.baseUrl)
+		const url = new URL(`${config.public?.url}/api//assets/${user.avatar.id}`)
 
 		url.searchParams.append('key', 'system-medium-cover')
 		url.searchParams.append('access_token', token)

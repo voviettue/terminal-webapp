@@ -32,7 +32,7 @@
 							>
 								<span class="sr-only">Open user menu</span>
 								<img
-									v-if="!avatarImg"
+									v-if="avatarImg"
 									class="h-8 w-8 rounded-full"
 									:src="avatarImg"
 									:alt="user?.avatar?.title || 'User Avatar'"

@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<p :style="styles" v-html="content"></p>
+	<p :style="styles" v-html="widget?.content"></p>
 </template>
 
 <script setup lang="ts">

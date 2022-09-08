@@ -56,3 +56,8 @@ export interface DividerWidget extends Widget {
 	capPosition?: string
 	height?: string
 }
+
+export interface ListWidget extends ContainerWidget {
+	data: any[]
+	itemSpacing?: string
+}

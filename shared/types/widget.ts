@@ -43,3 +43,16 @@ export interface ContainerWidget extends Widget {
 	shadow?: boolean
 	widgets?: Widget[]
 }
+
+export interface IframeWidget extends Widget {
+	url: string
+}
+
+export interface DividerWidget extends Widget {
+	orientation?: string
+	strokeStyle?: string
+	color?: string
+	cap?: string
+	capPosition?: string
+	height?: string
+}

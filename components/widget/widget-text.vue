@@ -1,5 +1,5 @@
 <template>
-	<p :style="styles">{{ widget.text }}</p>
+	<p :style="styles">{{ text }}</p>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +10,10 @@ interface Props {
 }
 
 const props: any = defineProps<Props>()
-const { getStyles } = useUtils()
+const { getStyles, renderTemplate } = useUtils()
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
 const styles = getStyles(props.widget.options)
+
+const text = renderTemplate(props.widget?.text, pageStore.context)
 </script>

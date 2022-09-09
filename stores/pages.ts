@@ -1,10 +1,28 @@
 import { defineStore, storeToRefs } from 'pinia'
-import { Page } from '~/shared/types'
+import { Page, Widget } from '~/shared/types'
+
+function findQueries(str: string) {
+	const regex = /\$query.(\w+)/g
+	const matches = [...str.matchAll(regex)] ?? []
+
+	return matches.map((e) => e[1])
+}
+
+async function getQueriesFromWidgets(widgets: Widget[]) {
+	let keys = []
+	for (const widget of widgets) {
+		keys = keys.concat(findQueries(JSON.stringify(widget.options)))
+	}
+	const { useQueryStore } = useStore()
+	const queryStore = useQueryStore()
+	return await queryStore.getByKeys(keys)
+}
 
 export const usePageStore = defineStore({
 	id: 'pagesStore',
 	state: () => ({
 		pages: [] as Page[],
+		context: {},
 		loading: false,
 		error: null,
 	}),
@@ -44,6 +62,14 @@ export const usePageStore = defineStore({
 		},
 		find(id: number | string): Page | undefined {
 			return this.pages.find((page) => page.id.toString() === id.toString())
+		},
+		async initContext(widgets: Widget[]) {
+			const queries = await getQueriesFromWidgets(widgets)
+			const $query = {}
+			for (const query of queries) {
+				$query[query.key] = JSON.parse(query.output) ?? null
+			}
+			this.context = { $query }
 		},
 	},
 })

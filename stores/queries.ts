@@ -10,10 +10,10 @@ export const useQueryStore = defineStore({
 			const directus = useDirectus()
 
 			try {
-				const queries = await directus.items('cms_queries').readByQuery({
+				const res = await directus.items('cms_queries').readByQuery({
 					filter: { _and: [{ key: { _in: keys } }] },
 				})
-				return queries as Query[]
+				return res.data as Query[]
 			} catch {
 				//
 			}

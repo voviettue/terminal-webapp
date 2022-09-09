@@ -18,7 +18,11 @@ interface Props {
 
 const props = defineProps<Props>()
 const directus = useDirectus()
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
 const items = (await fetchWidgets()) as Widget[]
+await pageStore.initContext(items)
+provide('widgets', items)
 
 async function fetchWidgets() {
 	const cmsWidgets = directus.items('cms_widgets')
@@ -30,5 +34,4 @@ async function fetchWidgets() {
 		? res.data.sort((a: any, b: any) => (a.sort ?? 1000) - (b.sort ?? 1000))
 		: []
 }
-provide('widgets', items)
 </script>

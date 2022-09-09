@@ -1,5 +1,9 @@
 <template>
-	<div :style="styles" :class="`shadow-${widget?.shadow}`">
+	<div
+		v-if="isArray(widget.data)"
+		:style="styles"
+		:class="`shadow-${widget?.shadow}`"
+	>
 		<div
 			v-for="(json, index) in widget.data"
 			:key="index"
@@ -24,6 +28,8 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const { isArray } = useLodash()
 
 const widgets: Widget[] = inject('widgets')
 

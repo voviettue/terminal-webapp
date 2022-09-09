@@ -20,6 +20,20 @@ export interface TextWidget extends Widget {
 	border?: string
 }
 
+export interface KeyValueWidget extends Widget {
+	data?: any
+	background?: string
+	style?: string
+	rows?: number | string
+	lineBetweenRows?: boolean
+	textAlignLeft?: Array<'left' | 'right' | 'center' | 'justify'>
+	textAlignRight?: Array<'left' | 'right' | 'center' | 'justify'>
+	textStyleLeft?: Array<'bold' | 'italic' | 'underline'>
+	textStyleRifht?: Array<'bold' | 'italic' | 'underline'>
+	textColorLeft?: string
+	textColorRight?: string
+}
+
 export interface RichTextWidget extends Widget {
 	content?: string
 	fontFamily?: string
@@ -58,6 +72,6 @@ export interface DividerWidget extends Widget {
 }
 
 export interface ListWidget extends ContainerWidget {
-	data: any[]
+	data?: any[]
 	itemSpacing?: string
 }

@@ -2,20 +2,15 @@
 	<div
 		v-if="isArray(widget.data)"
 		:style="styles"
-		:class="`shadow-${widget?.shadow}`"
+		:class="`lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6 shadow-${widget?.shadow}`"
 	>
-		<div
-			v-for="(json, index) in widget.data"
-			:key="index"
-			:class="`lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6`"
-			:style="{ padding: widget?.itemSpacing + 'px' }"
-		>
+		<template v-for="(dataItem, index) in widget.data">
 			<RenderWidget
-				v-for="item in items"
-				:key="`widget-${item.id}`"
-				:widget="item"
+				v-for="childWidget in childWidgets"
+				:key="`widget-${index}-${childWidget.id}`"
+				:widget="addContext(childWidget, dataItem)"
 			></RenderWidget>
-		</div>
+		</template>
 	</div>
 </template>
 
@@ -33,7 +28,10 @@ const { isArray } = useLodash()
 
 const widgets: Widget[] = inject('widgets')
 
-const items = widgets.filter((e) => e.parent === props.widget.id)
+const childWidgets = widgets.filter((e) => e.parent === props.widget.id)
 const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
+function addContext(childWidget: Widget, dataItem: any) {
+	return { ...childWidget, context: { $item: dataItem } }
+}
 </script>

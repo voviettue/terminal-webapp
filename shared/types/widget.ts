@@ -7,6 +7,7 @@ export interface Widget {
 	options: Record<string, any>
 	parent: number
 	page?: number
+	context?: Record<string, any>
 }
 
 export interface TextWidget extends Widget {
@@ -73,5 +74,6 @@ export interface DividerWidget extends Widget {
 
 export interface ListWidget extends ContainerWidget {
 	data?: any[]
+	itemBackground?: string
 	itemSpacing?: string
 }

@@ -6,7 +6,7 @@
 		<RenderWidget
 			v-for="item in items"
 			:key="`widget-${item.id}`"
-			:widget="item"
+			:widget="addContext(item, widget?.context)"
 		></RenderWidget>
 	</div>
 </template>
@@ -25,4 +25,7 @@ const widgets: Widget[] = inject('widgets')
 const items = widgets.filter((e) => e.parent === props.widget.id)
 const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
+function addContext(childWidget: Widget, dataItem: any) {
+	return { ...childWidget, context: { $item: dataItem } }
+}
 </script>

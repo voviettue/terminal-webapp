@@ -7,11 +7,11 @@ export default function renderTemplate(template: string, context: any): string {
 		const block = match[0]
 		const statement = 'return ' + block.replace('{{', '').replace('}}', '')
 
-		const { $query } = context
+		const { $query, $item } = context
 		// eslint-disable-next-line no-new-func
-		const fn = new Function('$query', statement)
+		const fn = new Function('$item', '$query', statement)
 
-		const value = fn($query) ?? block
+		const value = fn($item, $query) ?? block
 		const replacement =
 			typeof value === 'string' ? value : JSON.stringify(value)
 		result = template.replace(block, replacement)

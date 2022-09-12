@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-if="isArray(widget.data)"
+		v-if="Array.isArray(widget.data)"
 		:style="styles"
 		:class="`lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6 shadow-${widget?.shadow}`"
 	>
@@ -23,8 +23,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-const { isArray } = useLodash()
 
 const widgets: Widget[] = inject('widgets')
 

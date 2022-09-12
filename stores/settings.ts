@@ -4,7 +4,7 @@ import { Settings } from '~/shared/types'
 const { getFileSrc } = useUtils()
 
 export const useSettingStore = defineStore({
-	id: 'settingsStore',
+	id: 'settingStore',
 	state: () => ({
 		settings: null as Settings | null,
 		loading: false,

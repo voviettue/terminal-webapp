@@ -27,7 +27,10 @@ provide('widgets', items)
 async function fetchWidgets() {
 	const cmsWidgets = directus.items('cms_widgets')
 	const res = await cmsWidgets.readByQuery({
-		filter: { page: props.page.id },
+		filter: {
+			page: props.page.id,
+			hidden: { _neq: true },
+		},
 	})
 
 	return res.data

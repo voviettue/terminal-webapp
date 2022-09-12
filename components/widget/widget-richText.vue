@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<p :style="styles" v-html="widget?.content"></p>
+	<p :style="styles" v-html="content"></p>
 </template>
 
 <script setup lang="ts">
@@ -11,7 +11,10 @@ interface Props {
 }
 
 const props: any = defineProps<Props>()
-const { getStyles } = useUtils()
+const { getStyles, renderTemplate } = useUtils()
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
 
 const styles = getStyles(props.widget.options)
+const content = renderTemplate(props.widget?.content, pageStore.context) ?? null
 </script>

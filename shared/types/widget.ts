@@ -73,7 +73,7 @@ export interface DividerWidget extends Widget {
 }
 
 export interface ListWidget extends ContainerWidget {
-	data?: any[]
+	data?: any
 	itemBackground?: string
 	itemSpacing?: string
 }

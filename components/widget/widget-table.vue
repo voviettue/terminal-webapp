@@ -15,6 +15,14 @@ const pageStore = usePageStore()
 const columns = props.widget.columns ?? ([] as TableHeader[])
 
 const styles = getStyles(props.widget.options)
-const data =
-	JSON.parse(renderTemplate(props.widget?.data, pageStore.context)) ?? []
+let data = []
+try {
+	data =
+		JSON.parse(
+			renderTemplate(props.widget?.data, {
+				...pageStore.context,
+				...props.widget?.context,
+			})
+		) ?? []
+} catch {}
 </script>

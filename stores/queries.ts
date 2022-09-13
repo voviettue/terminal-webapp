@@ -37,8 +37,10 @@ export const useQueryStore = defineStore({
 					}
 				)
 				const { cloneDeep } = useLodash()
-				const output = cloneDeep(data?.value) ?? null
-				return { ...query, output: JSON.stringify(output) }
+				let output = cloneDeep(data?.value) ?? null
+				output = output ? JSON.stringify(output) : query.output
+
+				return { ...query, output }
 			} catch {
 				//
 			}

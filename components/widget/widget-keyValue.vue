@@ -1,6 +1,6 @@
 <template>
 	<div :style="styles" :class="props.widget.style || 'bottom-line'">
-		<template v-for="(value, key, index) in widget.data">
+		<template v-for="(value, key, index) in data">
 			<div
 				v-if="!widget?.rows || (index || 0) < widget.rows"
 				:key="index"
@@ -26,10 +26,24 @@ interface Props {
 
 const props: any = defineProps<Props>()
 
-const { getStyles } = useUtils()
+const { getStyles, renderTemplate } = useUtils()
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
+
 const styles = getStyles(props.widget.options)
 const leftStyle = getStylesBy('Left')
 const rightStyle = getStylesBy('Right')
+
+let data = null
+try {
+	data =
+		JSON.parse(
+			renderTemplate(props.widget?.data, {
+				...pageStore.context,
+				...props.widget?.context,
+			})
+		) ?? []
+} catch {}
 
 function getStylesBy(position: string) {
 	const styles = {}
@@ -60,19 +74,19 @@ function getStylesBy(position: string) {
 	padding: 0 0.25rem;
 	background-color: #fafafa;
 }
-.covered-borde {
+.covered-border {
 	border: 1px #d1d5db solid;
 	border-bottom: 0;
 }
-.covered-borde > div {
+.covered-border > div {
 	display: flex;
 	padding: 0.875rem;
 	border-bottom: 1px #d1d5db solid;
 }
-.covered-borde > div > div:first-child {
+.covered-border > div > div:first-child {
 	flex: 1;
 }
-.covered-borde > div > div:last-child {
+.covered-border > div > div:last-child {
 	flex: 2;
 }
 </style>

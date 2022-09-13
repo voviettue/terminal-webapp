@@ -7,6 +7,7 @@ export interface Widget {
 	options: Record<string, any>
 	parent: number
 	page?: number
+	context?: Record<string, any>
 }
 
 export interface TextWidget extends Widget {
@@ -18,6 +19,20 @@ export interface TextWidget extends Widget {
 	fontFamily?: string
 	background?: string
 	border?: string
+}
+
+export interface KeyValueWidget extends Widget {
+	data?: any
+	background?: string
+	style?: string
+	rows?: number | string
+	lineBetweenRows?: boolean
+	textAlignLeft?: Array<'left' | 'right' | 'center' | 'justify'>
+	textAlignRight?: Array<'left' | 'right' | 'center' | 'justify'>
+	textStyleLeft?: Array<'bold' | 'italic' | 'underline'>
+	textStyleRifht?: Array<'bold' | 'italic' | 'underline'>
+	textColorLeft?: string
+	textColorRight?: string
 }
 
 export interface RichTextWidget extends Widget {
@@ -55,4 +70,10 @@ export interface DividerWidget extends Widget {
 	cap?: string
 	capPosition?: string
 	height?: string
+}
+
+export interface ListWidget extends ContainerWidget {
+	data?: any[]
+	itemBackground?: string
+	itemSpacing?: string
 }

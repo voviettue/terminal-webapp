@@ -1,6 +1,6 @@
 export default function renderTemplate(template: string, context: any): string {
 	const regex = /({{.*?}})/g
-	const matches = [...template.matchAll(regex)]
+	const matches = typeof template === 'string' ? [...template.matchAll(regex)] : []
 	let result = template
 
 	matches.forEach((match) => {

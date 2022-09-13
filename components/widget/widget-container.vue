@@ -25,7 +25,7 @@ const widgets: Widget[] = inject('widgets')
 const items = widgets.filter((e) => e.parent === props.widget.id)
 const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
-function addContext(childWidget: Widget, dataItem: any) {
-	return { ...childWidget, context: { $item: dataItem } }
+function addContext(childWidget: Widget, context: any) {
+	return { ...childWidget, context }
 }
 </script>

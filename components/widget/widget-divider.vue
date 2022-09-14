@@ -35,10 +35,10 @@ const {
 	capPosition,
 	lineHeight,
 	lineWidth,
-} = props.widget?.options as DividerWidget
+} = (props.widget?.options || {}) as DividerWidget
 
 const content = cap || ''
-const orientationRow = orientation === 'horizontal'
+const orientationRow = !orientation || orientation === 'horizontal'
 // let position =
 const { getStyles } = useUtils()
 const getStylesDivider = () => {
@@ -53,10 +53,12 @@ const styleDivider = getStylesDivider()
 const getStylesBorder = () => {
 	return orientationRow
 		? {
-				'border-top': `${lineHeight || 1}px ${color} ${strokeStyle || 'solid'}`,
+				'border-top': `${lineHeight || 1}px ${color || '#ccc'} ${
+					strokeStyle || 'solid'
+				}`,
 		  }
 		: {
-				'border-left': `${lineHeight || 1}px ${color} ${
+				'border-left': `${lineHeight || 1}px ${color || '#ccc'} ${
 					strokeStyle || 'solid'
 				}`,
 		  }

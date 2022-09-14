@@ -75,13 +75,13 @@ function getStylesBy(position: string) {
 	background-color: #fafafa;
 }
 .covered-border {
-	border: 1px #d1d5db solid;
+	border: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
 	border-bottom: 0;
 }
 .covered-border > div {
 	display: flex;
 	padding: 0.875rem;
-	border-bottom: 1px #d1d5db solid;
+	border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
 }
 .covered-border > div > div:first-child {
 	flex: 1;

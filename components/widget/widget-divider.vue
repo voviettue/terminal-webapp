@@ -53,10 +53,12 @@ const styleDivider = getStylesDivider()
 const getStylesBorder = () => {
 	return orientationRow
 		? {
-				'border-top': `${lineHeight || 1}px ${color} ${strokeStyle || 'solid'}`,
+				'border-top': `${lineHeight || 1}px ${color || '#ccc'} ${
+					strokeStyle || 'solid'
+				}`,
 		  }
 		: {
-				'border-left': `${lineHeight || 1}px ${color} ${
+				'border-left': `${lineHeight || 1}px ${color || '#ccc'} ${
 					strokeStyle || 'solid'
 				}`,
 		  }

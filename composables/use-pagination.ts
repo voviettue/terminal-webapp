@@ -32,7 +32,7 @@ export const usePagination = (): Pagination => {
 
 	function setTotalItem(total: number) {
 		totalItem.value = total
-		pageTotal.value = Math.round(total / limit.value)
+		pageTotal.value = Math.ceil(total / limit.value)
 	}
 
 	function onPageChanged(fn: () => void) {

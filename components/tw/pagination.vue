@@ -8,22 +8,22 @@
 				v-if="totalPage > 1 && page > 1"
 				:disabled="page === 1"
 				href="#"
-				class="cursor-pointer border-t-2 border-transparent pt-4 pr-1 inline-flex items-center font-medium hover:border-gray-300"
+				class="page px-2"
 				@click="toPage(page - 1)"
 			>
-				<NuxtIcon
-					name="arrow-narrow-left"
-					class="mr-3 h-5 w-5 text-gray-500"
+				<TwIcon
+					name="arrow_left"
+					class="text-2xl text-gray-500"
 					aria-hidden="true"
 				/>
-				Prev
+				<span>Prev</span>
 			</button>
 		</div>
 		<div v-if="totalPage > 1" class="hidden md:-mt-px md:flex">
 			<page
 				v-for="i of visiblePages"
 				:key="`page-${i}`"
-				:class="{ 'cursor-pointer': 1, page, active: i === page }"
+				:class="{ 'cursor-pointer': 1, 'px-3': 1, page, active: i === page }"
 				aria-current="page"
 				@click="toPage(i)"
 			>
@@ -34,13 +34,13 @@
 			<button
 				v-if="totalPage > 1 && page < totalPage"
 				:disabled="page >= totalPage"
-				class="cursor-pointer border-t-2 border-transparent pt-4 pl-1 inline-flex items-center font-medium hover:border-gray-300"
+				class="page px-2"
 				@click="toPage(page + 1)"
 			>
-				Next
-				<NuxtIcon
-					name="arrow-narrow-right"
-					class="ml-3 h-5 w-5 text-gray-500"
+				<span>Next</span>
+				<TwIcon
+					name="arrow_right"
+					class="text-2xl text-gray-500"
 					aria-hidden="true"
 				/>
 			</button>
@@ -78,7 +78,8 @@ watchEffect(() => {
 
 <style scoped>
 .page {
-	@apply border-transparent hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium;
+	@apply border-transparent hover:border-gray-300 border-t-2 py-2 inline-flex items-center text-sm font-medium;
+	height: 40px;
 }
 
 .active {

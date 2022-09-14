@@ -1,9 +1,7 @@
 <template>
 	<section
 		:data-id="id"
-		:class="`widget overflow-auto width-${widget.width} ${
-			widget?.html_class ?? ''
-		}`"
+		:class="`widget width-${widget.width} ${widget?.html_class ?? ''}`"
 	>
 		<component :is="`widget-${widget.widget}`" :widget="detailsWidget" />
 	</section>

@@ -38,7 +38,7 @@ const {
 } = props.widget?.options as DividerWidget
 
 const content = cap || ''
-const orientationRow = orientation === 'horizontal'
+const orientationRow = !orientation || orientation === 'horizontal'
 // let position =
 const { getStyles } = useUtils()
 const getStylesDivider = () => {

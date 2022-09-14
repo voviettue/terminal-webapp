@@ -35,7 +35,7 @@ const {
 	capPosition,
 	lineHeight,
 	lineWidth,
-} = props.widget?.options as DividerWidget
+} = (props.widget?.options || {}) as DividerWidget
 
 const content = cap || ''
 const orientationRow = !orientation || orientation === 'horizontal'

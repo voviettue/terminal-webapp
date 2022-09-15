@@ -1,8 +1,5 @@
 <template>
-	<div
-		:class="['relative', 'flex', 'py-5', 'items-center']"
-		:style="styleDivider"
-	>
+	<div :class="['relative', 'flex', 'items-center']" :style="styleDivider">
 		<div
 			v-if="!capPosition || ['right', 'bottom', 'center'].includes(capPosition)"
 			class="flex-grow"
@@ -45,7 +42,7 @@ const getStylesDivider = () => {
 	const styles = getStyles(props.widget.options)
 	const line = orientationRow
 		? { width: `${lineWidth}px` }
-		: { height: `${lineWidth}px` }
+		: { height: `${lineWidth || 100}px` }
 	const direction = { 'flex-direction': orientationRow ? 'row' : 'column' }
 	return { ...styles, ...line, ...direction }
 }

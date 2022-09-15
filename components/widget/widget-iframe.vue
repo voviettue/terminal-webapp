@@ -1,6 +1,6 @@
 <template>
 	<iframe
-		:src="props.widget.Url"
+		:src="props.widget?.url"
 		width="100%"
 		frameborder="0"
 		:style="styles"
@@ -15,5 +15,8 @@ interface Props {
 
 const props: any = defineProps<Props>()
 const { getStyles } = useUtils()
-const styles = getStyles(props.widget.options)
+
+const defaultStyles = { 'aspect-ratio': '16/9' }
+let styles = getStyles(props.widget.options)
+styles = { ...defaultStyles, ...styles }
 </script>

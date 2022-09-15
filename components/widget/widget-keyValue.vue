@@ -2,15 +2,18 @@
 	<div :style="styles" :class="props.widget.style || 'bottom-line'">
 		<template v-for="(value, key, index) in data">
 			<div
-				v-if="!widget?.rows || (index || 0) < widget.rows"
+				v-if="
+					(!widget?.rows || (index || 0) < widget.rows) &&
+					keyTransformation(key)
+				"
 				:key="index"
-				:class="`sm:grid sm:grid-cols-2`"
+				class="key-value-grid"
 			>
 				<div :style="leftStyle">
-					<span>{{ key }}</span>
+					<span>{{ keyTransformation(key) || '—' }}</span>
 				</div>
 				<div :style="rightStyle">
-					<span>{{ value }}</span>
+					<span>{{ startCase(upperFirst(value)) || '—' }}</span>
 				</div>
 			</div>
 		</template>
@@ -18,6 +21,8 @@
 </template>
 
 <script setup lang="ts">
+import upperFirst from 'lodash/upperFirst'
+import startCase from 'lodash/startCase'
 import { KeyValueWidget } from '~/shared/types'
 
 interface Props {
@@ -33,6 +38,10 @@ const pageStore = usePageStore()
 const styles = getStyles(props.widget.options)
 const leftStyle = getStylesBy('Left')
 const rightStyle = getStylesBy('Right')
+
+function keyTransformation(key) {
+	return props.widget?.keyTransformation?.find((e: any) => e.key === key)?.value
+}
 
 let data = null
 try {
@@ -65,10 +74,19 @@ function getStylesBy(position: string) {
 	padding: 0.875rem 0;
 	border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
 }
+.connected-line {
+	position: relative;
+}
 .connected-line > div {
 	margin: 0.875rem 0;
-	border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
+}
+.connected-line > div::before {
+	content: '';
+	position: absolute;
+	width: 100%;
 	height: 1rem;
+	z-index: -1;
+	border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
 }
 .connected-line span {
 	padding: 0 0.25rem;
@@ -79,14 +97,16 @@ function getStylesBy(position: string) {
 	border-bottom: 0;
 }
 .covered-border > div {
-	display: flex;
 	padding: 0.875rem;
 	border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
 }
-.covered-border > div > div:first-child {
+.key-value-grid {
+	display: flex;
+}
+.key-value-grid > div:first-child {
 	flex: 1;
 }
-.covered-border > div > div:last-child {
+.key-value-grid > div:last-child {
 	flex: 2;
 }
 </style>

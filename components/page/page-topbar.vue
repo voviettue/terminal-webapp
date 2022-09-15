@@ -18,7 +18,7 @@
 							/>
 						</NuxtLink>
 					</div>
-					<nav class="hidden sm:ml-4 sm:space-x-6 sm:flex">
+					<nav class="hidden sm:flex sm:space-x-4 ml-4">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
 						<RenderMenu v-for="menu in menus" :key="menu.id" :menu="menu" />
 					</nav>
@@ -115,7 +115,6 @@
 					v-for="menu in menus"
 					:key="menu.id"
 					:menu="menu"
-					class=""
 					@click="onClickMenu(menu, close)"
 				/>
 			</nav>
@@ -136,7 +135,7 @@ import {
 import { storeToRefs } from 'pinia'
 
 const config = useRuntimeConfig()
-
+const router = useRouter()
 const { usePageStore, useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
@@ -147,6 +146,11 @@ const { user, avatarImg } = storeToRefs(userStore)
 const { logoBackgroundColor, projectLogoImg } = storeToRefs(settingStore)
 const menus = settingStore.menus.filter((e) => e.parent === null)
 const adminUrl = config.terminal.adminUrl
+let closePanel = () => null
+
+router.afterEach(() => {
+	closePanel()
+})
 
 async function logout() {
 	const directus = useDirectus()
@@ -160,8 +164,11 @@ async function logout() {
 }
 
 function onClickMenu(menu, close) {
+	closePanel = close
+	const state = useMenu()
 	if (menu.menu !== 'category') {
 		close()
+		state.value.open = false
 	}
 }
 </script>
@@ -179,15 +186,15 @@ function onClickMenu(menu, close) {
 
 <style scoped>
 nav :deep(.menu) {
-	@apply p-4 py-2 border-transparent border-l-4 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit  sm:p-0 hover:sm:border-transparent;
-}
-nav :deep(.menu.sub) {
-	@apply p-4 py-2 w-full sm:p-4 sm:py-2 border-b-0;
+	@apply px-4 sm:px-0 border-l-4 sm:border-l-0 py-2 border-transparent sm:border-b-2 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit  hover:sm:border-transparent;
 }
 nav :deep(.menu.active) {
-	@apply bg-indigo-50 border-indigo-500 font-medium sm:border-b-2 sm:border-l-0 sm:bg-inherit;
+	@apply bg-indigo-50 border-indigo-500 font-medium sm:bg-inherit;
+}
+nav :deep(.menu.sub) {
+	@apply py-2 w-full sm:p-4 sm:py-2 border-b-0;
 }
 nav :deep(.menu.sub.active) {
-	@apply border-l-4 border-b-0;
+	@apply border-l-4 sm:border-b-0;
 }
 </style>

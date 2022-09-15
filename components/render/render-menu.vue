@@ -3,6 +3,7 @@
 		:is="`menu-${menu.menu}`"
 		:menu="menuType"
 		:nested="nested"
+		@click="onClick()"
 	></component>
 </template>
 
@@ -15,6 +16,11 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), { nested: false })
-
 const menuType = { ...props.menu, ...props.menu.options }
+const state = useMenu()
+
+function onClick() {
+	if (props.menu.menu === 'category') return
+	state.value.open = false
+}
 </script>

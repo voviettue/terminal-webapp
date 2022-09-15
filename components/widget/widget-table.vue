@@ -2,7 +2,12 @@
 <template>
 	<TwTable :headers="columns" :items="items" :style="styles"></TwTable>
 	<template v-if="pagination">
-		<TwPagination v-model:page="page" :total-page="pageTotal"></TwPagination>
+		<TwPagination
+			v-model:page="page"
+			class="pt-4"
+			:total="totalItem"
+			:limit="limit"
+		></TwPagination>
 	</template>
 </template>
 
@@ -30,12 +35,12 @@ try {
 } catch {}
 // pagination
 const { pagination, itemPerPage } = props.widget.options
-const { items, page, pageTotal, limit, setLimit, setTotalItem, onPageChanged } =
+const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
 
 if (pagination) {
 	setTotalItem(data.length)
-	setLimit(itemPerPage ?? 10)
+	setLimit(parseInt(itemPerPage))
 	initItems()
 	onPageChanged(() => {
 		initItems()
@@ -47,5 +52,8 @@ if (pagination) {
 function initItems() {
 	const offset = (page.value - 1) * limit.value
 	items.value = data.slice(offset, offset + limit.value)
+	while (items.value.length < limit.value) {
+		items.value.push({})
+	}
 }
 </script>

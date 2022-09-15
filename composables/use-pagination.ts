@@ -14,7 +14,7 @@ interface Pagination {
 export const usePagination = (): Pagination => {
 	const items = ref([])
 	const page = ref(1)
-	const limit = ref(10)
+	const limit = ref<number>(10)
 	const pageTotal = ref(0)
 	const totalItem = ref(0)
 	let handlePageChange: any = null
@@ -26,7 +26,7 @@ export const usePagination = (): Pagination => {
 	})
 
 	function setLimit(number: number) {
-		limit.value = number
+		limit.value = isNaN(number) ? 10 : number
 		setTotalItem(totalItem.value)
 	}
 

@@ -85,12 +85,15 @@ function getStylesBy(position: string) {
 	position: absolute;
 	width: 100%;
 	height: 1rem;
-	z-index: -1;
+	z-index: 1;
 	border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
+}
+.connected-line > div > div {
+	z-index: 2;
 }
 .connected-line span {
 	padding: 0 0.25rem;
-	background-color: #fafafa;
+	background-color: #ffffff;
 }
 .covered-border {
 	border: 1px #d1d5db v-bind('props.widget.borderType || "solid"');

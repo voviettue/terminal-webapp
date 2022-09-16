@@ -7,6 +7,7 @@ import WidgetIframe from '~/components/widget/widget-iframe.vue'
 import WidgetDivider from '~/components/widget/widget-divider.vue'
 import WidgetList from '~/components/widget/widget-list.vue'
 import WidgetKeyValue from '~/components/widget/widget-keyValue.vue'
+import WidgetLink from '~/components/widget/widget-link.vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-container', WidgetContainer)
@@ -18,4 +19,5 @@ export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-divider', WidgetDivider)
 	nuxtApp.vueApp.component('widget-list', WidgetList)
 	nuxtApp.vueApp.component('widget-keyValue', WidgetKeyValue)
+	nuxtApp.vueApp.component('widget-link', WidgetLink)
 })

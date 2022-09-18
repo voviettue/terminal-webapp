@@ -1,15 +1,27 @@
 <template>
-	<div class="lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6">
-		<RenderWidget
-			v-for="item in items.filter((e) => !e.parent)"
-			:key="`widget-${item.id}`"
-			:widget="item"
-		></RenderWidget>
+	<div
+		id="page-body"
+		class="lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6"
+	>
+		<template v-if="loaded === false">
+			<RenderSkeleton
+				v-for="item in items.filter((e) => !e.parent)"
+				:key="`skeleton-${item.id}`"
+				:widget="item"
+			></RenderSkeleton>
+		</template>
+		<template v-else>
+			<RenderWidget
+				v-for="item in items.filter((e) => !e.parent)"
+				:key="`widget-${item.id}`"
+				:widget="item"
+			></RenderWidget>
+		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue'
+import { provide, onMounted } from 'vue'
 import { Page, Widget } from '~/shared/types'
 interface Props {
 	params: object | null
@@ -21,8 +33,13 @@ const directus = useDirectus()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const items = (await fetchWidgets()) as Widget[]
-await pageStore.initContext(items)
+const loaded = ref(false)
 provide('widgets', items)
+
+onMounted(async () => {
+	await pageStore.initContext(items)
+	loaded.value = true
+})
 
 async function fetchWidgets() {
 	const cmsWidgets = directus.items('cms_widgets')
@@ -38,3 +55,27 @@ async function fetchWidgets() {
 		: []
 }
 </script>
+
+<style scoped>
+#page-body :deep(.width-full) {
+	@apply col-span-6;
+}
+#page-body :deep(.width-half) {
+	@apply col-span-3;
+}
+#page-body :deep(.width-1) {
+	@apply lg:col-span-1;
+}
+#page-body :deep(.width-2) {
+	@apply lg:col-span-2;
+}
+#page-body :deep(.width-3) {
+	@apply lg:col-span-3;
+}
+#page-body :deep(.width-4) {
+	@apply lg:col-span-4;
+}
+#page-body :deep(.width-5) {
+	@apply lg:col-span-5;
+}
+</style>

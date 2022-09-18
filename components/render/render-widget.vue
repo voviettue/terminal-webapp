@@ -42,27 +42,3 @@ function addCustomCss() {
 	head.append(style)
 }
 </script>
-
-<style scoped>
-.width-full {
-	@apply col-span-6;
-}
-.width-half {
-	@apply col-span-3;
-}
-.width-1 {
-	@apply lg:col-span-1;
-}
-.width-2 {
-	@apply lg:col-span-2;
-}
-.width-3 {
-	@apply lg:col-span-3;
-}
-.width-4 {
-	@apply lg:col-span-4;
-}
-.width-5 {
-	@apply lg:col-span-5;
-}
-</style>

@@ -1,7 +1,12 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-	<TwTable :headers="columns" :items="items" :style="styles"></TwTable>
-	<template v-if="pagination">
+	<TwTable
+		:headers="columns"
+		:items="items"
+		:min-row="page > 1 ? 10 : null"
+		:style="styles"
+	></TwTable>
+	<template v-if="pagination && items.length > 0">
 		<TwPagination
 			v-model:page="page"
 			class="pt-4"
@@ -52,8 +57,11 @@ if (pagination) {
 function initItems() {
 	const offset = (page.value - 1) * limit.value
 	items.value = data.slice(offset, offset + limit.value)
-	while (items.value.length < limit.value) {
-		items.value.push({})
+
+	if (page.value > 1) {
+		// while (items.value.length < limit.value) {
+		// 	items.value.push({})
+		// }
 	}
 }
 </script>

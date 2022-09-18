@@ -45,14 +45,22 @@
 							</slot>
 						</td>
 					</tr>
-					<tr v-if="items.length === 0">
-						<td
-							:colspan="headers.length"
-							class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
-						>
-							No data
-						</td>
-					</tr>
+
+					<template v-if="!items || items.length === 0">
+						<tr>
+							<td
+								:colspan="headers.length"
+								class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
+							>
+								No records found
+							</td>
+						</tr>
+					</template>
+					<template v-else-if="minRow > 0 && items.length < minRow">
+						<tr v-for="k in minRow - items.length" :key="`pad-row-${k}`">
+							<td :colspan="headers.length" class="py-4 opacity-0">—</td>
+						</tr>
+					</template>
 				</tbody>
 			</table>
 		</div>
@@ -67,6 +75,7 @@ const props = defineProps<{
 	items?: Record<string, any>[]
 	rowClick: (item: any) => void
 	hideHeader: boolean
+	minRow?: number
 }>()
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {

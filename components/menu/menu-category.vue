@@ -1,7 +1,7 @@
 <template>
 	<Disclosure
 		as="div"
-		class="flex-row sm:inline-flex items-center border-transparent cursor-pointer sm:relative"
+		class="flex-row sm:inline-flex items-center border-transparent cursor-pointer sm:relative sm:border-b-2"
 		tabindex="0"
 		@focusin="state.open = true"
 		@focusout="outFocus($event)"

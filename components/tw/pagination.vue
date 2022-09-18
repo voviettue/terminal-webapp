@@ -18,7 +18,7 @@
 					{{ ' ' }}
 					<span class="font-medium">{{ total }}</span>
 					{{ ' ' }}
-					results
+					records
 				</p>
 			</div>
 			<div>
@@ -117,7 +117,7 @@ watchEffect(() => {
 
 <style scoped>
 .page {
-	@apply relative items-center border border-gray-300 bg-white py-1 sm:py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
+	@apply relative items-center border border-gray-300 bg-white py-1 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
 	min-width: 40px;
 }
 .page.disabled .icon {

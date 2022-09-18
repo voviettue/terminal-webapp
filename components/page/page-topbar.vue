@@ -186,7 +186,7 @@ function onClickMenu(menu, close) {
 
 <style scoped>
 nav :deep(.menu) {
-	@apply px-4 sm:px-0 border-l-4 sm:border-l-0 py-2 border-transparent sm:border-b-2 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit  hover:sm:border-transparent;
+	@apply px-4 py-2 sm:py-0 sm:px-0 border-l-4 sm:border-l-0 border-transparent sm:border-b-2 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit  hover:sm:border-transparent;
 }
 nav :deep(.menu.active) {
 	@apply bg-indigo-50 border-indigo-500 font-medium sm:bg-inherit;

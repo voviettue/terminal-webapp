@@ -77,3 +77,8 @@ export interface ListWidget extends ContainerWidget {
 	itemBackground?: string
 	itemSpacing?: string
 }
+
+export interface LinkWidget extends TextWidget {
+	url: string
+	tooltip?: string
+}

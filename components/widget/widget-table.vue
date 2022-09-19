@@ -4,7 +4,10 @@
 		:headers="columns"
 		:items="items"
 		:min-row="page > 1 ? limit : null"
-		:style="styles"
+		:styles="styles"
+		:shadow="shadow"
+		:vertical-lines="verticalLines"
+		:striped-row="strippedRow"
 	></TwTable>
 	<template v-if="pagination && items.length > 0">
 		<TwPagination
@@ -39,7 +42,8 @@ try {
 		) ?? []
 } catch {}
 // pagination
-const { pagination, itemPerPage } = props.widget.options
+const { pagination, itemPerPage, shadow, verticalLines, strippedRow } =
+	props.widget.options
 const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
 

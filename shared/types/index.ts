@@ -13,6 +13,7 @@ export interface TableHeader {
 	key: string
 	label?: string
 	display?: string
+	tooltip?: string
 	displayOptions?: Record<string, any>
 }
 

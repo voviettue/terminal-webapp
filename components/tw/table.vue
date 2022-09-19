@@ -1,32 +1,47 @@
 <template>
-	<div class="overflow-x-auto">
-		<div class="inline-block min-w-full align-middle">
+	<div class="inline-block min-w-full align-middle">
+		<div
+			:class="`overflow-auto shadow-${shadow} ring-1 ring-black ring-opacity-5`"
+			:style="(styles as CSSProperties)"
+		>
 			<table class="min-w-full divide-y divide-gray-300">
 				<thead v-if="!hideHeader">
-					<tr>
+					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.key}`"
-							class="pl-4 pr-3 text-left py-3.5 sm:pl-6 md:pl-0 font-normal"
+							class="py-4 px-3 has-tooltip"
 							scope="col"
 						>
 							<slot :name="`header-${header.key}`" :header="header">
-								{{ get(header, 'label') ?? '—' }}
+								<span
+									:class="`
+										tooltip -mt-8 py-1 px-2 text-sm font-medium text-white bg-gray-900
+										rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700
+									`"
+								>
+									{{ get(header, 'tooltip', get(header, 'label')) }}
+								</span>
+								{{ get(header, 'label', '-') }}
 							</slot>
 						</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-200">
+				<tbody class="divide-y divide-gray-200 bg-white">
 					<tr
 						v-for="(item, index) in items"
 						:key="`tr-${index}`"
-						:class="{ 'hover:bg-gray-100 cursor-pointer': clickable }"
+						:class="{
+							'hover:bg-gray-100 cursor-pointer': clickable,
+							'bg-gray-50': stripedRow && index % 2 === 0,
+							'divide-x divide-gray-200': verticalLines,
+						}"
 						@click="onRowClick(item)"
 					>
 						<td
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
-							class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0"
+							class="whitespace-nowrap py-4 px-3 text-gray-900"
 						>
 							<slot
 								:name="`item-${header?.key}`"
@@ -68,6 +83,7 @@
 </template>
 
 <script setup lang="ts">
+import { CSSProperties } from 'vue'
 import { TableHeader } from '~/shared/types'
 
 const props = defineProps<{
@@ -76,6 +92,10 @@ const props = defineProps<{
 	rowClick: (item: any) => void
 	hideHeader: boolean
 	minRow?: number
+	styles?: Record<string, any>
+	shadow?: string
+	verticalLines?: boolean
+	stripedRow?: boolean
 }>()
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
@@ -90,3 +110,12 @@ function onRowClick(item) {
 	if (props.rowClick) props.rowClick(item)
 }
 </script>
+<style scoped>
+.tooltip {
+	@apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+	@apply visible z-50 opacity-100;
+}
+</style>

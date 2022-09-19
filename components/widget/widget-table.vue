@@ -3,7 +3,7 @@
 	<TwTable
 		:headers="columns"
 		:items="items"
-		:min-row="page > 1 ? 10 : null"
+		:min-row="page > 1 ? limit : null"
 		:style="styles"
 	></TwTable>
 	<template v-if="pagination && items.length > 0">

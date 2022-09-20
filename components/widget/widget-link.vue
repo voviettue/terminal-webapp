@@ -1,6 +1,6 @@
 <template>
 	<a
-		:href="url"
+		:href="link"
 		:target="newTab !== false ? '_blank' : '_top'"
 		class="w-full tooltip"
 		:style="styles"
@@ -28,6 +28,14 @@ const url = renderTemplate(props.widget?.url, {
 	...pageStore.context,
 	...props.widget?.context,
 })
+
+function formatLink(url) {
+	const regexlink = /^http(s)?:\/\/.+/i
+	if (!regexlink.test(url)) return `http://${url}`
+	return url
+}
+const link = formatLink(url)
+
 const text = renderTemplate(props.widget?.text, {
 	...pageStore.context,
 	...props.widget?.context,

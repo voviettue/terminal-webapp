@@ -1,9 +1,6 @@
 <template>
-	<div class="inline-block min-w-full align-middle">
-		<div
-			:class="`overflow-auto shadow-${shadow} ring-1 ring-black ring-opacity-5`"
-			:style="(styles as CSSProperties)"
-		>
+	<div class="overflow-auto inline-block min-w-full align-middle">
+		<div :class="`shadow-${shadow}`" :style="(styles as CSSProperties)">
 			<table class="min-w-full divide-y divide-gray-300">
 				<thead v-if="!hideHeader">
 					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
@@ -15,10 +12,7 @@
 						>
 							<slot :name="`header-${header.key}`" :header="header">
 								<span
-									:class="`
-										tooltip -mt-8 py-1 px-2 text-sm font-medium text-white bg-gray-900
-										rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700
-									`"
+									class="` tooltip -mt-8 py-1 px-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700 `"
 								>
 									{{ get(header, 'tooltip', get(header, 'label')) }}
 								</span>
@@ -42,6 +36,7 @@
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
 							class="whitespace-nowrap py-4 px-3 text-gray-900"
+							:style="getStyles(header ?? {})"
 						>
 							<slot
 								:name="`item-${header?.key}`"
@@ -65,7 +60,7 @@
 						<tr>
 							<td
 								:colspan="headers.length"
-								class="whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
+								class="` whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400 `"
 							>
 								No records found
 							</td>
@@ -85,6 +80,7 @@
 <script setup lang="ts">
 import { CSSProperties } from 'vue'
 import { TableHeader } from '~/shared/types'
+import getStyles from '~~/composables/utils/get-styles'
 
 const props = defineProps<{
 	headers: (string | Partial<TableHeader>)[]

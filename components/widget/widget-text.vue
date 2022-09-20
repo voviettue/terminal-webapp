@@ -17,14 +17,13 @@ const pageStore = usePageStore()
 
 const options = ref(props.widget.options)
 const text = ref('')
-
-const textRender = renderTemplate(props.widget?.text, {
+text.value = renderTemplate(props.widget?.text, {
 	...pageStore.context,
 	...props.widget?.context,
 })
 
 if (props.widget?.condition) {
-	const { widget, text: value } = applyConditions(props.widget, textRender)
+	const { widget, text: value } = applyConditions(props.widget, text.value)
 	text.value = value
 	options.value = widget.options
 }

@@ -1,6 +1,6 @@
 <template>
 	<a
-		:href="widget.url"
+		:href="url"
 		:target="newTab !== false ? '_blank' : '_top'"
 		class="w-full tooltip"
 		:style="styles"
@@ -24,6 +24,10 @@ const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const styles = getStyles(props.widget.options)
 
+const url = renderTemplate(props.widget?.url, {
+	...pageStore.context,
+	...props.widget?.context,
+})
 const text = renderTemplate(props.widget?.text, {
 	...pageStore.context,
 	...props.widget?.context,

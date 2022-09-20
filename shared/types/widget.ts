@@ -81,4 +81,5 @@ export interface ListWidget extends ContainerWidget {
 export interface LinkWidget extends TextWidget {
 	url: string
 	tooltip?: string
+	newTab?: boolean
 }

@@ -14,6 +14,7 @@ export default function getStyles(options: Record<string, any>): CSSProperties {
 		ratioHeight,
 		objectFit,
 		borderRadius,
+		textTransform,
 	} = options
 
 	const styles = {
@@ -32,6 +33,7 @@ export default function getStyles(options: Record<string, any>): CSSProperties {
 		'object-fit': objectFit ?? null,
 		transform: zoom ? `scale(${zoom})` : null,
 		'border-radius': borderRadius ?? null,
+		'text-transform': textTransform ?? null,
 	}
 
 	Object.keys(styles).forEach((k) => {

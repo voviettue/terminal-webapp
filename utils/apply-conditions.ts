@@ -24,16 +24,20 @@ function matchedConditions(
 	conditions: Record<string, any>[],
 	valueCompare: any
 ) {
-	const type = typeof valueCompare
+	const type = isNaN(valueCompare)
+		? typeof valueCompare
+		: typeof parseInt(valueCompare)
 
-	if (type !== 'string' && type !== 'number') {
-		return false
-	}
+	if (type !== 'string' && type !== 'number') return false
 
 	return (conditions || []).filter(({ operator, value }) => {
-		return type === 'string'
-			? matchString(valueCompare, value, operator)
-			: matchNumber(valueCompare, value, operator)
+		if (type === 'string') {
+			return matchString(valueCompare, value, operator)
+		} else {
+			const left = parseInt(valueCompare)
+			const right = !isNaN(value) ? parseInt(value) : value
+			return matchNumber(left, right, operator)
+		}
 	})
 }
 

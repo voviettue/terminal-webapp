@@ -10,7 +10,7 @@
 				: 'justify-center',
 		]"
 	>
-		<button type="button" :class="getStyleButton">
+		<button type="button" :class="getStyleButton()">
 			<TwIcon v-if="leftIcon" :name="leftIcon" class="mr-1" />
 			{{ label }}
 			<TwIcon v-if="rightIcon" :name="rightIcon" class="ml-1" />

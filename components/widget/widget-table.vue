@@ -3,6 +3,7 @@
 	<TwTable
 		:headers="columns"
 		:items="items"
+		:row-click="widget?.onRowClick ? onRowClick : null"
 		:min-row="page > 1 ? limit : null"
 		:styles="styles"
 		:shadow="shadow"
@@ -61,11 +62,12 @@ if (pagination) {
 function initItems() {
 	const offset = (page.value - 1) * limit.value
 	items.value = data.slice(offset, offset + limit.value)
+}
 
-	if (page.value > 1) {
-		// while (items.value.length < limit.value) {
-		// 	items.value.push({})
-		// }
-	}
+function onRowClick(item) {
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	const AsyncFunction = async function () {}.constructor
+	const fn = AsyncFunction('$item', 'navigateTo', props.widget.onRowClick)
+	fn(item, navigateTo)
 }
 </script>

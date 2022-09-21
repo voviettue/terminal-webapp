@@ -2,11 +2,13 @@
 	<a
 		:href="link"
 		:target="newTab !== false ? '_blank' : '_top'"
-		class="w-full tooltip"
+		class="w-full"
 		:style="styles"
 	>
-		<span v-if="tooltip" class="tooltiptext">{{ tooltip }}</span>
-		{{ text }}
+		<div class="tooltip">
+			{{ text }}
+			<span v-if="tooltip" class="tooltiptext">{{ tooltip }}</span>
+		</div>
 	</a>
 </template>
 
@@ -44,27 +46,29 @@ const text = renderTemplate(props.widget?.text, {
 <style scoped>
 .tooltip {
 	position: relative;
-	display: inline-block;
+	width: max-content;
+	word-wrap: break-word;
+	max-width: 100%;
 }
 
 .tooltip .tooltiptext {
 	visibility: hidden;
-	width: 120px;
-	background-color: #555;
+	background-color: black;
 	color: #fff;
 	text-align: center;
 	border-radius: 6px;
-	padding: 5px 0;
+	padding: 5px;
 	position: absolute;
 	z-index: 1;
 	bottom: 125%;
-	left: 5%;
-	margin-left: -60px;
+	left: 50%;
 	opacity: 0;
 	transition: opacity 0.3s;
 	font-size: 12px;
 	font-style: normal;
 	font-weight: 400;
+	transform: translateX(-50%);
+	width: max-content;
 }
 
 .tooltip .tooltiptext::after {

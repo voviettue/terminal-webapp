@@ -96,3 +96,13 @@ export interface ButtonWidget extends Widget {
 	position: string
 	outline?: boolean
 }
+export interface IconButtonWidget extends Widget {
+	icon: string
+	buttonSize?: string
+	disable: boolean
+	buttonVariant?: string
+	borderRadius?: number
+	shadow?: string
+	position: string
+	outline?: boolean
+}

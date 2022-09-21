@@ -12,7 +12,7 @@
 						>
 							<slot :name="`header-${header.key}`" :header="header">
 								<span
-									class="` tooltip -mt-8 py-1 px-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700 `"
+									class="tooltip -mt-8 py-1 px-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700"
 								>
 									{{ get(header, 'tooltip', get(header, 'label')) }}
 								</span>
@@ -95,9 +95,11 @@ const props = defineProps<{
 }>()
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
-	return props.headers.map((header: any) =>
-		header instanceof Object ? header : { key: header, label: header }
-	)
+	return props.headers
+		.map((header: any) =>
+			header instanceof Object ? header : { key: header, label: header }
+		)
+		.filter((header: any) => !header.hidden)
 })
 
 const clickable = !!props.rowClick

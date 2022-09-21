@@ -1,6 +1,9 @@
 <template>
-	<div class="overflow-auto inline-block min-w-full align-middle">
-		<div :class="`shadow-${shadow}`" :style="(styles as CSSProperties)">
+	<div class="w-full inline-block align-middle">
+		<div
+			:class="`overflow-auto shadow-${shadow}`"
+			:style="(styles as CSSProperties)"
+		>
 			<table class="min-w-full divide-y divide-gray-300">
 				<thead v-if="!hideHeader">
 					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">

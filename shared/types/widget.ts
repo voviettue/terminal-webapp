@@ -83,3 +83,26 @@ export interface LinkWidget extends TextWidget {
 	tooltip?: string
 	newTab?: boolean
 }
+
+export interface ButtonWidget extends Widget {
+	label?: string
+	buttonSize?: string
+	leftIcon?: string
+	rightIcon?: string
+	disable: boolean
+	buttonVariant?: string
+	borderRadius?: number
+	shadow?: string
+	position: string
+	outline?: boolean
+}
+export interface IconButtonWidget extends Widget {
+	icon: string
+	buttonSize?: string
+	disable: boolean
+	buttonVariant?: string
+	borderRadius?: number
+	shadow?: string
+	position: string
+	outline?: boolean
+}

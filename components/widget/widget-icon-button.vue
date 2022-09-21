@@ -12,16 +12,21 @@
 	>
 		<button
 			type="button"
-			class="flex justify-center items-center"
-			:class="getStyleButton()"
+			:class="[
+				'btn icon',
+				`${buttonSize || 'sm'}`,
+				`${buttonVariant || 'light'}`,
+				`shadow-${shadow || 'md'}`,
+				outline ? 'outline' : '',
+			]"
+			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '50%' }"
 		>
-			<TwIcon :name="icon" class="mr-1" />
+			<TwIcon :name="icon" />
 		</button>
 	</div>
 </template>
 
 <script setup lang="ts">
-import * as buttonStyle from './button/style.json'
 import { IconButtonWidget } from '~~/shared/types'
 interface Props {
 	widget: IconButtonWidget
@@ -36,14 +41,4 @@ const {
 	shadow,
 	borderRadius,
 } = (props.widget?.options || {}) as Partial<IconButtonWidget>
-const getStyleButton = () => {
-	const color = buttonStyle.color[outline ? 'outline' : 'normal'][buttonVariant]
-	const size = buttonStyle.size[buttonSize || 'sm']
-	return [
-		color,
-		size,
-		`shadow-${shadow || 'md'}`,
-		`rounded-${borderRadius ? `[${borderRadius}px]` : 'full'}`,
-	].join(' ')
-}
 </script>

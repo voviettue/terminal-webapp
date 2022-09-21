@@ -60,7 +60,7 @@ const text = renderTemplate(props.widget?.text, {
 	padding: 5px;
 	position: absolute;
 	z-index: 1;
-	bottom: 125%;
+	top: -30px;
 	left: 50%;
 	opacity: 0;
 	transition: opacity 0.3s;

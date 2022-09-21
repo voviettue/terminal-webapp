@@ -12,8 +12,14 @@
 	>
 		<button
 			type="button"
-			class="flex justify-center items-center"
-			:class="getStyleButton()"
+			:class="[
+				'btn',
+				`${buttonSize || 'sm'}`,
+				`${buttonVariant || 'light'}`,
+				`shadow-${shadow || 'md'}`,
+				outline ? 'outline' : '',
+			]"
+			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '20%' }"
 		>
 			<TwIcon v-if="leftIcon" :name="leftIcon" class="mr-1" />
 			{{ label }}
@@ -23,7 +29,6 @@
 </template>
 
 <script setup lang="ts">
-import * as buttonStyle from './button/style.json'
 import { ButtonWidget } from '~~/shared/types'
 
 interface Props {
@@ -43,14 +48,4 @@ const {
 	shadow,
 	borderRadius,
 } = (props.widget?.options || {}) as Partial<ButtonWidget>
-const getStyleButton = () => {
-	const color = buttonStyle.color[outline ? 'outline' : 'normal'][buttonVariant]
-	const size = buttonStyle.size[buttonSize || 'sm']
-	return [
-		color,
-		size,
-		`shadow-${shadow || 'md'}`,
-		`rounded-${borderRadius ? `[${borderRadius}px]` : 'full'}`,
-	].join(' ')
-}
 </script>

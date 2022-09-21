@@ -34,6 +34,7 @@ const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const items = (await fetchWidgets()) as Widget[]
 const loaded = ref(false)
+updateRouteParams()
 provide('widgets', items)
 
 onMounted(async () => {
@@ -53,6 +54,14 @@ async function fetchWidgets() {
 	return res.data
 		? res.data.sort((a: any, b: any) => (a.sort ?? 1000) - (b.sort ?? 1000))
 		: []
+}
+
+function updateRouteParams() {
+	const route = useRoute()
+	delete route.params.endpoint
+	Object.keys(props.params).forEach((key) => {
+		route.params[key] = props.params[key]
+	})
 }
 </script>
 

@@ -26,11 +26,13 @@ export const useQueryStore = defineStore({
 				const directus = useDirectus()
 				const token = directus.auth?.token
 				const config = useRuntimeConfig()
+				const route = useRoute()
 
 				const { data } = await useFetch(
 					`${config.public.url}/api/front-office/queries/${query.id}/execute`,
 					{
 						method: 'PATCH',
+						body: route.params,
 						headers: {
 							Authorization: `Bearer ${token}`,
 						},

@@ -1,6 +1,8 @@
 import { CSSProperties } from 'vue'
 
 export default function getStyles(options: Record<string, any>): CSSProperties {
+	if (!options || Object.keys(options).length === 0) return null
+
 	const {
 		textSize,
 		textColor,

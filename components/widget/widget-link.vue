@@ -1,13 +1,10 @@
 <template>
-	<a
-		:href="link"
-		:target="newTab !== false ? '_blank' : '_top'"
-		class="w-full"
-		:style="styles"
-	>
-		<div class="tooltip">
-			{{ text }}
-			<span v-if="tooltip" class="tooltiptext">{{ tooltip }}</span>
+	<a :href="link" :target="newTab !== false ? '_blank' : '_top'" class="w-full">
+		<div :style="styles">
+			<span class="tooltip">
+				{{ text }}
+				<span v-if="tooltip" class="tooltiptext">{{ tooltip }}</span>
+			</span>
 		</div>
 	</a>
 </template>

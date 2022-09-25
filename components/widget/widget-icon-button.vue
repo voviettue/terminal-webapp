@@ -18,8 +18,10 @@
 				`${buttonVariant || 'light'}`,
 				`shadow-${shadow || 'md'}`,
 				outline ? 'outline' : '',
+				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
 			]"
 			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '50%' }"
+			@click="fnClick"
 		>
 			<TwIcon :name="icon" />
 		</button>
@@ -40,5 +42,9 @@ const {
 	buttonSize,
 	shadow,
 	borderRadius,
+	onClick,
+	disable,
 } = (props.widget?.options || {}) as Partial<IconButtonWidget>
+// eslint-disable-next-line no-new-func
+const fnClick = new Function(onClick || '')
 </script>

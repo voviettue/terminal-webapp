@@ -11,6 +11,11 @@ module.exports = {
 		'./app.vue',
 		'./formkit.config.{js,mjs,ts}',
 	],
+	safelist: [
+		{
+			pattern: /./,
+		},
+	],
 	theme: {
 		extend: {
 			fontFamily: {

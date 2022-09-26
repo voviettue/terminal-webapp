@@ -6,7 +6,7 @@ export interface Query {
 	output: string | null
 	refresh_on_load: boolean
 	timeout: number
-	query: 'items' | 'api' | 'json'
+	query: 'items' | 'api' | 'json' | 'item' | 'js-object'
 }
 
 export interface JsonQuery extends Query {

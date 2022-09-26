@@ -17,7 +17,7 @@ const pageStore = usePageStore()
 
 const options = ref(props.widget.options)
 const text = ref('')
-text.value = renderTemplate(props.widget?.text, {
+text.value = await renderTemplate(props.widget?.text, {
 	...pageStore.context,
 	...props.widget?.context,
 })

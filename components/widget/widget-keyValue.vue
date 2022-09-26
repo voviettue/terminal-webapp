@@ -47,7 +47,7 @@ let data = null
 try {
 	data =
 		JSON.parse(
-			renderTemplate(props.widget?.data, {
+			await renderTemplate(props.widget?.data, {
 				...pageStore.context,
 				...props.widget?.context,
 			})

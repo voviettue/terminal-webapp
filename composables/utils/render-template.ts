@@ -1,6 +1,9 @@
 import isEmpty from 'lodash/isEmpty'
 
-export default function renderTemplate(template: string, context: any): string {
+export default async function renderTemplate(
+	template: string,
+	context: any
+): Promise<string> {
 	const regexFunction = /(\(\s?{{(?:{.*}|[^{])*}}\s?\))/g
 	const matchesFunction =
 		typeof template === 'string' ? [...template.matchAll(regexFunction)] : []
@@ -11,19 +14,19 @@ export default function renderTemplate(template: string, context: any): string {
 
 	let result = template
 
-	matches.forEach((match) => {
-		const block = match[0]
+	for (let i = 0; i < matches.length; i++) {
+		const block = matches[i][0]
 		let statement = 'return ' + block.replace(/^{{|}}$/g, '')
 
 		if (!isEmpty([...statement.matchAll(regex)])) {
-			statement = renderTemplate(statement, context)
+			statement = await renderTemplate(statement, context)
 		}
 
 		const { $query, $item } = context
 		try {
 			// eslint-disable-next-line no-new-func
 			const fn = new Function('$item', '$query', statement)
-			const value = fn($item, $query) ?? block
+			const value = (await fn($item, $query)) ?? block
 
 			const replacement =
 				typeof value === 'string' && isEmpty(matchesFunction)
@@ -33,7 +36,7 @@ export default function renderTemplate(template: string, context: any): string {
 		} catch (err) {
 			// do nothing
 		}
-	})
+	}
 
 	return result
 }

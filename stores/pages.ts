@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from 'pinia'
-import { queryParse } from '../utils/query-parse'
+import { parseQuery } from '../utils/query-parse'
 import { Page, Widget } from '~/shared/types'
 
 export const usePageStore = defineStore({
@@ -53,7 +53,7 @@ export const usePageStore = defineStore({
 			const queries: any = await widgetStore.getQueriesFromWidgets(widgets)
 			const $query = {}
 			for (const query of queries) {
-				$query[query.key] = queryParse(query) ?? null
+				$query[query.key] = parseQuery(query) ?? null
 			}
 			this.context = { $query }
 		},

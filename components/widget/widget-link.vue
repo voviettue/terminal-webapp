@@ -23,7 +23,7 @@ const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const styles = getStyles(props.widget.options)
 
-const url = renderTemplate(props.widget?.url, {
+const url = await renderTemplate(props.widget?.url, {
 	...pageStore.context,
 	...props.widget?.context,
 })
@@ -35,7 +35,7 @@ function formatLink(url) {
 }
 const link = formatLink(url)
 
-const text = renderTemplate(props.widget?.text, {
+const text = await renderTemplate(props.widget?.text, {
 	...pageStore.context,
 	...props.widget?.context,
 })

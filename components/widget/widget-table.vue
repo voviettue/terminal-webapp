@@ -1,5 +1,8 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
+	<!-- <template v-if="searchable"> -->
+	<TwSearch v-model:search="search"></TwSearch>
+	<!-- </template> -->
 	<TwTable
 		:headers="columns"
 		:items="items"
@@ -42,7 +45,6 @@ try {
 			})
 		) ?? []
 } catch {}
-// pagination
 const { pagination, itemPerPage, shadow, verticalLines, strippedRow } =
 	props.widget.options
 const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
@@ -63,6 +65,12 @@ function initItems() {
 	const offset = (page.value - 1) * limit.value
 	items.value = data.slice(offset, offset + limit.value)
 }
+
+const { search, searchFor } = useSearch()
+
+watch(search, () => {
+	items.value = searchFor(data, search)
+})
 
 function onRowClick(item) {
 	const context = { ...pageStore.context, $item: item }

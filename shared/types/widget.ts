@@ -95,6 +95,7 @@ export interface ButtonWidget extends Widget {
 	shadow?: string
 	position: string
 	outline?: boolean
+	onClick?: string
 }
 export interface IconButtonWidget extends Widget {
 	icon: string
@@ -105,4 +106,5 @@ export interface IconButtonWidget extends Widget {
 	shadow?: string
 	position: string
 	outline?: boolean
+	onClick?: string
 }

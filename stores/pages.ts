@@ -55,7 +55,27 @@ export const usePageStore = defineStore({
 			for (const query of queries) {
 				$query[query.key] = parseQuery(query) ?? null
 			}
-			this.context = { $query }
+			const navigate = (name: string, params: Record<string, any> = {}) => {
+				const page: Page = this.pages.find((e) => e.key === name)
+				if (!page) return navigateTo({ path: name })
+
+				const endpoint = page.endpoint
+					.split('/')
+					.map((e) => {
+						if (e.startsWith(':')) {
+							const key = e.replace(':', '')
+							e = params?.[key] ?? e
+						}
+						return e
+					})
+					.join('/')
+
+				return navigateTo({ path: endpoint })
+			}
+			this.context = {
+				$query,
+				navigateTo: navigate,
+			}
 		},
 	},
 })

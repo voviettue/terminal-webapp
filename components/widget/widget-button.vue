@@ -21,7 +21,7 @@
 				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
 			]"
 			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '5px' }"
-			@click="fnClick"
+			@click="onButtonClick"
 		>
 			<TwIcon v-if="leftIcon" :name="leftIcon" class="mr-1" />
 			{{ label }}
@@ -37,8 +37,9 @@ interface Props {
 	widget: ButtonWidget
 }
 const props: any = defineProps<Props>()
-// const { getStyles } = useUtils()
-// const styles = getStyles(props.widget.options)
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
+
 const {
 	rightIcon,
 	leftIcon,
@@ -52,6 +53,13 @@ const {
 	onClick,
 	disable,
 } = (props.widget?.options || {}) as Partial<ButtonWidget>
-// eslint-disable-next-line no-new-func
-const fnClick = new Function(onClick || '')
+
+function onButtonClick() {
+	if (!onClick) return
+	const context = { ...pageStore.context, ...props.widget.context }
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	const AsyncFunction = async function () {}.constructor
+	const fn = AsyncFunction(...Object.keys(context), onClick)
+	fn(...Object.values(context))
+}
 </script>

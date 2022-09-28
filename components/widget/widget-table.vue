@@ -65,9 +65,10 @@ function initItems() {
 }
 
 function onRowClick(item) {
+	const context = { ...pageStore.context, $item: item }
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
-	const fn = AsyncFunction('$item', 'navigateTo', props.widget.onRowClick)
-	fn(item, navigateTo)
+	const fn = AsyncFunction(...Object.keys(context), props.widget.onRowClick)
+	fn(...Object.values(context), navigateTo)
 }
 </script>

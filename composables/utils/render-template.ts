@@ -4,6 +4,8 @@ export default async function renderTemplate(
 	template: string,
 	context: any
 ): Promise<string> {
+	if (!template) return template
+
 	const regexFunction = /(\(\s?{{(?:{.*}|[^{])*}}\s?\))/g
 	const matchesFunction =
 		typeof template === 'string' ? [...template.matchAll(regexFunction)] : []

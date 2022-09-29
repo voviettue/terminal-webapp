@@ -16,9 +16,8 @@ const { usePageStore } = useStore()
 const pageStore = usePageStore()
 
 const styles = getStyles(props.widget.options)
-const content =
-	(await renderTemplate(props.widget?.content, {
-		...pageStore.context,
-		...props.widget?.context,
-	})) ?? null
+const content = await renderTemplate(props.widget?.content, {
+	...pageStore.context,
+	...props.widget?.context,
+})
 </script>

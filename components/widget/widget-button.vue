@@ -24,7 +24,7 @@
 			@click="onButtonClick"
 		>
 			<TwIcon v-if="leftIcon" :name="leftIcon" class="mr-1" />
-			{{ label }}
+			{{ text }}
 			<TwIcon v-if="rightIcon" :name="rightIcon" class="ml-1" />
 		</button>
 	</div>
@@ -39,6 +39,7 @@ interface Props {
 const props: any = defineProps<Props>()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
+const { renderTemplate } = useUtils()
 
 const {
 	rightIcon,
@@ -53,6 +54,11 @@ const {
 	onClick,
 	disable,
 } = (props.widget?.options || {}) as Partial<ButtonWidget>
+
+const text = await renderTemplate(label, {
+	...pageStore.context,
+	...props.widget?.context,
+})
 
 function onButtonClick() {
 	if (!onClick) return

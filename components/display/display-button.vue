@@ -7,7 +7,7 @@ interface Props {
 	options?: any
 }
 const props = defineProps<Props>()
-const options = { ...props.options }
+const options = { ...props.options, label: props.options?.label || props.value }
 
 const widget = {
 	id: 'display-button',

@@ -2,7 +2,6 @@
 	<div
 		:class="[
 			'flex',
-			'py-4',
 			position === 'left'
 				? 'justify-start'
 				: position === 'right'

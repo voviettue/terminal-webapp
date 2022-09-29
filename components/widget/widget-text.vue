@@ -1,5 +1,5 @@
 <template>
-	<p :style="styles">{{ text }}</p>
+	<p :style="styles">{{ text || '—' }}</p>
 </template>
 
 <script setup lang="ts">

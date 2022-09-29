@@ -1,5 +1,6 @@
 <template>
-	<WidgetLink :widget="widget" />
+	<span v-if="!text || !url">'—'</span>
+	<WidgetLink v-else :widget="widget" />
 </template>
 <script setup lang="ts">
 interface Props {
@@ -7,8 +8,8 @@ interface Props {
 	options?: any
 }
 const props = defineProps<Props>()
-const options = { ...props.options, text: props.value }
-
+const options = { text: props.value, ...props.options }
+const { text, url } = options
 const widget = {
 	id: 'display-link',
 	name: 'display-link',

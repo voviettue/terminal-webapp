@@ -1,9 +1,7 @@
 <template>
-	<span v-if="value === null || value === undefined">—</span>
 	<component
 		:is="`display-${name}`"
-		v-else
-		:value="value"
+		:value="value!"
 		:options="options"
 	></component>
 </template>

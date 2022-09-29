@@ -4,7 +4,7 @@
 			:class="`overflow-auto shadow-${shadow}`"
 			:style="(styles as CSSProperties)"
 		>
-			<table class="min-w-full divide-y divide-gray-300">
+			<table class="table-auto min-w-full divide-y divide-gray-300 text-left">
 				<thead v-if="!hideHeader">
 					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
 						<th

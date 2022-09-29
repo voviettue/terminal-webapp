@@ -51,6 +51,7 @@
 									:name="header.display"
 									:value="get(item, header.key)"
 									:options="header?.displayOptions"
+									:context="{ $item: item }"
 								></RenderDisplay>
 								<template v-else>
 									{{ get(item, header.key) ?? '—' }}

@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-// const formKitTailwind = require('@formkit/themes/tailwindcss');
 import formKitTailwind from '@formkit/themes/tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 

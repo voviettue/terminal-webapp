@@ -1,12 +1,14 @@
-import { ref, Ref } from 'vue'
+import { Ref } from 'vue'
 
 interface Search {
 	search: Ref<any>
-	searchFor: (data: any[], toSearch: Ref<string>) => any[]
+	filter: Ref<any>
+	searchFor: (data: any[], toSearch: Ref<any>, filter: Ref<any>) => any[]
 }
 
 export const useSearch = (): Search => {
 	const search: Ref<any> = ref(null)
+	const filter: Ref<any> = ref(null)
 
 	function compareObjects(o1: object, o2: object) {
 		let k = ''
@@ -35,7 +37,9 @@ export const useSearch = (): Search => {
 		return false
 	}
 
-	function searchFor(data: any[], toSearch: Ref<any>) {
+	function searchFor(data: any[], toSearch: Ref<any>, filter: Ref<any>) {
+		// eslint-disable-next-line no-console
+		console.log(search, filter)
 		const result: any[] = []
 		data.forEach((item: object) => {
 			const flattedObject = flatObject(item)
@@ -57,6 +61,7 @@ export const useSearch = (): Search => {
 
 	return {
 		search,
+		filter,
 		searchFor,
 	}
 }

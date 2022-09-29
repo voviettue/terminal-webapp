@@ -1,22 +1,80 @@
 <template>
-	<div class="grid justify-items-stretch">
-		<div class="justify-self-end w-1/2">
-			<FormKit
-				type="text"
-				:delay="1500"
-				name="search"
-				placeholder="Search..."
-				@input="inputSearch"
-			/>
+	<div class="flex justify-end">
+		<div class="inline-flex">
+			<div v-if="activeSearch" class="cols">
+				<FormKit
+					type="text"
+					:delay="1000"
+					name="search"
+					placeholder="Search..."
+					@input="inputSearch"
+				/>
+			</div>
+			<div v-if="activeFilter" class="ml-2">
+				<Menu as="div" class="relative inline-block text-left">
+					<div>
+						<MenuButton
+							class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+						>
+							<TwIcon
+								name="filter_list"
+								class="icon text-xl"
+								aria-hidden="true"
+							/>
+						</MenuButton>
+					</div>
+					<transition
+						enter-active-class="transition ease-out duration-100"
+						enter-from-class="transform opacity-0 scale-95"
+						enter-to-class="transform opacity-100 scale-100"
+						leave-active-class="transition ease-in duration-75"
+						leave-from-class="transform opacity-100 scale-100"
+						leave-to-class="transform opacity-0 scale-95"
+					>
+						<MenuItems
+							class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+						>
+							<div class="py-1">
+								<MenuItem v-slot="{ active }">
+									<a
+										href="#"
+										:class="[
+											active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+											'block px-4 py-2 text-sm',
+										]"
+									>
+										INPROGRESS
+									</a>
+								</MenuItem>
+							</div>
+						</MenuItems>
+					</transition>
+				</Menu>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['update:search'])
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+interface Props {
+	activeSearch: boolean
+	activeFilter: boolean
+	fields: string[]
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps<Props>()
+
+const emit = defineEmits(['update:search', 'update:filter'])
 
 function inputSearch(value: any) {
 	emit('update:search', value)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function inputFilter(value: any) {
+	emit('update:filter', value)
 }
 </script>
 

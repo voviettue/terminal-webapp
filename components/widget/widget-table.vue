@@ -1,8 +1,14 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-	<!-- <template v-if="searchable"> -->
-	<TwSearch v-model:search="search"></TwSearch>
-	<!-- </template> -->
+	<template v-if="activeSearch || activeFilter">
+		<TwSearch
+			v-model:search="search"
+			v-model:filter="filter"
+			:fields="columns"
+			:active-search="activeSearch"
+			:active-filter="activeFilter"
+		></TwSearch>
+	</template>
 	<TwTable
 		:headers="columns"
 		:items="items"
@@ -45,8 +51,15 @@ try {
 			})
 		) ?? []
 } catch {}
-const { pagination, itemPerPage, shadow, verticalLines, strippedRow } =
-	props.widget.options
+const {
+	activeSearch,
+	activeFilter,
+	pagination,
+	itemPerPage,
+	shadow,
+	verticalLines,
+	strippedRow,
+} = props.widget.options
 const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
 
@@ -66,10 +79,10 @@ function initItems() {
 	items.value = data.slice(offset, offset + limit.value)
 }
 
-const { search, searchFor } = useSearch()
+const { search, filter, searchFor } = useSearch()
 
-watch(search, () => {
-	items.value = searchFor(data, search)
+watch([search, filter], () => {
+	items.value = searchFor(data, search, filter)
 })
 
 function onRowClick(item) {

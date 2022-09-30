@@ -10,6 +10,7 @@ import WidgetKeyValue from '~/components/widget/widget-keyValue.vue'
 import WidgetLink from '~/components/widget/widget-link.vue'
 import WidgetButton from '~/components/widget/widget-button.vue'
 import WidgetIconButton from '~/components/widget/widget-icon-button.vue'
+import WidgetCalendar from '~/components/widget/widget-calendar.vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-container', WidgetContainer)
@@ -24,4 +25,5 @@ export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-link', WidgetLink)
 	nuxtApp.vueApp.component('widget-button', WidgetButton)
 	nuxtApp.vueApp.component('widget-icon-button', WidgetIconButton)
+	nuxtApp.vueApp.component('widget-calendar', WidgetCalendar)
 })

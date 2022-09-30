@@ -15,3 +15,8 @@
 	src: url('../fonts/material-icons-outline.woff2') format('woff2');
 	font-display: block;
 }
+
+:root {
+	--fc-event-bg-color: #4f46e5;
+	--fc-event-border-color: black;
+}

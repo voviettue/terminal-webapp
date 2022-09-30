@@ -38,6 +38,7 @@ const pageStore = usePageStore()
 const styles = getStyles(props.widget.options)
 const leftStyle = getStylesBy('Left')
 const rightStyle = getStylesBy('Right')
+const borderStyle = ref('')
 
 let data = null
 try {
@@ -63,12 +64,16 @@ function getStylesBy(position: string) {
 
 	return getStyles(styles)
 }
+
+onMounted(() => {
+	borderStyle.value = props.widget.borderType || 'solid'
+})
 </script>
 
 <style scoped lang="scss">
 .bottom-line > div {
 	padding: 0.875rem 0;
-	border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
+	border-bottom: 1px #d1d5db v-bind(borderStyle);
 }
 .connected-line {
 	position: relative;
@@ -84,7 +89,7 @@ function getStylesBy(position: string) {
 			width: 100%;
 			height: 1rem;
 			z-index: 1;
-			border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
+			border-bottom: 1px #d1d5db v-bind(borderStyle);
 		}
 		> div {
 			z-index: 2;
@@ -92,11 +97,11 @@ function getStylesBy(position: string) {
 	}
 }
 .covered-border {
-	border: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
+	border: 1px #d1d5db v-bind(borderStyle);
 	border-bottom: 0;
 	> div {
 		padding: 0.875rem;
-		border-bottom: 1px #d1d5db v-bind('props.widget.borderType || "solid"');
+		border-bottom: 1px #d1d5db v-bind(borderStyle);
 	}
 }
 .key-value-grid {

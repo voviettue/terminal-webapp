@@ -111,3 +111,16 @@ export interface IconButtonWidget extends Widget {
 	outline?: boolean
 	onClick?: string
 }
+
+export interface CalendarWidget extends Widget {
+	visible?: boolean
+	data: Record<string, any>
+	defaultDate?: Date
+	defaultView?: string
+	displayTemplate?: string
+	firstDay?: number
+	startDate?: Date
+	endDate?: Date
+	borderRadius?: string
+	shadow?: string
+}

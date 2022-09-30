@@ -20,12 +20,14 @@ export const useSearch = (): Search => {
 	function flatObject(o: object) {
 		function flat(res, key, val, pre = '') {
 			const prefix = [pre, key].filter((v) => v).join('.')
-			return typeof val === 'object'
-				? Object.keys(val).reduce(
-						(prev, curr) => flat(prev, curr, val[curr], prefix),
-						res
-				  )
-				: Object.assign(res, { [prefix]: val })
+			if (typeof val === 'object' && val !== null) {
+				return Object.keys(val).reduce(
+					(prev, curr) => flat(prev, curr, val[curr], prefix),
+					res
+				)
+			} else {
+				return Object.assign(res, { [prefix]: val })
+			}
 		}
 
 		return Object.keys(o).reduce((prev, curr) => flat(prev, curr, o[curr]), {})

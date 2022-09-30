@@ -114,7 +114,7 @@ export interface IconButtonWidget extends Widget {
 
 export interface CalendarWidget extends Widget {
 	visible?: boolean
-	events: Record<string, any>
+	data: Record<string, any>
 	defaultDate?: Date
 	defaultView?: string
 	displayTemplate?: string

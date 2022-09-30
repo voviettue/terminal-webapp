@@ -29,7 +29,7 @@ let data = null
 try {
 	data =
 		JSON.parse(
-			await renderTemplate(props.widget?.events, {
+			await renderTemplate(props.widget?.data, {
 				...pageStore.context,
 				...props.widget?.context,
 			})
@@ -178,10 +178,6 @@ onMounted(() => {
 			outline: none;
 			box-shadow: none !important;
 		}
-		// &:focus-visible {
-		// 	outline: none;
-		// 	box-shadow: none !important;
-		// }
 	}
 }
 .calendar-rounded {

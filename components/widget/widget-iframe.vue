@@ -9,14 +9,9 @@ interface Props {
 }
 
 const props: any = defineProps<Props>()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
-const { getStyles, renderTemplate } = useUtils()
+const { getStyles } = useUtils()
 
-const url = await renderTemplate(props.widget?.url, {
-	...pageStore.context,
-	...props.widget?.context,
-})
+const { result: url } = useBindData(props.widget?.url, props.widget?.context)
 const defaultStyles = { 'aspect-ratio': '16/9' }
 let styles = getStyles(props.widget.options)
 styles = { ...defaultStyles, ...styles }

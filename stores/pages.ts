@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from 'pinia'
-import { parseQuery } from '../utils/query-parse'
+import { parseQuery } from '../utils/parse-query'
 import { Page, Widget } from '~/shared/types'
 
 export const usePageStore = defineStore({
@@ -48,8 +48,9 @@ export const usePageStore = defineStore({
 			return this.pages.find((page) => page.id.toString() === id.toString())
 		},
 		async initContext(widgets: Widget[]) {
-			const { useWidgetStore } = useStore()
+			const { useWidgetStore, useQueryStore } = useStore()
 			const widgetStore = useWidgetStore()
+			const queryStore = useQueryStore()
 			const queries: any = await widgetStore.getQueriesFromWidgets(widgets)
 			const $query = {}
 			for (const query of queries) {
@@ -72,9 +73,19 @@ export const usePageStore = defineStore({
 
 				return navigateTo({ path: endpoint })
 			}
+			const executeQuery = async (
+				key: string,
+				params: Record<string, any> = {}
+			) => {
+				const output = await queryStore.execute(key, params)
+				// eslint-disable-next-line dot-notation
+				this.context['$query'][key] = output
+				return output
+			}
 			this.context = {
 				$query,
 				navigateTo: navigate,
+				executeQuery,
 			}
 		},
 	},

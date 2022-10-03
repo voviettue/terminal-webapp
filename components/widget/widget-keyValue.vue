@@ -31,25 +31,20 @@ interface Props {
 
 const props: any = defineProps<Props>()
 
-const { getStyles, renderTemplate } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
+const { getStyles, parseJson } = useUtils()
 
 const styles = getStyles(props.widget.options)
 const leftStyle = getStylesBy('Left')
 const rightStyle = getStylesBy('Right')
 const borderStyle = ref('')
 
-let data = null
-try {
-	data =
-		JSON.parse(
-			await renderTemplate(props.widget?.data, {
-				...pageStore.context,
-				...props.widget?.context,
-			})
-		) ?? []
-} catch {}
+const { result: rawData } = useBindData(
+	props.widget?.data,
+	props.widget?.context
+)
+const data = computed(() => {
+	return parseJson(rawData.value, [])
+})
 
 function getStylesBy(position: string) {
 	const styles = {}

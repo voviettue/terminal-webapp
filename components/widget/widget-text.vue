@@ -11,22 +11,19 @@ interface Props {
 }
 
 const props: any = defineProps<Props>()
-const { getStyles, renderTemplate } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
+const { getStyles } = useUtils()
 
 const options = ref(props.widget.options)
-const text = ref('')
-text.value = await renderTemplate(props.widget?.text, {
-	...pageStore.context,
-	...props.widget?.context,
+const styles = ref(getStyles(options.value))
+
+const { result: rawData } = useBindData(
+	props.widget.options?.text,
+	props.widget?.context
+)
+const text = computed(() => {
+	if (!props.widget?.condition) return rawData.value
+	const { widget, text } = applyConditions(props.widget, rawData.value)
+	styles.value = getStyles(widget.options)
+	return text
 })
-
-if (props.widget?.condition) {
-	const { widget, text: value } = applyConditions(props.widget, text.value)
-	text.value = value
-	options.value = widget.options
-}
-
-const styles = getStyles(options.value)
 </script>

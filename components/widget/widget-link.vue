@@ -18,26 +18,15 @@ interface Props {
 
 const props: any = defineProps<Props>()
 const { newTab, tooltip } = (props.widget?.options || {}) as Partial<LinkWidget>
-const { getStyles, renderTemplate } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
+const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
 
-const url = await renderTemplate(props.widget?.url, {
-	...pageStore.context,
-	...props.widget?.context,
-})
-
-function formatLink(url) {
+const { result: url } = useBindData(props.widget?.url, props.widget?.context)
+const { result: text } = useBindData(props.widget?.text, props.widget?.context)
+const link = computed(() => {
 	const regexlink = /^http(s)?:\/\/.+/i
-	if (!regexlink.test(url)) return `http://${url}`
-	return url
-}
-const link = formatLink(url)
-
-const text = await renderTemplate(props.widget?.text, {
-	...pageStore.context,
-	...props.widget?.context,
+	if (!regexlink.test(url.value)) return `http://${url.value}`
+	return url.value
 })
 </script>
 <style scoped>

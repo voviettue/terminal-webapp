@@ -36,21 +36,20 @@ interface Props {
 	widget: any
 }
 const props = defineProps<Props>()
-const { getStyles, renderTemplate } = useUtils()
+const { getStyles, parseJson } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const columns = props.widget.columns ?? ([] as TableHeader[])
 const styles = getStyles(props.widget.options)
-let data = []
-try {
-	data =
-		JSON.parse(
-			await renderTemplate(props.widget?.data, {
-				...pageStore.context,
-				...props.widget?.context,
-			})
-		) ?? []
-} catch {}
+const { result: rawData } = useBindData(
+	props.widget?.data,
+	props.widget?.context
+)
+const data = computed(() => {
+	page.value = 1
+	return parseJson(rawData.value, [])
+})
+
 const {
 	activeSearch,
 	activeFilter,
@@ -63,26 +62,27 @@ const {
 const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
 
-if (pagination) {
-	setTotalItem(data.length)
-	setLimit(parseInt(itemPerPage))
-	initItems()
-	onPageChanged(() => {
+watchEffect(() => {
+	items.value = data.value
+
+	if (pagination) {
 		initItems()
-	})
-} else {
-	items.value = data
-}
+		setTotalItem(data.value.length)
+		setLimit(parseInt(itemPerPage))
+		onPageChanged(() => {
+			initItems()
+		})
+	}
+})
 
 function initItems() {
 	const offset = (page.value - 1) * limit.value
-	items.value = data.slice(offset, offset + limit.value)
+	items.value = data.value.slice(offset, offset + limit.value)
 }
 
 const { search, filter, searchFor } = useSearch()
-
 watch([search, filter], () => {
-	items.value = searchFor(data, search, filter)
+	items.value = searchFor(data.value, search, filter)
 })
 
 function onRowClick(item) {

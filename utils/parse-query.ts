@@ -1,6 +1,7 @@
 import { Query } from '~/shared/types'
 
 export function parseQuery(query: Query) {
+	if (typeof query.output === 'object') return query.output
 	try {
 		switch (query.query) {
 			case 'js-object':

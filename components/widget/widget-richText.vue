@@ -11,13 +11,11 @@ interface Props {
 }
 
 const props: any = defineProps<Props>()
-const { getStyles, renderTemplate } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
+const { getStyles } = useUtils()
 
 const styles = getStyles(props.widget.options)
-const content = await renderTemplate(props.widget?.content, {
-	...pageStore.context,
-	...props.widget?.context,
-})
+const { result: content } = useBindData(
+	props.widget?.content,
+	props.widget?.context
+)
 </script>

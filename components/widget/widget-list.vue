@@ -26,22 +26,18 @@ const props = defineProps<Props>()
 
 const widgets: Widget[] = inject('widgets')
 
-const { getStyles, renderTemplate } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
+const { getStyles, parseJson } = useUtils()
 
 const childWidgets = widgets.filter((e) => e.parent === props.widget.id)
 const styles = getStyles(props.widget.options)
-let data = []
-try {
-	data =
-		JSON.parse(
-			await renderTemplate(props.widget?.data, {
-				...pageStore.context,
-				...props.widget?.context,
-			})
-		) ?? []
-} catch {}
+
+const { result: rawData } = useBindData(
+	props.widget?.data,
+	props.widget?.context
+)
+const data = computed(() => {
+	return parseJson(rawData.value, [])
+})
 
 function addContext(childWidget: Widget, dataItem: any) {
 	return { ...childWidget, context: { $item: dataItem } }

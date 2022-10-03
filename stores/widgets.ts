@@ -24,7 +24,11 @@ export const useWidgetStore = defineStore({
 			const queryStore = useQueryStore()
 			const queries = await queryStore.getByKeys(keys)
 			for (let i = 0; i < queries.length; i++) {
-				queries[i] = await queryStore.refresh(queries[i])
+				if (queries[i]?.refresh_on_load) {
+					const route = useRoute()
+					const output = await queryStore.execute(queries[i].key, route.params)
+					queries[i].output = output
+				}
 			}
 			return queries
 		},

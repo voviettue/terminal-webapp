@@ -20,33 +20,12 @@ interface Props {
 
 const props: any = defineProps<Props>()
 
-const { renderTemplate } = useUtils()
+const { parseJson } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const borderRadius = ref('')
-
-let data = null
-try {
-	data =
-		JSON.parse(
-			await renderTemplate(props.widget?.data, {
-				...pageStore.context,
-				...props.widget?.context,
-			})
-		) ?? []
-} catch {}
-
-const events = computed(() => {
-	if (!Array.isArray(data)) return null
-
-	return (
-		data
-			.map((item) => calendarEventParse(item, props.widget?.options))
-			.filter((e) => e) || []
-	)
-})
-
-const calendarOptions = {
+const events = ref([])
+const calendarOptions = ref({
 	plugins: [
 		dayGridPlugin,
 		timeGridPlugin,
@@ -68,7 +47,23 @@ const calendarOptions = {
 	firstDay: props.widget?.firstDay || 0,
 	select: onDateClick,
 	eventClick: onItemClick,
-}
+})
+
+const { result: rawData } = useBindData(
+	props.widget?.data,
+	props.widget?.context
+)
+
+watch(rawData, () => {
+	const data = parseJson(rawData.value, [])
+	if (!Array.isArray(data)) return
+
+	events.value = data
+		.map((item) => calendarEventParse(item, props.widget?.options))
+		.filter((e) => e)
+
+	calendarOptions.value = { ...calendarOptions.value, events: events.value }
+})
 
 function onItemClick() {
 	if (!props.widget?.onItemClick) return

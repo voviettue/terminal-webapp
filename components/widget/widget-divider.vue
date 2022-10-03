@@ -24,9 +24,7 @@ interface Props {
 }
 
 const props: any = defineProps<Props>()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
-const { getStyles, renderTemplate } = useUtils()
+const { getStyles } = useUtils()
 
 const {
 	cap,
@@ -38,10 +36,7 @@ const {
 	lineWidth,
 } = (props.widget?.options || {}) as DividerWidget
 
-const content = await renderTemplate(cap, {
-	...pageStore.context,
-	...props.widget?.context,
-})
+const { result: content } = useBindData(cap, props.widget?.context)
 const orientationRow = !orientation || orientation === 'horizontal'
 // let position =
 const getStylesDivider = () => {

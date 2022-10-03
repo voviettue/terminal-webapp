@@ -18,7 +18,7 @@ const props = defineProps<Props>()
 const { defaultImage, shadow } = props.widget as any
 const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
-const url = ref(props.widget?.url)
+const { result: url } = useBindData(props.widget?.url, props.widget?.context)
 if (!url.value) {
 	onError()
 }

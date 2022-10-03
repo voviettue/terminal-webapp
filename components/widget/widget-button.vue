@@ -38,7 +38,6 @@ interface Props {
 const props: any = defineProps<Props>()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
-const { renderTemplate } = useUtils()
 
 const {
 	rightIcon,
@@ -54,10 +53,7 @@ const {
 	disable,
 } = (props.widget?.options || {}) as Partial<ButtonWidget>
 
-const text = await renderTemplate(label, {
-	...pageStore.context,
-	...props.widget?.context,
-})
+const { result: text } = useBindData(label, props.widget?.context)
 
 function onButtonClick() {
 	if (!onClick) return

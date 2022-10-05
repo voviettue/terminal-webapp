@@ -19,7 +19,7 @@
 				outline ? 'outline' : '',
 				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
 			]"
-			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '5px' }"
+			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '0px' }"
 			@click="onButtonClick"
 		>
 			<TwIcon v-if="leftIcon" :name="leftIcon" class="mr-1" />

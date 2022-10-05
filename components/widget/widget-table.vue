@@ -1,19 +1,20 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
 	<template v-if="activeSearch || activeFilter">
-		<TwSearch
+		<FormFilter
 			v-model:search="search"
-			v-model:filter="filter"
 			:fields="columns"
 			:active-search="activeSearch"
 			:active-filter="activeFilter"
-		></TwSearch>
+			:filter="filter"
+			@update:filter="updateFilter"
+		></FormFilter>
 	</template>
 	<TwTable
 		:headers="columns"
 		:items="items"
 		:row-click="widget?.onRowClick ? onRowClick : null"
-		:min-row="page > 1 ? limit : null"
+		:min-row="page > 1 || search || filter ? limit : null"
 		:styles="styles"
 		:shadow="shadow"
 		:vertical-lines="verticalLines"
@@ -59,15 +60,21 @@ const {
 	verticalLines,
 	strippedRow,
 } = props.widget.options
+
 const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
 
-watchEffect(() => {
-	items.value = data.value
+const { search, filter, items: filteredItems } = useFilter(data)
+function updateFilter(value: any) {
+	filter.value = value
+}
+
+watch([filteredItems], () => {
+	items.value = filteredItems.value
 
 	if (pagination) {
 		initItems()
-		setTotalItem(data.value.length)
+		setTotalItem(filteredItems.value.length)
 		setLimit(parseInt(itemPerPage))
 		onPageChanged(() => {
 			initItems()
@@ -77,13 +84,8 @@ watchEffect(() => {
 
 function initItems() {
 	const offset = (page.value - 1) * limit.value
-	items.value = data.value.slice(offset, offset + limit.value)
+	items.value = filteredItems.value.slice(offset, offset + limit.value)
 }
-
-const { search, filter, searchFor } = useSearch()
-watch([search, filter], () => {
-	items.value = searchFor(data.value, search, filter)
-})
 
 function onRowClick(item) {
 	const context = { ...pageStore.context, $item: item }

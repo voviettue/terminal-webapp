@@ -66,7 +66,12 @@ const theme = {
 			'form-range appearance-none w-full h-2 p-0 bg-gray-200 rounded-full focus:outline-none focus:ring-0 focus:shadow-none',
 	},
 	search: textClassification,
-	select: textClassification,
+	select: {
+		...textClassification,
+		inner: 'rounded mb-1 focus-within:border-blue-500',
+		input:
+			'block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
+	},
 	submit: buttonClassification,
 	tel: textClassification,
 	text: textClassification,

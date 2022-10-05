@@ -63,9 +63,6 @@ export const useFilter = (data: Ref<any[]>): Filter => {
 			})
 			items.value = filterItems(result, filter.value)
 		}
-
-		// eslint-disable-next-line no-console
-		console.log(search.value, filter.value)
 	})
 
 	return {

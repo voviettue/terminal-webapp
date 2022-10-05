@@ -14,7 +14,7 @@
 		:headers="columns"
 		:items="items"
 		:row-click="widget?.onRowClick ? onRowClick : null"
-		:min-row="page > 1 || search || filter ? limit : null"
+		:min-row="minRow"
 		:styles="styles"
 		:shadow="shadow"
 		:vertical-lines="verticalLines"
@@ -79,6 +79,14 @@ watch([filteredItems], () => {
 		onPageChanged(() => {
 			initItems()
 		})
+	}
+})
+
+const minRow = computed(() => {
+	if (pagination) {
+		return page.value > 1 || search || filter ? limit : null
+	} else {
+		return filteredItems.value ? filteredItems.value.length : 0
 	}
 })
 

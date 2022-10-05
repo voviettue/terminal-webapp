@@ -37,6 +37,8 @@ const calendarOptions = ref({
 		right: 'dayGridMonth,timeGridWeek,timeGridDay',
 	},
 	initialView: props.widget?.defaultView || 'dayGridMonth',
+	initialDate: props.widget?.defaultDate || null,
+	now: props.widget?.defaultDate || null,
 	events: events.value,
 	editable: true,
 	selectable: true,
@@ -161,12 +163,13 @@ onMounted(() => {
 		}
 		&:hover {
 			--tw-bg-opacity: 1;
-			background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+			background-color: black;
+			color: white;
 		}
 		&.fc-button-active,
 		&:active {
-			background-color: #f9fafb;
-			color: black;
+			background-color: black;
+			color: white;
 		}
 		&:focus,
 		&:focus-visible {

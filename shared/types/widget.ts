@@ -124,3 +124,47 @@ export interface CalendarWidget extends Widget {
 	borderRadius?: string
 	shadow?: string
 }
+export interface InputWidget extends Widget {
+	defaultValue?: string | number
+	required?: boolean
+	placeholder?: string
+	disable?: boolean
+	label: string
+	labelPosition?: string
+	labelColor?: string
+	labelSize?: string
+	labelFontFamily?: string
+	labelWidth?: number
+	onChange?: string
+	borderRadius?: number
+	shadow?: string
+}
+
+export interface TextInputWidget extends InputWidget {
+	minLength?: number
+	maxLength?: number
+	leftIcon?: string
+	rightIcon?: string
+	trim?: boolean
+	marked?: boolean
+	regex?: string
+	errorMessage?: string
+	alignment?: string
+	autoFocus?: boolean
+	reset?: boolean
+	tooltip?: string
+}
+
+export interface NumberInputWidget extends InputWidget {
+	minValue?: number
+	maxValue?: number
+	tooltip?: string
+	leftIcon?: string
+	rightIcon?: string
+	marked?: boolean
+	regex?: string
+	errorMessage?: string
+	alignment?: string
+	autoFocus?: boolean
+	reset?: boolean
+}

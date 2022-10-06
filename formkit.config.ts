@@ -68,7 +68,7 @@ const theme = {
 	search: {
 		...textClassification,
 		inner:
-			'inline-flex gap-2 items-center pl-2 rounded mb-1 overflow-hidden divide-x focus-within:border-blue-500 border border-gray-300 rounded-md shadow-sm',
+			'inline-flex gap-2 items-center pl-2 rounded mb-1 overflow-hidden divide-x focus-within:border-indigo-500 border border-gray-300 rounded-md shadow-sm',
 		input:
 			'block w-full px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
 	},

@@ -46,13 +46,14 @@
 								:item="item"
 								:value="get(item, header.key)"
 							>
-								<RenderDisplay
-									v-if="header?.display"
-									:name="header.display"
-									:value="get(item, header.key)"
-									:options="header?.displayOptions"
-									:context="{ $item: item }"
-								></RenderDisplay>
+								<template v-if="header?.display">
+									<RenderDisplay
+										:name="header.display"
+										:value="get(item, header.key)"
+										:options="header?.displayOptions"
+										:context="{ $item: item }"
+									></RenderDisplay>
+								</template>
 								<template v-else>
 									{{ get(item, header.key) ?? '—' }}
 								</template>

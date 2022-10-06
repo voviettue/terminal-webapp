@@ -1,4 +1,7 @@
 import { format, isValid, parseISO } from 'date-fns'
+import { getFieldsFromTemplate } from '@directus/shared/utils'
+import { get, set } from 'lodash'
+import { render } from 'micromustache'
 
 export function calendarEventParse(item: any, options: any) {
 	if (!options?.startDateField) return null
@@ -32,14 +35,29 @@ export function calendarEventParse(item: any, options: any) {
 
 function renderDisplayStringTemplate(
 	item: Record<string, any>,
-	displayTemplate: string
+	template: string
 ) {
-	const keys = displayTemplate.replaceAll(' ', '').split(',')
-	let result = ''
+	const fields = getFieldsFromTemplate(template)
+	const parsedItem: Record<string, any> = {}
 
-	keys?.forEach((key: string) => {
-		result += `${item[key]} `
-	})
+	for (const key of fields) {
+		set(parsedItem, key, get(item, key))
+	}
 
-	return result
+	return renderPlainStringTemplate(template, parsedItem)
+}
+
+export function renderPlainStringTemplate(
+	template: string,
+	item?: Record<string, any> | null
+): string | null {
+	const fieldsInTemplate = getFieldsFromTemplate(template)
+
+	if (!item || !template || !fieldsInTemplate) return null
+
+	try {
+		return render(template, item, { propsExist: true }) || '—'
+	} catch {
+		return '—'
+	}
 }

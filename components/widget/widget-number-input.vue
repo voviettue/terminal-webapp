@@ -12,7 +12,7 @@
 		]"
 		ref="textInput"
 	>
-		<div :class="getClassLabel()" :style="styleLabel">
+		<div :class="getClassLabel()" :style="styleLabel" @click="clickLabel">
 			<span>{{ label }}</span>
 		</div>
 		<div :class="getClassFormKitInput()">
@@ -133,6 +133,11 @@ const getClassFormKitInput = () => {
 	return classes
 }
 
+const clickLabel = () => {
+	const input = textInput.value.querySelector('.formkit-input')
+	input.focus()
+}
+
 onMounted(() => {
 	if (required) {
 		validates.value = 'required'
@@ -147,6 +152,12 @@ onMounted(() => {
 		const input = textInput.value.querySelector('.formkit-input')
 		autoFocus && input.focus()
 		disable && input.setAttribute('readonly', true)
+	}
+	if (borderRadius) {
+		const inner = textInput.value.querySelector('.formkit-inner')
+		const input = textInput.value.querySelector('.formkit-input')
+		inner.style.borderRadius = `${borderRadius}px`
+		if (!leftIcon && !rightIcon) input.style.border = 'none'
 	}
 })
 </script>

@@ -13,9 +13,9 @@
 			type="button"
 			:class="[
 				'btn',
-				`${buttonSize || 'sm'}`,
-				`${buttonVariant || 'light'}`,
-				`shadow-${shadow || 'md'}`,
+				`${buttonSize || 'md'}`,
+				`${buttonVariant || 'primary'}`,
+				`shadow-${shadow || null}`,
 				outline ? 'outline' : '',
 				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
 			]"

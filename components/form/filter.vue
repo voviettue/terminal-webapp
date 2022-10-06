@@ -1,16 +1,17 @@
 <template>
 	<div class="flex justify-end">
-		<div class="inline-flex">
-			<div v-if="activeSearch" class="cols">
+		<div class="inline-flex gap-2">
+			<div v-if="activeSearch">
 				<FormKit
-					type="text"
+					type="search"
 					:delay="1000"
 					name="search"
+					prefix-icon="search"
 					placeholder="Search..."
 					@input="inputSearch"
 				/>
 			</div>
-			<div v-if="activeFilter" class="ml-2">
+			<div v-if="activeFilter">
 				<div class="relative inline-block text-left">
 					<div>
 						<button
@@ -18,12 +19,13 @@
 							@click="filterActive = !filterActive"
 						>
 							<TwIcon
-								name="filter_list"
+								name="filter_alt"
 								class="icon text-xl"
 								aria-hidden="true"
 							></TwIcon>
 							<span
-								class="absolute -top-2 -right-2 drop-shadow-xl items-center rounded-full bg-purple-100 px-1.5 py-0.5 text-xs font-medium text-purple-800"
+								v-if="filterCount"
+								class="absolute -top-2 -right-2 drop-shadow-xl items-center rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-600"
 							>
 								{{ filterCount }}
 							</span>
@@ -52,11 +54,11 @@
 							></FormFilterRow>
 							<div class="flex justify-between items-center mt-4">
 								<button
-									class="btn secondary inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+									class="inline-flex items-center gap-1 text-sm font-medium bg-transparent text-purple-600 font-medium leading-tight uppercase"
 									@click="addFilterRow"
 								>
 									<TwIcon
-										name="add"
+										name="add_circle"
 										class="icon text-xl"
 										aria-hidden="true"
 									></TwIcon>
@@ -64,13 +66,13 @@
 								</button>
 								<div class="flex justify-between gap-4">
 									<button
-										class="btn inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+										class="btn secondary md shadow-md rounded-md text-sm font-medium"
 										@click="clearFilter"
 									>
 										CLEAR
 									</button>
 									<button
-										class="btn primary inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+										class="btn primary md shadow-md rounded-md text-sm font-medium"
 										@click="applyFilter"
 									>
 										APPLY
@@ -161,6 +163,8 @@ function clearFilter() {
 	for (let i = 0; i < filters.value.length; i++) {
 		filters.value[i] = { ...defaultRow }
 	}
+
+	filterActive.value = false
 }
 
 function addFilterRow() {
@@ -180,4 +184,8 @@ function removeFilterRow(index: number) {
 }
 </script>
 
-<style scoped></style>
+<style>
+.formkit-prefix-icon {
+	width: 2em;
+}
+</style>

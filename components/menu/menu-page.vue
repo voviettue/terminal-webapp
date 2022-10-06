@@ -1,6 +1,10 @@
 <template>
 	<NuxtLink :class="{ menu: true, active, sub: nested }" :to="endpoint">
-		<TwIcon v-if="menu.icon" :name="menu.icon" class="text-xl mr-2"></TwIcon>
+		<TwIcon
+			v-if="menu.icon"
+			:name="menu.icon"
+			class="shrink-0 text-xl mr-2"
+		></TwIcon>
 		<span>{{ menu.label }}</span>
 	</NuxtLink>
 </template>

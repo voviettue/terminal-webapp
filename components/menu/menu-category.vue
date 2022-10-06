@@ -1,13 +1,13 @@
 <template>
 	<Disclosure
 		as="div"
-		class="flex-row sm:inline-flex items-center border-transparent cursor-pointer sm:relative sm:border-b-2"
+		class="flex-row sm:inline-flex items-center border-transparent text-gray-500 cursor-pointer sm:relative sm:border-b-2 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 focus:border-transparent hover:sm:bg-inherit"
 		tabindex="0"
 		@focusin="state.open = true"
 		@focusout="outFocus($event)"
 	>
 		<div
-			:class="`px-4 py-2 sm:px-0 border-transparent border-l-4 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit sm:border-l-0 sm:p-0`"
+			:class="`px-4 py-2 sm:px-0 border-transparent border-l-4 flex items-center sm:border-l-0 sm:p-0`"
 		>
 			<TwIcon
 				v-if="menu.icon"

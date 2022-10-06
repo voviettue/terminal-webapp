@@ -3,9 +3,9 @@
 		<TwIcon
 			v-if="menu.icon"
 			:name="menu.icon"
-			class="text-green text-xl mr-2"
+			class="shrink-0 text-green text-xl mr-2"
 		></TwIcon>
-		<span>
+		<span class="">
 			{{ menu.label }}
 		</span>
 	</NuxtLink>

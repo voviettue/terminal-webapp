@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
 import { getFilterOperatorsForType } from '@directus/shared/utils'
+import operatorLabelMap from './operators'
 
 interface Props {
 	filterRow: any
@@ -86,18 +87,17 @@ const filterFields = computed(() =>
 	props.fields.map((field: any) => ({ label: field.label, value: field.key }))
 )
 const filterOperators = computed(() => {
-	let type = null
-	switch (
-		props.fields.find((field: any) => field.key === modelValue.value.field)
-			?.display
-	) {
+	const field = modelValue.value.field
+	let type = props.fields.find((el: any) => el.key === field)?.display
+	switch (type) {
 		case 'number':
 			type = 'integer'
 			break
 	}
+
 	return getFilterOperatorsForType(type).map((operator: any) => ({
-		label: operator,
 		value: operator,
+		label: operatorLabelMap.find((el: any) => el.value === operator)?.label,
 	}))
 })
 

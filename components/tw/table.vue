@@ -17,9 +17,28 @@
 								<span
 									class="tooltip -mt-8 py-1 px-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700"
 								>
-									{{ get(header, 'tooltip', get(header, 'label')) }}
+									{{ get(header, 'tooltip') ?? get(header, 'label') }}
 								</span>
-								{{ get(header, 'label', '-') }}
+								<div class="inline-flex items-center">
+									<span>{{ get(header, 'label') ?? '-' }}</span>
+									<span
+										v-if="
+											sortable && !['button'].includes(get(header, 'display'))
+										"
+										class="ml-1 rounded text-gray-900 hover:bg-gray-300"
+										@click="toggleSort(header)"
+									>
+										<NuxtIcon
+											:name="
+												(get(header, 'sortDirection') ?? 'asc') === 'asc'
+													? 'chevron-down'
+													: 'chevron-up'
+											"
+											class="flex-shrink-0"
+											aria-hidden="true"
+										></NuxtIcon>
+									</span>
+								</div>
 							</slot>
 						</th>
 					</tr>
@@ -46,13 +65,14 @@
 								:item="item"
 								:value="get(item, header.key)"
 							>
-								<RenderDisplay
-									v-if="header?.display"
-									:name="header.display"
-									:value="get(item, header.key)"
-									:options="header?.displayOptions"
-									:context="{ $item: item }"
-								></RenderDisplay>
+								<template v-if="header?.display">
+									<RenderDisplay
+										:name="header.display"
+										:value="get(item, header.key)"
+										:options="header?.displayOptions"
+										:context="{ $item: item }"
+									></RenderDisplay>
+								</template>
 								<template v-else>
 									{{ get(item, header.key) ?? '—' }}
 								</template>
@@ -91,12 +111,15 @@ const props = defineProps<{
 	items?: Record<string, any>[]
 	rowClick: (item: any) => void
 	hideHeader: boolean
+	sortable: boolean
 	minRow?: number
 	styles?: Record<string, any>
 	shadow?: string
 	verticalLines?: boolean
 	stripedRow?: boolean
 }>()
+
+const emit = defineEmits(['toggleSort'])
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 	return props.headers
@@ -105,6 +128,14 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 		)
 		.filter((header: any) => !header.hidden)
 })
+
+function toggleSort(header: any) {
+	emit('toggleSort', {
+		key: header.key,
+		direction:
+			(get(header, 'sortDirection') ?? 'asc') === 'asc' ? 'desc' : 'asc',
+	})
+}
 
 const clickable = !!props.rowClick
 const { get } = useLodash()

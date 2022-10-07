@@ -19,6 +19,8 @@
 		:shadow="shadow"
 		:vertical-lines="verticalLines"
 		:striped-row="strippedRow"
+		:sortable="sortable"
+		@toggle-sort="toggleSort($event)"
 	></TwTable>
 	<template v-if="pagination && items.length > 0">
 		<TwPagination
@@ -40,7 +42,7 @@ const props = defineProps<Props>()
 const { getStyles, parseJson } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
-const columns = props.widget.columns ?? ([] as TableHeader[])
+const columns = ref(props.widget.columns ?? ([] as TableHeader[]))
 const styles = getStyles(props.widget.options)
 const { result: rawData } = useBindData(
 	props.widget?.data,
@@ -59,12 +61,18 @@ const {
 	shadow,
 	verticalLines,
 	strippedRow,
+	sortable,
 } = props.widget.options
 
 const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
 	usePagination()
 
-const { search, filter, items: filteredItems } = useFilter(data)
+const {
+	search,
+	filter,
+	toggleSort,
+	items: filteredItems,
+} = useFilter(data, columns)
 function updateFilter(value: any) {
 	filter.value = value
 }

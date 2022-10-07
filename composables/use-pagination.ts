@@ -1,4 +1,4 @@
-import { ref, Ref } from 'vue'
+import { ref, Ref, watch } from 'vue'
 
 interface Pagination {
 	items: Ref<any[]>
@@ -6,38 +6,28 @@ interface Pagination {
 	limit: Ref<number>
 	pageTotal: Ref<number>
 	totalItem: Ref<number>
-	setLimit: (number: number) => void
-	setTotalItem: (total: number) => void
-	onPageChanged: (fn: () => void) => void
+}
+interface PaginationOption {
+	limit?: number
+	page?: number
 }
 
-export const usePagination = (): Pagination => {
+export const usePagination = (
+	data: Ref<Record<string, any>[]>,
+	options: PaginationOption
+): Pagination => {
 	const items = ref([])
-	const page = ref(1)
-	const limit = ref<number>(10)
-	const pageTotal = ref(0)
+	const page = ref<number>(options.page || 10)
+	const limit = ref<number>(options.limit || 10)
+	const pageTotal = ref()
 	const totalItem = ref(0)
-	let handlePageChange: any = null
 
-	watch(page, () => {
-		if (handlePageChange) {
-			handlePageChange()
-		}
+	watch([data, page, limit], () => {
+		totalItem.value = data.value.length
+		pageTotal.value = Math.ceil(totalItem.value / limit.value)
+		const offset = (page.value - 1) * limit.value
+		items.value = data.value.slice(offset, offset + limit.value)
 	})
-
-	function setLimit(number: number) {
-		limit.value = isNaN(number) ? 10 : number
-		setTotalItem(totalItem.value)
-	}
-
-	function setTotalItem(total: number) {
-		totalItem.value = total
-		pageTotal.value = Math.ceil(total / limit.value)
-	}
-
-	function onPageChanged(fn: () => void) {
-		handlePageChange = fn
-	}
 
 	return {
 		items,
@@ -45,8 +35,5 @@ export const usePagination = (): Pagination => {
 		limit,
 		pageTotal,
 		totalItem,
-		setLimit,
-		setTotalItem,
-		onPageChanged,
 	}
 }

@@ -49,7 +49,6 @@ const { result: rawData } = useBindData(
 	props.widget?.context
 )
 const data = computed(() => {
-	page.value = 1
 	return parseJson(rawData.value, [])
 })
 
@@ -64,44 +63,33 @@ const {
 	sortable,
 } = props.widget.options
 
-const { items, page, totalItem, limit, setLimit, setTotalItem, onPageChanged } =
-	usePagination()
-
 const {
 	search,
 	filter,
 	toggleSort,
 	items: filteredItems,
 } = useFilter(data, columns)
+
 function updateFilter(value: any) {
 	filter.value = value
 }
 
-watch([filteredItems], () => {
-	items.value = filteredItems.value
-
-	if (pagination) {
-		initItems()
-		setTotalItem(filteredItems.value.length)
-		setLimit(parseInt(itemPerPage))
-		onPageChanged(() => {
-			initItems()
-		})
-	}
+const { items, page, totalItem, limit } = usePagination(filteredItems, {
+	limit: itemPerPage ? parseInt(itemPerPage) : undefined,
+	page: 1,
 })
 
 const minRow = computed(() => {
 	if (pagination) {
-		return page.value > 1 || search || filter ? limit : null
+		return page.value > 1 || search || filter ? limit.value : null
 	} else {
 		return filteredItems.value ? filteredItems.value.length : 0
 	}
 })
 
-function initItems() {
-	const offset = (page.value - 1) * limit.value
-	items.value = filteredItems.value.slice(offset, offset + limit.value)
-}
+watch(filteredItems, () => {
+	page.value = 1
+})
 
 function onRowClick(item) {
 	const context = { ...pageStore.context, $item: item }

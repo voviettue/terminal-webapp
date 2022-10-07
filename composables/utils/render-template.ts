@@ -4,7 +4,7 @@ export default async function renderTemplate(
 	template: string,
 	context: any
 ): Promise<string> {
-	if (!template) return template
+	if (!template || isEmpty(context)) return template
 
 	const regexFunction = /(\(\s?{{(?:{.*}|[^{])*}}\s?\))/g
 	const matchesFunction =

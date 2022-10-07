@@ -46,7 +46,7 @@
 				<tbody class="divide-y divide-gray-200 bg-white">
 					<tr
 						v-for="(item, index) in items"
-						:key="`tr-${index}`"
+						:key="`tr-${Math.random()}-${index}`"
 						:class="{
 							'hover:bg-gray-100 cursor-pointer': clickable,
 							'bg-gray-50': stripedRow && index % 2 === 0,

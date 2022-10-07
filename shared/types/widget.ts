@@ -146,7 +146,7 @@ export interface TextInputWidget extends InputWidget {
 	leftIcon?: string
 	rightIcon?: string
 	trim?: boolean
-	marked?: boolean
+	masked?: boolean
 	regex?: string
 	errorMessage?: string
 	alignment?: string
@@ -161,7 +161,7 @@ export interface NumberInputWidget extends InputWidget {
 	tooltip?: string
 	leftIcon?: string
 	rightIcon?: string
-	marked?: boolean
+	masked?: boolean
 	regex?: string
 	errorMessage?: string
 	alignment?: string

@@ -18,7 +18,7 @@
 		<div :class="getClassFormKitInput()">
 			<FormKit
 				v-model="text"
-				:type="marked ? 'password' : 'number'"
+				:type="masked ? 'password' : 'number'"
 				:validation="validates"
 				:placeholder="placeholder"
 				:min="minValue"
@@ -67,7 +67,7 @@ const {
 	placeholder,
 	leftIcon,
 	rightIcon,
-	marked,
+	masked,
 	disable,
 	regex,
 	errorMessage,
@@ -114,9 +114,8 @@ const getInputClass = () => {
 const styleLabel = getStyles({
 	textColor: labelColor,
 	textSize: labelSize,
-	textFontFamily: labelFontFamily,
+	fontFamily: labelFontFamily,
 })
-
 const getClassLabel = () => {
 	const classes = { 'label-input': true }
 	if (labelPosition === 'left') {
@@ -151,7 +150,11 @@ onMounted(() => {
 	if (autoFocus || disable) {
 		const input = textInput.value.querySelector('.formkit-input')
 		autoFocus && input.focus()
-		disable && input.setAttribute('readonly', true)
+		if (disable) {
+			input.setAttribute('readonly', true)
+			input.style.backgroundColor = '#E5E8E8'
+			input.blur()
+		}
 	}
 	if (borderRadius) {
 		const inner = textInput.value.querySelector('.formkit-inner')
@@ -189,6 +192,10 @@ onMounted(() => {
 			border-bottom: none;
 		}
 	}
+	:deep().formkit-message {
+		position: absolute;
+		width: 100%;
+	}
 	:deep().formkit-inner {
 		display: flex;
 		justify-content: flex-start;
@@ -202,11 +209,6 @@ onMounted(() => {
 	:deep().formkit-outer {
 		width: 100%;
 	}
-	&.align-right {
-		:deep().formkit-input {
-			text-align: right;
-		}
-	}
 	&.readonly {
 		:deep().formkit-outer {
 			pointer-events: none;
@@ -217,6 +219,11 @@ onMounted(() => {
 		justify-content: flex-start;
 		align-items: flex-start;
 		padding-top: 5px;
+	}
+	&.align-right {
+		.label-input {
+			justify-content: flex-end;
+		}
 	}
 
 	&.tooltip {

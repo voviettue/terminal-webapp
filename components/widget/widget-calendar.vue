@@ -37,8 +37,6 @@ const calendarOptions = ref({
 		right: 'dayGridMonth,timeGridWeek,timeGridDay',
 	},
 	initialView: props.widget?.defaultView || 'dayGridMonth',
-	initialDate: props.widget?.defaultDate || null,
-	now: props.widget?.defaultDate || null,
 	events: events.value,
 	editable: true,
 	selectable: true,
@@ -149,32 +147,44 @@ onMounted(() => {
 		text-transform: capitalize;
 		background-color: rgb(256 256 256 / var(--tw-bg-opacity));
 		color: rgb(209 213 219 / var(--tw-border-opacity));
-		border-color: black;
-		&:first-child {
-			border-right: none;
-		}
-		&:last-child {
-			border-left: none;
-		}
-		&:not(:last-child):not(:first-child) {
+		border-color: rgb(209 213 219);
+		min-width: 3.8125rem;
+		&.fc-today-button:disabled {
 			opacity: 1;
-			border-left: none;
-			border-right: none;
+		}
+		&.fc-next-button,
+		&.fc-prev-button {
+			min-width: 1rem;
+			span {
+				color: black;
+			}
 		}
 		&:hover {
 			--tw-bg-opacity: 1;
-			background-color: black;
-			color: white;
+			background-color: #f3f4f6;
+			color: black;
 		}
 		&.fc-button-active,
 		&:active {
-			background-color: black;
-			color: white;
+			background-color: #f3f4f6;
+			color: black;
+			--fc-button-active-border-color: rgb(209 213 219);
 		}
 		&:focus,
 		&:focus-visible {
-			outline: none;
-			box-shadow: none !important;
+			--tw-border-opacity: 1;
+			--tw-ring-opacity: 1;
+			--tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity));
+			--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
+				var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+			--tw-ring-shadow: var(--tw-ring-inset) 0 0 0
+				calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+			border-color: rgb(99 102 241 / var(--tw-border-opacity));
+			box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+				var(--tw-shadow, 0 0 #0000) !important;
+			outline: 2px solid transparent;
+			outline-offset: 2px;
+			z-index: 10;
 		}
 	}
 }
@@ -204,5 +214,10 @@ onMounted(() => {
 .fc .fc-scroller-harness-liquid :deep(.fc-scroller) {
 	border-bottom-left-radius: v-bind(borderRadius);
 	border-bottom-right-radius: v-bind(borderRadius);
+}
+:deep(.fc-daygrid-dot-event) {
+	.fc-event-title {
+		text-overflow: ellipsis;
+	}
 }
 </style>

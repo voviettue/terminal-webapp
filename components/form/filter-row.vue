@@ -6,7 +6,7 @@
 	>
 		<button
 			v-if="index > 0"
-			class="block hover:text-red-600"
+			class="block text-gray-500 hover:text-red-500"
 			@click="removeFilterRow"
 		>
 			<TwIcon name="close" class="icon text-xl" aria-hidden="true"></TwIcon>

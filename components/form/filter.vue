@@ -15,12 +15,12 @@
 				<div class="relative inline-block text-left">
 					<div>
 						<button
-							class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+							class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
 							@click="filterActive = !filterActive"
 						>
 							<TwIcon
 								name="filter_alt"
-								class="icon text-xl"
+								class="icon text-xl text-gray-500"
 								aria-hidden="true"
 							></TwIcon>
 							<span
@@ -54,7 +54,7 @@
 							></FormFilterRow>
 							<div class="flex justify-between items-center mt-4">
 								<button
-									class="inline-flex items-center gap-1 text-sm font-medium bg-transparent text-purple-600 font-medium leading-tight uppercase"
+									class="inline-flex items-center gap-1 text-sm bg-transparent text-gray-600 hover:text-gray-900 leading-tight uppercase"
 									@click="addFilterRow"
 								>
 									<TwIcon
@@ -66,13 +66,13 @@
 								</button>
 								<div class="flex justify-between gap-4">
 									<button
-										class="btn secondary md shadow-md rounded-md text-sm font-medium"
+										class="btn light sm shadow-md rounded-md text-sm font-medium"
 										@click="clearFilter"
 									>
 										CLEAR
 									</button>
 									<button
-										class="btn primary md shadow-md rounded-md text-sm font-medium"
+										class="btn primary sm shadow-md rounded-md text-sm font-medium"
 										@click="applyFilter"
 									>
 										APPLY
@@ -165,6 +165,8 @@ function clearFilter() {
 	}
 
 	filterActive.value = false
+
+	emit('update:filter', null)
 }
 
 function addFilterRow() {
@@ -186,6 +188,7 @@ function removeFilterRow(index: number) {
 
 <style>
 .formkit-prefix-icon {
-	width: 2em;
+	width: 1.25em;
+	@apply text-gray-500;
 }
 </style>

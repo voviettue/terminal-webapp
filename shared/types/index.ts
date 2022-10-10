@@ -31,4 +31,9 @@ export type Settings = {
 	project_background: string
 	homepage: number
 	menus: Menu[]
+	menu_options?: {
+		alignment?: 'left' | 'center' | 'right'
+		hideLabel?: boolean
+		fontFamily?: string
+	}
 }

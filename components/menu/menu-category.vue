@@ -1,20 +1,21 @@
 <template>
 	<Disclosure
 		as="div"
-		class="flex-row sm:inline-flex items-center border-transparent text-gray-500 cursor-pointer sm:relative sm:border-b-2 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 focus:border-transparent hover:sm:bg-inherit"
+		class="menu !p-0 cursor-pointer flex-col sm:flex-row sm:relative"
 		tabindex="0"
 		@focusin="state.open = true"
 		@focusout="outFocus($event)"
 	>
-		<div
-			:class="`px-4 py-2 sm:px-0 border-transparent border-l-4 flex items-center sm:border-l-0 sm:p-0`"
-		>
+		<div class="w-full px-4 py-2 sm:py-0 sm:px-0">
 			<TwIcon
 				v-if="menu.icon"
 				:name="menu.icon"
-				class="text-green text-xl mr-2"
+				class="icon text-green text-xl"
 			></TwIcon>
-			{{ menu.label }}
+			<span class="label ml-2">{{ menu.label }}</span>
+			<span class="tooltip">
+				{{ menu.label }}
+			</span>
 		</div>
 
 		<DisclosurePanel
@@ -24,9 +25,9 @@
 		>
 			<div v-for="childMenu in childMenus" :key="childMenu.id">
 				<RenderMenu
+					class="p-4 py-2 w-full sm:p-4 sm:py-2"
 					:menu="childMenu"
 					:nested="true"
-					class="p-4 py-2 w-full sm:p-4 sm:py-2"
 					@click="state.open = false"
 				/>
 			</div>

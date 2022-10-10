@@ -28,14 +28,7 @@ export const useSettingStore = defineStore({
 		async hydrate() {
 			const directus = useDirectus()
 			this.loading = true
-
-			const fields = [
-				'homepage',
-				'project_name',
-				'project_logo',
-				'project_background',
-				'menus.*',
-			]
+			const fields = ['*', 'menus.*']
 
 			try {
 				const { data } = await directus

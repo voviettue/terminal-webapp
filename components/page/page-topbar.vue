@@ -4,7 +4,7 @@
 		as="nav"
 		class="bg-white shadow fixed bottom-0 w-full sm:static z-50"
 	>
-		<div class="container mx-auto bg-white border-t">
+		<div class="container mx-auto bg-white border-t px-4 sm:px-0">
 			<div class="flex h-16">
 				<div
 					class="flex-shrink-0 flex items-center justify-center background-logo"
@@ -13,10 +13,15 @@
 						<img class="h-9 w-auto" :src="projectLogoImg" alt="Project Logo" />
 					</NuxtLink>
 				</div>
-				<div class="flex grow mx-8">
+				<div :class="{ 'flex grow mx-8': true, ...navClass }">
 					<nav class="hidden sm:flex sm:space-x-8">
 						<!-- Current: 'border-indigo-500 text-gray-900', Default: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' -->
-						<RenderMenu v-for="menu in menus" :key="menu.id" :menu="menu" />
+						<RenderMenu
+							v-for="menu in menus"
+							:key="menu.id"
+							:class="`${hideLabel ? 'menu menu-icon' : ''}`"
+							:menu="menu"
+						/>
 					</nav>
 				</div>
 				<div class="flex-shrink-0 flex items-center">
@@ -50,20 +55,9 @@
 							leave-to-class="transform opacity-0 scale-95"
 						>
 							<MenuItems
-								class="origin-top-right absolute right-0 -mt-[160px] sm:mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+								class="origin-top-right absolute right-0 -mt-[90px] sm:mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							>
-								<MenuItem v-slot="{ active }" as="div" class="sm:hidden">
-									<a
-										:href="adminUrl"
-										:class="[
-											active ? 'bg-gray-100' : '',
-											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
-										]"
-									>
-										Go to Back Office
-									</a>
-								</MenuItem>
-								<MenuItem v-slot="{ active }" as="div">
+								<!-- <MenuItem v-slot="{ active }" as="div">
 									<NuxtLink
 										:class="[
 											active ? 'bg-gray-100' : '',
@@ -72,7 +66,7 @@
 									>
 										Your Profile
 									</NuxtLink>
-								</MenuItem>
+								</MenuItem> -->
 								<MenuItem v-slot="{ active }" as="div">
 									<a
 										:class="[
@@ -104,13 +98,14 @@
 
 		<DisclosurePanel
 			v-slot="{ close }"
-			class="disclosure-panel sm:hidden fixed w-full border-b bg-white"
+			class="disclosure-panel sm:hidden fixed flex flex-col justify-end w-full border-b bg-white"
 		>
-			<nav class="pt-2 pb-3 space-y-1 flex flex-col justify-end h-full">
+			<nav class="pt-2 pb-3 space-y-1 flex flex-col justify-end bg-white">
 				<RenderMenu
 					v-for="menu in menus"
 					:key="menu.id"
 					:menu="menu"
+					:hide-label="hideLabel"
 					@click="onClickMenu(menu, close)"
 				/>
 			</nav>
@@ -130,7 +125,6 @@ import {
 } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 
-const config = useRuntimeConfig()
 const router = useRouter()
 const { usePageStore, useUserStore, useSettingStore } = useStore()
 const userStore = useUserStore()
@@ -141,13 +135,21 @@ const homePage = pageStore.homepage
 const { user, avatarImg } = storeToRefs(userStore)
 const { logoBackgroundColor, projectLogoImg } = storeToRefs(settingStore)
 const menus = settingStore.menus.filter((e) => e.parent === null)
-const adminUrl = config.terminal.adminUrl
 let closePanel = () => null
 
 router.afterEach(() => {
 	closePanel()
 })
 
+const options = settingStore.settings?.menu_options
+const alignment = options?.alignment || 'left'
+const hideLabel = options?.hideLabel || false
+const fontFamily = options?.fontFamily || 'inherit'
+const navClass = {
+	'justify-start': alignment === 'left',
+	'justify-center': alignment === 'center',
+	'justify-end': alignment === 'right',
+}
 async function logout() {
 	const directus = useDirectus()
 	try {
@@ -169,10 +171,11 @@ function onClickMenu(menu, close) {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .background-logo {
 	background-color: v-bind('logoBackgroundColor');
 }
+
 .disclosure-panel {
 	height: calc(100% - 64px);
 	bottom: 64px;
@@ -180,17 +183,55 @@ function onClickMenu(menu, close) {
 }
 </style>
 
-<style scoped>
-nav :deep(.menu) {
-	@apply px-4 py-2 sm:py-0 sm:px-0 border-l-4 sm:border-l-0 border-transparent sm:border-b-2 flex items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit;
-}
-nav :deep(.menu.active) {
-	@apply text-gray-900 bg-indigo-50 border-indigo-500 font-medium sm:bg-inherit;
-}
-nav :deep(.menu.sub) {
-	@apply py-2 w-full sm:p-4 sm:py-2 border-b-0;
-}
-nav :deep(.menu.sub.active) {
-	@apply border-l-4 sm:border-b-0;
+<style lang="scss">
+nav {
+	.menu {
+		font-family: v-bind('fontFamily');
+		@apply px-4 py-2 sm:py-0 sm:px-0 border-l-4 sm:border-l-0 border-transparent sm:border-b-2 flex justify-start items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit relative;
+
+		&.active {
+			@apply text-indigo-500 bg-indigo-50 border-indigo-500 font-medium sm:bg-inherit;
+		}
+		&.sub {
+			@apply py-2 w-full sm:p-4 sm:py-2 border-b-0;
+		}
+		&.sub.active {
+			@apply border-l-4 sm:border-b-0;
+		}
+		.label {
+			@apply ml-2;
+		}
+	}
+	.tooltip {
+		@apply invisible absolute;
+		@apply py-1 px-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700;
+		left: 0;
+		bottom: -40px;
+	}
+	.menu-icon {
+		.icon {
+			font-size: 1.5rem;
+			padding: 0.75rem;
+		}
+		.label {
+			@apply inline sm:hidden;
+		}
+		&:hover .tooltip {
+			@apply visible z-50 opacity-100;
+		}
+		&:focus .tooltip {
+			@apply invisible;
+		}
+		.sub .icon {
+			font-size: 1.25rem;
+			padding: 0;
+		}
+		.sub .label {
+			@apply sm:inline;
+		}
+		.sub .tooltip {
+			display: none !important;
+		}
+	}
 }
 </style>

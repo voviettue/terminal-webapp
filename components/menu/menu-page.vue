@@ -3,9 +3,12 @@
 		<TwIcon
 			v-if="menu.icon"
 			:name="menu.icon"
-			class="shrink-0 text-xl mr-2"
+			class="icon shrink-0 text-xl"
 		></TwIcon>
-		<span>{{ menu.label }}</span>
+		<span class="label">{{ menu.label }}</span>
+		<span class="tooltip">
+			{{ menu.label }}
+		</span>
 	</NuxtLink>
 </template>
 

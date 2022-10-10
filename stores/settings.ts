@@ -34,6 +34,13 @@ export const useSettingStore = defineStore({
 				const { data } = await directus
 					.items('cms_settings')
 					.readByQuery({ fields })
+
+				if (data.menu_options?.hideLabel === true) {
+					data.menus = data.menus.map((item) => {
+						item.icon = item?.icon || 'menu'
+						return item
+					})
+				}
 				this.settings = data
 			} catch (error) {
 				this.error = error

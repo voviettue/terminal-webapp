@@ -25,8 +25,7 @@
 				:name="label"
 				validation-visibility="live"
 				:validation-messages="errorsMessage"
-				:input-class="getInputClass"
-				:inner-class="getInnerClass"
+				:wrapper-class="getWrapperClass"
 				@input="onChangeText"
 			>
 				<template v-if="leftIcon" #prefixIcon>
@@ -102,15 +101,8 @@ const onChangeText = (val) => {
 	fn(...Object.values(context))
 }
 
-const getInnerClass = () => {
-	if ((!leftIcon && !rightIcon) || !shadow) return {}
-	const res = {}
-	res[`shadow-${shadow}`] = true
-	return res
-}
-
-const getInputClass = () => {
-	if (leftIcon || rightIcon || !shadow) return {}
+const getWrapperClass = () => {
+	if (!shadow) return {}
 	const res = {}
 	res[`shadow-${shadow}`] = true
 	return res
@@ -166,6 +158,8 @@ onMounted(() => {
 	if (borderRadius) {
 		const inner = textInput.value.querySelector('.formkit-inner')
 		const input = textInput.value.querySelector('.formkit-input')
+		const wrapper = textInput.value.querySelector('.formkit-wrapper')
+		wrapper.style.borderRadius = `${borderRadius}px`
 		inner.style.borderRadius = `${borderRadius}px`
 		if (!leftIcon && !rightIcon) input.style.border = 'none'
 	}

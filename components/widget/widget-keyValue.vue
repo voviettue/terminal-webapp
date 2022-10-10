@@ -1,6 +1,6 @@
 <template>
 	<div :style="styles" :class="widget.style || 'bottom-line'">
-		<template v-for="(item, key, index) in widget.keyTransformation">
+		<template v-for="(item, key, index) in widget.keys">
 			<div
 				v-if="
 					(!widget?.rows || (index || 0) < widget.rows) && get(data, item.key)
@@ -8,11 +8,21 @@
 				:key="index"
 				class="key-value-grid"
 			>
-				<div :style="leftStyle">
-					<span>{{ item.value || '—' }}</span>
+				<div :style="getStylesBy('Left', item)">
+					<span>{{ item.label || '—' }}</span>
 				</div>
-				<div :style="rightStyle">
-					<span>{{ startCase(upperFirst(get(data, item.key))) || '—' }}</span>
+				<div :style="getStylesBy('Right', item)">
+					<template v-if="item?.display">
+						<RenderDisplay
+							:name="item.display"
+							:value="get(data, item.key)"
+							:options="item?.displayOptions"
+							:context="{ $item: get(data, item.key) }"
+						></RenderDisplay>
+					</template>
+					<template v-else>
+						{{ startCase(upperFirst(get(data, item.key))) || '—' }}
+					</template>
 				</div>
 			</div>
 		</template>
@@ -23,6 +33,9 @@
 import upperFirst from 'lodash/upperFirst'
 import startCase from 'lodash/startCase'
 import get from 'lodash/get'
+import mergeWith from 'lodash/mergeWith'
+import cloneDeep from 'lodash/cloneDeep'
+import isNull from 'lodash/isNull'
 import { KeyValueWidget } from '~/shared/types'
 
 interface Props {
@@ -34,8 +47,6 @@ const props: any = defineProps<Props>()
 const { getStyles, parseJson } = useUtils()
 
 const styles = getStyles(props.widget.options)
-const leftStyle = getStylesBy('Left')
-const rightStyle = getStylesBy('Right')
 const borderStyle = ref('')
 
 const { result: rawData } = useBindData(
@@ -46,9 +57,12 @@ const data = computed(() => {
 	return parseJson(rawData.value, [])
 })
 
-function getStylesBy(position: string) {
+function getStylesBy(position: string, optiosnStyle: Record<string, any>) {
 	const styles = {}
-	const options = props.widget.options
+	const widgetOptions = cloneDeep(props.widget.options)
+	const options = mergeWith({}, widgetOptions, optiosnStyle, (o: any, s: any) =>
+		isNull(s) ? o : s
+	)
 
 	Object.keys(options).forEach((k) => {
 		if (k.includes(position)) {
@@ -57,7 +71,7 @@ function getStylesBy(position: string) {
 		}
 	})
 
-	return getStyles(styles)
+	return getStyles(styles) || null
 }
 
 onMounted(() => {

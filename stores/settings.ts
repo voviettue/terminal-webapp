@@ -37,7 +37,9 @@ export const useSettingStore = defineStore({
 
 				if (data.menu_options?.hideLabel === true) {
 					data.menus = data.menus.map((item) => {
-						item.icon = item?.icon || 'menu'
+						if (!item?.icon && !item.parent) {
+							item.icon = item?.icon || 'menu'
+						}
 						return item
 					})
 				}

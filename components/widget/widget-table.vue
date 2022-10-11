@@ -81,7 +81,7 @@ const { items, page, totalItem, limit } = usePagination(filteredItems, {
 
 const minRow = computed(() => {
 	if (pagination) {
-		return page.value > 1 || search || filter ? limit.value : null
+		return page.value > 1 || search.value || filter.value ? limit.value : null
 	} else {
 		return filteredItems.value ? filteredItems.value.length : 0
 	}

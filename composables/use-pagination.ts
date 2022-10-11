@@ -1,4 +1,4 @@
-import { ref, Ref, watch } from 'vue'
+import { ref, Ref } from 'vue'
 
 interface Pagination {
 	items: Ref<any[]>
@@ -22,7 +22,7 @@ export const usePagination = (
 	const pageTotal = ref()
 	const totalItem = ref(0)
 
-	watch([data, page, limit], () => {
+	watchEffect(() => {
 		totalItem.value = data.value.length
 		pageTotal.value = Math.ceil(totalItem.value / limit.value)
 		const offset = (page.value - 1) * limit.value

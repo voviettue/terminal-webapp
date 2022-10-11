@@ -18,6 +18,7 @@ export const useFilter = (data: Ref<any[]>, columns: Ref<any[]>): Filter => {
 	const search: Ref<string> = ref(null)
 	const filter: Ref<Query['filter']> = ref(null)
 	const items: Ref<any[]> = ref(null)
+
 	const { filterItems } = useUtils()
 
 	function compareObjects(o1: object, o2: object) {
@@ -60,7 +61,7 @@ export const useFilter = (data: Ref<any[]>, columns: Ref<any[]>): Filter => {
 		items.value = orderBy(items.value, [sort.key], [sort.direction])
 	}
 
-	watch([search, filter, data], () => {
+	watchEffect(() => {
 		if (!search.value) {
 			items.value = filterItems(data.value, filter.value)
 		} else {

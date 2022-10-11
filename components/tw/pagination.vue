@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-	<nav class="flex items-center justify-between">
+	<div class="flex items-center justify-between">
 		<div class="full-w flex flex-1 items-center justify-between">
 			<div class="mr-2">
 				<p class="text-sm text-gray-700 py-2">
@@ -22,7 +22,7 @@
 				</p>
 			</div>
 			<div>
-				<nav
+				<div
 					class="isolate inline-flex -space-x-px rounded-md shadow-sm"
 					aria-label="Pagination"
 				>
@@ -72,10 +72,10 @@
 							aria-hidden="true"
 						/>
 					</button>
-				</nav>
+				</div>
 			</div>
 		</div>
-	</nav>
+	</div>
 </template>
 
 <script setup lang="ts">

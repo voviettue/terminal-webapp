@@ -1,5 +1,8 @@
 <template>
-	<NuxtLink :class="{ menu: true, sub: nested }" :to="menu.url">
+	<NuxtLink
+		:class="{ menu: true, sub: nested, 'space-x-2': true }"
+		:to="menu.url"
+	>
 		<TwIcon
 			v-if="menu.icon"
 			:name="menu.icon"

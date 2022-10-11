@@ -6,13 +6,13 @@
 		@focusin="state.open = true"
 		@focusout="outFocus($event)"
 	>
-		<div class="w-full px-4 py-2 sm:py-0 sm:px-0">
+		<div class="w-full px-4 py-2 sm:py-0 sm:px-0 space-x-2">
 			<TwIcon
 				v-if="menu.icon"
 				:name="menu.icon"
 				class="icon text-green text-xl"
 			></TwIcon>
-			<span class="label ml-2">{{ menu.label }}</span>
+			<span class="label">{{ menu.label }}</span>
 			<span class="tooltip">
 				{{ menu.label }}
 			</span>
@@ -21,7 +21,7 @@
 		<DisclosurePanel
 			v-show="state.open"
 			static
-			class="bg-white ml-4 sm:ml-0 sm:absolute sm:top-[100%] sm:mt-1 sm:min-w-[200px] sm:shadow sm:rounded-lg"
+			class="bg-white w-full ml-4 sm:ml-0 sm:absolute sm:top-[100%] sm:mt-1 sm:min-w-[200px] sm:shadow sm:rounded-lg"
 		>
 			<div v-for="childMenu in childMenus" :key="childMenu.id">
 				<RenderMenu

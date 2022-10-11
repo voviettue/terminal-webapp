@@ -178,6 +178,8 @@ function onClickMenu(menu, close) {
 
 .disclosure-panel {
 	height: calc(100% - 64px);
+	left: 0;
+	width: 100%;
 	bottom: 64px;
 	z-index: 10000;
 }
@@ -194,16 +196,16 @@ nav {
 		&.active {
 			@apply text-indigo-500 bg-indigo-50 border-indigo-500 font-medium sm:bg-inherit;
 		}
+
 		&.sub {
 			@apply py-2 w-full sm:p-4 sm:py-2 border-b-0;
 		}
+
 		&.sub.active {
 			@apply border-l-4 sm:border-b-0;
 		}
-		.label {
-			@apply ml-2;
-		}
 	}
+
 	.tooltip {
 		@apply invisible absolute;
 		@apply py-1 px-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700;

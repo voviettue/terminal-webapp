@@ -1,5 +1,5 @@
 <template>
-	<div :style="styles" :class="widget.style || 'bottom-line'">
+	<div :style="styles">
 		<template v-for="(item, key, index) in widget.keys">
 			<div
 				v-if="
@@ -9,11 +9,12 @@
 				"
 				:key="index"
 				class="key-value-grid"
+				:class="getWidgetStyle(item)"
 			>
-				<div :style="getStylesBy('Left', item)">
+				<div :style="getKeyStyle(item)">
 					<span>{{ item.label || '—' }}</span>
 				</div>
-				<div :style="getStylesBy('Right', item)">
+				<div :style="getValueStyle(item)">
 					<template v-if="item?.display">
 						<RenderDisplay
 							:name="item.display"
@@ -23,7 +24,9 @@
 						></RenderDisplay>
 					</template>
 					<template v-else>
-						{{ startCase(upperFirst(get(data, item.key))) || '—' }}
+						<span>
+							{{ startCase(upperFirst(get(data, item.key))) || '—' }}
+						</span>
 					</template>
 				</div>
 			</div>
@@ -59,6 +62,18 @@ const data = computed(() => {
 	return parseJson(rawData.value, [])
 })
 
+function getWidgetStyle(conditionOptions) {
+	return conditionOptions?.style || props.widget.options?.style || 'bottom-line'
+}
+
+function getKeyStyle(conditionOptions) {
+	return getStylesBy('Left', conditionOptions)
+}
+
+function getValueStyle(conditionOptions) {
+	return getStylesBy('Right', conditionOptions)
+}
+
 function getStylesBy(position: string, optionsStyle: Record<string, any>) {
 	const styles = {}
 	const widgetOptions = cloneDeep(props.widget.options)
@@ -73,7 +88,7 @@ function getStylesBy(position: string, optionsStyle: Record<string, any>) {
 		}
 	})
 
-	return getStyles(styles) || null
+	return getStyles(styles)
 }
 
 onMounted(() => {
@@ -88,13 +103,10 @@ onMounted(() => {
 	border-bottom: 1px #d1d5db v-bind('cssBinding.borderStyle');
 }
 .connected-line {
-	.key-value-grid {
-		position: relative;
+	&.key-value-grid {
 		> div {
-			&:first-child {
-				display: flex;
-				align-items: center;
-			}
+			display: flex;
+			align-items: center;
 		}
 	}
 	span {
@@ -103,6 +115,7 @@ onMounted(() => {
 	}
 	> div {
 		margin: 0.875rem 0;
+		position: relative;
 		&::before {
 			content: '';
 			position: absolute;
@@ -111,22 +124,20 @@ onMounted(() => {
 			z-index: 1;
 			border-bottom: 1px #d1d5db v-bind('cssBinding.borderStyle');
 		}
-		> div {
+		> span {
 			z-index: 2;
 		}
 	}
 }
 .covered-border {
 	border: 1px #d1d5db v-bind('cssBinding.borderStyle');
-	border-bottom: 0;
+	margin-top: -1px;
 	> div {
 		padding: 0.875rem;
-		border-bottom: 1px #d1d5db v-bind('cssBinding.borderStyle');
 	}
 }
 .key-value-grid {
 	display: flex;
-	align-items: center;
 	> div {
 		&:first-child {
 			flex: 1;

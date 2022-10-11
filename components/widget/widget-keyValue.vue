@@ -3,7 +3,9 @@
 		<template v-for="(item, key, index) in widget.keys">
 			<div
 				v-if="
-					(!widget?.rows || (index || 0) < widget.rows) && get(data, item.key)
+					(!widget?.rows || (index || 0) < widget.rows) &&
+					get(data, item.key) &&
+					!item?.hidden
 				"
 				:key="index"
 				class="key-value-grid"
@@ -47,7 +49,7 @@ const props: any = defineProps<Props>()
 const { getStyles, parseJson } = useUtils()
 
 const styles = getStyles(props.widget.options)
-const borderStyle = ref('')
+const cssBinding: Record<string, any> = ref({})
 
 const { result: rawData } = useBindData(
 	props.widget?.data,
@@ -57,10 +59,10 @@ const data = computed(() => {
 	return parseJson(rawData.value, [])
 })
 
-function getStylesBy(position: string, optiosnStyle: Record<string, any>) {
+function getStylesBy(position: string, optionsStyle: Record<string, any>) {
 	const styles = {}
 	const widgetOptions = cloneDeep(props.widget.options)
-	const options = mergeWith({}, widgetOptions, optiosnStyle, (o: any, s: any) =>
+	const options = mergeWith({}, widgetOptions, optionsStyle, (o: any, s: any) =>
 		isNull(s) ? o : s
 	)
 
@@ -75,30 +77,39 @@ function getStylesBy(position: string, optiosnStyle: Record<string, any>) {
 }
 
 onMounted(() => {
-	borderStyle.value = props.widget.borderType || 'solid'
+	cssBinding.value.borderStyle = props.widget.borderType || 'solid'
+	cssBinding.value.background = props.widget?.options?.background || '#fafafa'
 })
 </script>
 
 <style scoped lang="scss">
 .bottom-line > div {
 	padding: 0.875rem 0;
-	border-bottom: 1px #d1d5db v-bind(borderStyle);
+	border-bottom: 1px #d1d5db v-bind('cssBinding.borderStyle');
 }
 .connected-line {
-	position: relative;
+	.key-value-grid {
+		position: relative;
+		> div {
+			&:first-child {
+				display: flex;
+				align-items: center;
+			}
+		}
+	}
 	span {
 		padding: 0 0.25rem;
-		background-color: #ffffff;
+		background-color: v-bind('cssBinding.background');
 	}
 	> div {
 		margin: 0.875rem 0;
 		&::before {
 			content: '';
 			position: absolute;
+			bottom: 0.25rem;
 			width: 100%;
-			height: 1rem;
 			z-index: 1;
-			border-bottom: 1px #d1d5db v-bind(borderStyle);
+			border-bottom: 1px #d1d5db v-bind('cssBinding.borderStyle');
 		}
 		> div {
 			z-index: 2;
@@ -106,15 +117,16 @@ onMounted(() => {
 	}
 }
 .covered-border {
-	border: 1px #d1d5db v-bind(borderStyle);
+	border: 1px #d1d5db v-bind('cssBinding.borderStyle');
 	border-bottom: 0;
 	> div {
 		padding: 0.875rem;
-		border-bottom: 1px #d1d5db v-bind(borderStyle);
+		border-bottom: 1px #d1d5db v-bind('cssBinding.borderStyle');
 	}
 }
 .key-value-grid {
 	display: flex;
+	align-items: center;
 	> div {
 		&:first-child {
 			flex: 1;

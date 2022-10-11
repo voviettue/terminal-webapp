@@ -33,7 +33,7 @@ export interface KeyValueWidget extends Widget {
 	textStyleRifht?: Array<'bold' | 'italic' | 'underline'>
 	textColorLeft?: string
 	textColorRight?: string
-	keyTransformation?: Record<string, any>
+	keys?: Record<string, any>
 }
 
 export interface RichTextWidget extends Widget {

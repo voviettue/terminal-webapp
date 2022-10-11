@@ -2,9 +2,9 @@
 	<Disclosure
 		v-slot="{ open }"
 		as="nav"
-		class="bg-white shadow fixed bottom-0 w-full sm:static z-50"
+		class="bg-white shadow fixed bottom-0 w-full sm:relative z-50 px-6"
 	>
-		<div class="container mx-auto bg-white border-t px-4 sm:px-0">
+		<div class="container mx-auto bg-white border-t">
 			<div class="flex h-16">
 				<div
 					class="flex-shrink-0 flex items-center justify-center background-logo"
@@ -185,6 +185,8 @@ function onClickMenu(menu, close) {
 
 <style lang="scss">
 nav {
+	position: relative;
+	z-index: 500;
 	.menu {
 		font-family: v-bind('fontFamily');
 		@apply px-4 py-2 sm:py-0 sm:px-0 border-l-4 sm:border-l-0 border-transparent sm:border-b-2 flex justify-start items-center text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 hover:sm:bg-inherit relative;

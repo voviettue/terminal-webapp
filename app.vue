@@ -9,12 +9,10 @@
 			/>
 		</Head>
 
-		<Body class="bg-zinc-50 text-sm text-zinc-800">
-			<div class="min-h-screen">
-				<NuxtLayout>
-					<NuxtPage />
-				</NuxtLayout>
-			</div>
+		<Body class="min-h-screen bg-zinc-50 text-sm text-zinc-800">
+			<NuxtLayout>
+				<NuxtPage />
+			</NuxtLayout>
 		</Body>
 	</Html>
 </template>

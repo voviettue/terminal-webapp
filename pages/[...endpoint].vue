@@ -1,6 +1,6 @@
 <template>
-	<PageWrapper>
-		<RenderPage v-if="pageInfo" :page="pageInfo" :params="params" />
+	<PageWrapper v-if="pageInfo" :page="pageInfo">
+		<RenderPage :page="pageInfo" :params="params" />
 	</PageWrapper>
 </template>
 

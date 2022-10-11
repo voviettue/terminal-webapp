@@ -23,6 +23,9 @@ export interface Page {
 	id: string | number
 	name: string
 	title: string
+	options?: {
+		maxWidth?: string
+	}
 }
 
 export type Settings = {

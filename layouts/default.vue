@@ -26,7 +26,7 @@ async function init() {
 	try {
 		await Promise.all([userHydrate(), settingsStore.hydrate(), pageHydrate()])
 		const { options, page_options: pageOptions } = settings.value
-		customCss.value = options?.custom_css
+		customCss.value = options?.custom_css ?? ''
 
 		if (pageOptions?.layoutWidth === 'fluid') {
 			maxWidth.value = '100%'

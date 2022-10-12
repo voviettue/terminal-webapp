@@ -89,5 +89,9 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.fc {
+	--fc-event-bg-color: #6366f1;
+	--fc-event-border-color: black;
+}
 @import '@/assets/css/component/calendar.scss';
 </style>

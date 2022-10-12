@@ -19,12 +19,24 @@ useHead({
 })
 
 const customCss = ref('')
+const maxWidth = ref('')
 await init()
 
 async function init() {
 	try {
 		await Promise.all([userHydrate(), settingsStore.hydrate(), pageHydrate()])
-		customCss.value = settings.value?.options?.custom_css
+		const { options, page_options: pageOptions } = settings.value
+		customCss.value = options?.custom_css
+
+		if (pageOptions?.layoutWidth === 'fluid') {
+			maxWidth.value = '100%'
+		}
+		if (pageOptions?.maxWidth) {
+			maxWidth.value = settings.value?.page_options?.maxWidth
+		}
+		if (maxWidth.value) {
+			customCss.value += `\n .container { max-width: ${maxWidth.value} }`
+		}
 		addCustomCss()
 	} catch (err) {
 		// do nothing

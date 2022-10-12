@@ -8,8 +8,21 @@ export function calendarEventParse(item: any, options: any) {
 
 	let endDate = ''
 
+	let isDateFormat = false
+	const date = new Date(item[options?.startDateField])
+	if (
+		!options?.endDateField &&
+		isValid(date) &&
+		date?.getHours() === 0 &&
+		date?.getMinutes() === 0 &&
+		date?.getSeconds() === 0
+	) {
+		isDateFormat = true
+	}
+
 	const allDay =
-		item[options?.endDateField] && new Date(item[options?.endDateField])
+		isDateFormat ||
+		(item[options?.endDateField] && new Date(item[options?.endDateField]))
 
 	if (options?.endDateField) {
 		if (allDay && isValid(allDay)) {

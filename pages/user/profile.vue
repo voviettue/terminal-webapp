@@ -70,7 +70,12 @@
 					<div class="space-y-6">
 						<FormKit type="text" name="first_name" label="First Name" />
 						<FormKit type="text" name="last_name" label="Last Name" />
-						<FormKit type="text" name="email" label="Email" class="readonly" />
+						<FormKit
+							type="text"
+							name="email"
+							label="Email"
+							input-class="input-readonly"
+						/>
 						<FormKit type="text" name="title" label="Title" />
 						<FormKit type="text" name="location" label="Location" />
 						<FormKit
@@ -137,28 +142,29 @@ const changeAvatar = async (event) => {
 		const form = new FormData()
 		form.append('file', event.target.files[0])
 		const res = await directus.files.createOne(form)
-		values.value.avatar.id = res.id
+		user.value.avatar = { id: res.id }
 		await directus.users.me.update({ avatar: res.id })
-		// await directus.users.me.update(fields)
 	} catch (e) {
 		errors.value = e
 	}
 }
 const removeAvatar = async () => {
 	try {
-		values.value.avatar.id = null
+		user.value.avatar = null
 		await directus.users.me.update({ avatar: null })
-		// await directus.users.me.update(fields)
 	} catch (e) {
 		errors.value = e
 	}
 }
 
 const submitProfile = async () => {
-	// eslint-disable-next-line camelcase
-	const { first_name, last_name, email, title, location } = values.value
-	// eslint-disable-next-line camelcase
-	const fields = { first_name, last_name, email, title, location }
+	const {
+		first_name: firstName,
+		last_name: lastName,
+		title,
+		location,
+	} = values.value
+	const fields = { first_name: firstName, last_name: lastName, title, location }
 	try {
 		await directus.users.me.update(fields)
 	} catch (e) {
@@ -166,9 +172,7 @@ const submitProfile = async () => {
 	}
 }
 const submitPassword = async () => {
-	// eslint-disable-next-line camelcase
 	const { password } = form.value
-	// eslint-disable-next-line camelcase
 	const fields = { password }
 	try {
 		await directus.users.me.update(fields)
@@ -176,4 +180,10 @@ const submitPassword = async () => {
 		errors.value = e
 	}
 }
+
+onMounted(() => {
+	const input = document.querySelector('.input-readonly')
+	input.setAttribute('readonly', true)
+	input.style.backgroundColor = '#ccc'
+})
 </script>

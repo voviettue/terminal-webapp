@@ -21,7 +21,6 @@
 		:sortable="sortable"
 		:layout="layout"
 		:height="height"
-		@toggle-sort="toggleSort($event)"
 	></TwTable>
 	<template v-if="pagination && items.length > 0">
 		<TwPagination
@@ -66,12 +65,7 @@ const {
 	height,
 } = props.widget.options
 
-const {
-	search,
-	filter,
-	toggleSort,
-	items: filteredItems,
-} = useFilter(data, columns)
+const { search, filter, items: filteredItems } = useFilter(data)
 
 function updateFilter(value: any) {
 	filter.value = value

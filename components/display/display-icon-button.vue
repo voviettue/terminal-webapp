@@ -1,6 +1,6 @@
 s
 <template>
-	<WidgetButton :widget="widget" />
+	<WidgetIconButton :widget="widget" />
 </template>
 <script setup lang="ts">
 import { inject } from 'vue'
@@ -9,12 +9,12 @@ interface Props {
 	options?: any
 }
 const props = defineProps<Props>()
-const options = { ...props.options, label: props.options?.label || props.value }
+const options = { ...props.options }
 const displayContext = inject('display-context')
 
 const widget = {
-	id: 'display-button',
-	name: 'Display Button',
+	id: 'display-icon-button',
+	name: 'Display Icon Button',
 	width: 'full',
 	context: displayContext,
 	options,

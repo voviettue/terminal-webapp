@@ -9,8 +9,8 @@ interface Props {
 const props = defineProps<Props>()
 const options = { ...props.options, text: props.value }
 const widget = {
-	id: 'display-text',
-	name: 'Display Text',
+	id: 'display-label',
+	name: 'Display Label',
 	width: 'full',
 	options,
 	...options,

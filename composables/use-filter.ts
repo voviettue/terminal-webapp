@@ -1,20 +1,13 @@
 import { Ref } from 'vue'
 import { Query } from '@directus/shared/types'
-import orderBy from 'lodash/orderBy'
-
-type Sort = {
-	key: string
-	direction: string
-}
 
 interface Filter {
 	search: Ref<string>
 	filter: Ref<Query['filter']>
 	items: Ref<any[]>
-	toggleSort: (sort: Sort) => void
 }
 
-export const useFilter = (data: Ref<any[]>, columns: Ref<any[]>): Filter => {
+export const useFilter = (data: Ref<any[]>): Filter => {
 	const search: Ref<string> = ref(null)
 	const filter: Ref<Query['filter']> = ref(null)
 	const items: Ref<any[]> = ref(null)
@@ -50,17 +43,6 @@ export const useFilter = (data: Ref<any[]>, columns: Ref<any[]>): Filter => {
 		return false
 	}
 
-	function toggleSort(sort: Sort) {
-		const columnIndex = columns.value.findIndex(
-			(el: any) => el.key === sort.key
-		)
-		columns.value[columnIndex] = {
-			...columns.value[columnIndex],
-			sortDirection: sort.direction,
-		}
-		items.value = orderBy(items.value, [sort.key], [sort.direction])
-	}
-
 	watchEffect(() => {
 		if (!search.value) {
 			items.value = filterItems(data.value, filter.value)
@@ -82,16 +64,11 @@ export const useFilter = (data: Ref<any[]>, columns: Ref<any[]>): Filter => {
 			})
 			items.value = filterItems(result, filter.value)
 		}
-
-		const keys = columns.value.map((el: any) => el.key)
-		const directions = columns.value.map((el: any) => el.sortDirection) ?? 'asc'
-		items.value = orderBy(items.value, keys, directions)
 	})
 
 	return {
 		search,
 		filter,
 		items,
-		toggleSort,
 	}
 }

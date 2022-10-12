@@ -15,8 +15,9 @@
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.key}`"
-							class="py-4 px-3 has-tooltip"
+							class="py-4 px-3 cursor-pointer has-tooltip hover:bg-gray-50"
 							scope="col"
+							@click="toggleSort(header)"
 						>
 							<slot :name="`header-${header.key}`" :header="header">
 								<span
@@ -24,24 +25,18 @@
 								>
 									{{ get(header, 'tooltip') ?? get(header, 'label') }}
 								</span>
-								<div class="inline-flex items-center">
+								<div class="relative">
 									<span>{{ get(header, 'label') ?? '-' }}</span>
 									<span
-										v-if="
-											sortable && !['button'].includes(get(header, 'display'))
-										"
-										class="ml-1 rounded text-gray-900 hover:bg-gray-300"
-										@click="toggleSort(header)"
+										v-if="sortable && get(header, 'sortDirection')"
+										class="absolute right-0 ml-1 rounded text-gray-900"
 									>
-										<NuxtIcon
-											:name="
-												(get(header, 'sortDirection') ?? 'asc') === 'asc'
-													? 'chevron-down'
-													: 'chevron-up'
-											"
+										<TwIcon
+											v-if="directionIcon(header)"
+											:name="directionIcon(header)"
 											class="flex-shrink-0"
 											aria-hidden="true"
-										></NuxtIcon>
+										></TwIcon>
 									</span>
 								</div>
 							</slot>
@@ -50,7 +45,7 @@
 				</thead>
 				<tbody class="divide-y divide-gray-200 bg-white z-1">
 					<tr
-						v-for="(item, index) in items"
+						v-for="(item, index) in tableData"
 						:key="`tr-${Math.random()}-${index}`"
 						:class="{
 							'hover:bg-gray-100 cursor-pointer': clickable,
@@ -85,7 +80,7 @@
 						</td>
 					</tr>
 
-					<template v-if="!items || items.length === 0">
+					<template v-if="!tableData || tableData.length === 0">
 						<tr>
 							<td
 								:colspan="headers.length"
@@ -95,8 +90,8 @@
 							</td>
 						</tr>
 					</template>
-					<template v-else-if="minRow > 0 && items.length < minRow">
-						<tr v-for="k in minRow - items.length" :key="`pad-row-${k}`">
+					<template v-else-if="minRow > 0 && tableData.length < minRow">
+						<tr v-for="k in minRow - tableData.length" :key="`pad-row-${k}`">
 							<td :colspan="headers.length" class="py-4 opacity-0">—</td>
 						</tr>
 					</template>
@@ -108,6 +103,7 @@
 
 <script setup lang="ts">
 import { onUpdated } from 'vue'
+import orderBy from 'lodash/orderBy'
 import { TableHeader } from '~/shared/types'
 
 interface Props {
@@ -130,7 +126,6 @@ const props = withDefaults(defineProps<Props>(), {
 	height: 'auto',
 })
 
-const emit = defineEmits(['toggleSort'])
 const { getStyles } = useUtils()
 const { get } = useLodash()
 const table = ref(null)
@@ -158,12 +153,36 @@ function alignHeightTable() {
 	}
 }
 
+const sortDirection = ref<string>()
+const sortBy = ref<string>()
+
+const tableData = computed(() => {
+	const keys = sortBy.value ?? normalizedHeaders.value.map((el: any) => el.key)
+	const directions =
+		sortDirection.value ??
+		normalizedHeaders.value.map((el: any) => el.sortDirection)
+
+	return orderBy(props.items, keys, directions)
+})
+
 function toggleSort(header: any) {
-	emit('toggleSort', {
-		key: header.key,
-		direction:
-			(get(header, 'sortDirection') ?? 'asc') === 'asc' ? 'desc' : 'asc',
-	})
+	if (!get(header, 'sortDirection')) return
+
+	const defaultSortDirection =
+		sortDirection.value ?? get(header, 'sortDirection')
+	sortDirection.value = defaultSortDirection === 'asc' ? 'desc' : 'asc'
+	sortBy.value = get(header, 'key')
+}
+
+function directionIcon(header: any) {
+	if (!sortBy.value)
+		return header.sortDirection === 'asc' ? 'expand_less' : 'expand_more'
+
+	if (header.key === sortBy.value && sortDirection.value) {
+		return sortDirection.value === 'asc' ? 'expand_less' : 'expand_more'
+	} else {
+		return 'unfold_more'
+	}
 }
 
 function onRowClick(item) {

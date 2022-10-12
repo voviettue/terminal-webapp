@@ -4,6 +4,9 @@ import DisplayText from '~/components/display/display-text.vue'
 import DisplayLink from '~/components/display/display-link.vue'
 import DisplayNumber from '~/components/display/display-number.vue'
 import DisplayButton from '~/components/display/display-button.vue'
+import DisplayIconButton from '~/components/display/display-icon-button.vue'
+import DisplayLabel from '~/components/display/display-label.vue'
+import DisplayDuration from '~/components/display/display-duration.vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('display-date', DisplayDate)
@@ -12,4 +15,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('display-link', DisplayLink)
 	nuxtApp.vueApp.component('display-number', DisplayNumber)
 	nuxtApp.vueApp.component('display-button', DisplayButton)
+	nuxtApp.vueApp.component('display-icon-button', DisplayIconButton)
+	nuxtApp.vueApp.component('display-label', DisplayLabel)
+	nuxtApp.vueApp.component('display-duration', DisplayDuration)
 })

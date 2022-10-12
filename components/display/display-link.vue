@@ -12,7 +12,7 @@ const options = { text: props.value, ...props.options }
 const { text, url } = options
 const widget = {
 	id: 'display-link',
-	name: 'display-link',
+	name: 'Display Link',
 	width: 'full',
 	options,
 	...options,

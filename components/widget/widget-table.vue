@@ -14,12 +14,13 @@
 		:headers="columns"
 		:items="items"
 		:row-click="widget?.onRowClick ? onRowClick : null"
-		:min-row="minRow"
 		:styles="styles"
 		:shadow="shadow"
 		:vertical-lines="verticalLines"
 		:striped-row="strippedRow"
 		:sortable="sortable"
+		:layout="layout"
+		:height="height"
 		@toggle-sort="toggleSort($event)"
 	></TwTable>
 	<template v-if="pagination && items.length > 0">
@@ -61,6 +62,8 @@ const {
 	verticalLines,
 	strippedRow,
 	sortable,
+	layout,
+	height,
 } = props.widget.options
 
 const {
@@ -79,13 +82,13 @@ const { items, page, totalItem, limit } = usePagination(filteredItems, {
 	page: 1,
 })
 
-const minRow = computed(() => {
-	if (pagination) {
-		return page.value > 1 || search.value || filter.value ? limit.value : null
-	} else {
-		return filteredItems.value ? filteredItems.value.length : 0
-	}
-})
+// const minRow = computed(() => {
+// 	if (height) return null;
+// 	if (pagination) {
+// 		return page.value > 1 || search.value || filter.value ? limit.value : null
+// 	}
+// 	return filteredItems.value ? filteredItems.value.length : 0
+// })
 
 watch(filteredItems, () => {
 	page.value = 1

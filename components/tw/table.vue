@@ -2,10 +2,15 @@
 	<div class="w-full inline-block align-middle">
 		<div
 			:class="`overflow-auto shadow-${shadow}`"
-			:style="(styles as CSSProperties)"
+			:style="{ ...styles, height: height }"
 		>
-			<table class="table-auto min-w-full divide-y divide-gray-300 text-left">
-				<thead v-if="!hideHeader">
+			<table
+				ref="table"
+				:class="`${
+					layout === 'fixed' ? 'table-fixed' : 'table-auto'
+				} w-full divide-y divide-gray-300 text-left`"
+			>
+				<thead v-if="!hideHeader" class="sticky top-0 bg-white z-10">
 					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
 						<th
 							v-for="header in normalizedHeaders"
@@ -43,7 +48,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-200 bg-white">
+				<tbody class="divide-y divide-gray-200 bg-white z-1">
 					<tr
 						v-for="(item, index) in items"
 						:key="`tr-${Math.random()}-${index}`"
@@ -57,7 +62,7 @@
 						<td
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
-							class="whitespace-nowrap py-4 px-3 text-gray-900"
+							class="py-4 px-3 text-gray-900"
 							:style="getStyles(header ?? {})"
 						>
 							<slot
@@ -84,7 +89,7 @@
 						<tr>
 							<td
 								:colspan="headers.length"
-								class="` whitespace-nowrap py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400 `"
+								class="py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
 							>
 								No records found
 							</td>
@@ -102,24 +107,35 @@
 </template>
 
 <script setup lang="ts">
-import { CSSProperties } from 'vue'
+import { onUpdated } from 'vue'
 import { TableHeader } from '~/shared/types'
-import getStyles from '~~/composables/utils/get-styles'
 
-const props = defineProps<{
+interface Props {
 	headers: (string | Partial<TableHeader>)[]
-	items?: Record<string, any>[]
+	items: Record<string, any>[]
 	rowClick: (item: any) => void
 	hideHeader: boolean
 	sortable: boolean
-	minRow?: number
 	styles?: Record<string, any>
 	shadow?: string
 	verticalLines?: boolean
 	stripedRow?: boolean
-}>()
+	layout?: 'auto' | 'fixed'
+	height?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+	layout: 'auto',
+	styles: null,
+	shadow: null,
+	height: 'auto',
+})
 
 const emit = defineEmits(['toggleSort'])
+const { getStyles } = useUtils()
+const { get } = useLodash()
+const table = ref(null)
+const height = ref(props.height)
+const clickable = !!props.rowClick
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 	return props.headers
@@ -129,6 +145,19 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 		.filter((header: any) => !header.hidden)
 })
 
+onUpdated(() => {
+	if (props.height === 'auto') {
+		alignHeightTable()
+	}
+})
+
+function alignHeightTable() {
+	const h = table.value.offsetHeight
+	if (height.value === 'auto' || h > parseInt(height.value)) {
+		height.value = `${h}px`
+	}
+}
+
 function toggleSort(header: any) {
 	emit('toggleSort', {
 		key: header.key,
@@ -137,12 +166,11 @@ function toggleSort(header: any) {
 	})
 }
 
-const clickable = !!props.rowClick
-const { get } = useLodash()
 function onRowClick(item) {
 	if (props.rowClick) props.rowClick(item)
 }
 </script>
+
 <style scoped>
 .tooltip {
 	@apply invisible absolute;

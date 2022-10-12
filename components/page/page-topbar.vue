@@ -57,8 +57,9 @@
 							<MenuItems
 								class="origin-top-right absolute right-0 -mt-[90px] sm:mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							>
-								<!-- <MenuItem v-slot="{ active }" as="div">
+								<MenuItem v-slot="{ active }" as="div">
 									<NuxtLink
+										to="/user/profile"
 										:class="[
 											active ? 'bg-gray-100' : '',
 											'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
@@ -66,7 +67,7 @@
 									>
 										Your Profile
 									</NuxtLink>
-								</MenuItem> -->
+								</MenuItem>
 								<MenuItem v-slot="{ active }" as="div">
 									<a
 										:class="[

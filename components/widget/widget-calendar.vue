@@ -65,18 +65,18 @@ watch(rawData, () => {
 	calendarOptions.value = { ...calendarOptions.value, events: events.value }
 })
 
-function onItemClick() {
+function onItemClick(item) {
 	if (!props.widget?.onItemClick) return
-	const context = { ...pageStore.context, ...props.widget.context }
+	const context = { ...pageStore.context, $item: item.event }
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
 	const fn = AsyncFunction(...Object.keys(context), props.widget.onItemClick)
 	fn(...Object.values(context))
 }
 
-function onDateClick() {
+function onDateClick(item) {
 	if (!props.widget?.onDateClick) return
-	const context = { ...pageStore.context, ...props.widget.context }
+	const context = { ...pageStore.context, $item: item.event }
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
 	const fn = AsyncFunction(...Object.keys(context), props.widget.onDateClick)

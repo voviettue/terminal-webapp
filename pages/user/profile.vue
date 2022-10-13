@@ -1,5 +1,5 @@
 <template>
-	<div class="min-h-full flex flex-col justify-center py-4 sm:px-2 lg:px-2">
+	<div class="min-h-full flex flex-col justify-center py-6 sm:px-2 lg:px-2">
 		<div class="sm:mx-auto sm:w-full sm:max-w-md">
 			<h1 class="text-center text-3xl font-extrabold text-gray-900">
 				Profile Setting
@@ -13,12 +13,12 @@
 			<div class="py-8 px-8 shadow sm:rounded sm:px-10">
 				<div class="flex justify-start items-center mb-5">
 					<TwIcon
-						name="image"
+						name="account_circle"
 						class="rounded-full border border-slate-500 border-solid p-1"
 					></TwIcon>
-					<span class="ml-2 font-bold">Avatar</span>
+					<span class="ml-2 font-bold text-xl">Avatar</span>
 				</div>
-				<div class="mb-4 flex justify-start items-center">
+				<div class="mb-10 flex justify-start items-center">
 					<img
 						v-if="avatarImg"
 						:src="avatarImg"
@@ -41,6 +41,7 @@
 						type="button"
 						label="Remove"
 						outer-class="ml-4 !mb-0"
+						input-class="!bg-transparent !text-slate-400 !border !border-solid !border-slate-400"
 						@click="removeAvatar"
 					/>
 					<input
@@ -56,10 +57,10 @@
 						name="co_present"
 						class="rounded-full border border-slate-500 border-solid p-1"
 					></TwIcon>
-					<span class="ml-2 font-bold">Profile</span>
+					<span class="ml-2 font-bold text-xl">Profile</span>
 				</div>
 				<FormKit
-					v-model="values"
+					v-model="forms"
 					type="form"
 					method="POST"
 					submit-label="UpdateProfile"
@@ -68,16 +69,37 @@
 					@submit="submitProfile()"
 				>
 					<div class="space-y-6">
-						<FormKit type="text" name="first_name" label="First Name" />
-						<FormKit type="text" name="last_name" label="Last Name" />
 						<FormKit
 							type="text"
 							name="email"
 							label="Email"
-							input-class="input-readonly"
+							outer-class="pointer-events-none"
+							input-class="bg-slate-200 pointer-events-none rounded"
 						/>
-						<FormKit type="text" name="title" label="Title" />
-						<FormKit type="text" name="location" label="Location" />
+						<FormKit
+							type="text"
+							name="firstName"
+							label="First Name"
+							input-class="rounded"
+						/>
+						<FormKit
+							type="text"
+							name="lastName"
+							label="Last Name"
+							input-class="rounded"
+						/>
+						<FormKit
+							type="text"
+							name="title"
+							label="Title"
+							input-class="rounded"
+						/>
+						<FormKit
+							type="text"
+							name="location"
+							label="Location"
+							input-class="rounded"
+						/>
 						<FormKit
 							type="submit"
 							label="Update Profile"
@@ -85,15 +107,15 @@
 						/>
 					</div>
 				</FormKit>
-				<div class="flex flex-start items-center my-6">
+				<div class="flex flex-start items-center mt-10 mb-5">
 					<TwIcon
-						name="co_present"
+						name="lock"
 						class="rounded-full border border-slate-500 border-solid p-1"
 					></TwIcon>
-					<span class="ml-2 font-bold">Password</span>
+					<span class="ml-2 font-bold text-xl">Password</span>
 				</div>
 				<FormKit
-					v-model="form"
+					v-model="forms"
 					type="form"
 					method="POST"
 					submit-label="Change Password"
@@ -106,12 +128,15 @@
 							type="password"
 							name="password"
 							label="Password"
-							validation="required"
+							input-class="rounded"
 						/>
 						<FormKit
 							type="submit"
 							label="Update Password"
 							input-class="!w-1/2"
+							:outer-class="
+								forms.password ? '' : 'pointer-events-none opacity-30'
+							"
 						/>
 					</div>
 				</FormKit>
@@ -132,8 +157,12 @@ const { useUserStore } = useStore()
 const userStore = useUserStore()
 const { user, avatarImg } = storeToRefs(userStore)
 const inputFile = ref(null)
-const values = ref(user)
-const form = ref({
+const forms = ref({
+	firstName: user.value.first_name,
+	lastName: user.value.last_name,
+	title: user.value.title,
+	location: user.value.location,
+	email: user.value.email,
 	password: '',
 })
 const errors = ref()
@@ -158,12 +187,7 @@ const removeAvatar = async () => {
 }
 
 const submitProfile = async () => {
-	const {
-		first_name: firstName,
-		last_name: lastName,
-		title,
-		location,
-	} = values.value
+	const { firstName, lastName, title, location } = forms.value
 	const fields = { first_name: firstName, last_name: lastName, title, location }
 	try {
 		await directus.users.me.update(fields)
@@ -182,8 +206,10 @@ const submitPassword = async () => {
 }
 
 onMounted(() => {
-	const input = document.querySelector('.input-readonly')
-	input.setAttribute('readonly', true)
-	input.style.backgroundColor = '#ccc'
+	// const input = document.querySelector('.input-readonly')
+	// if (input) {
+	// 	input.setAttribute('readonly', true)
+	// 	input.style.backgroundColor = '#ccc'
+	// }
 })
 </script>

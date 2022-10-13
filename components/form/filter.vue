@@ -125,13 +125,17 @@ const filterCount = computed(() => {
 })
 
 function applyFilter() {
-	const conditions = []
+	if (filters.value.length === 2)
+		filters.value[0].condition = filters.value[1].condition
+
+	const andConditions = []
+	const orConditions = []
 	filters.value.forEach((filter: any) => {
-		if (!filter.field || !filter.operator) return {}
+		if (!filter.field || !filter.operator || !filter.value) return undefined
 
 		switch (filter.condition) {
 			case '_and':
-				conditions.push({
+				andConditions.push({
 					[filter.field]: {
 						[`_${filter.operator}`]: filter.value,
 					},
@@ -139,7 +143,7 @@ function applyFilter() {
 				break
 
 			case '_or':
-				conditions.push({
+				orConditions.push({
 					[filter.condition]: [
 						{
 							[filter.field]: {
@@ -151,19 +155,25 @@ function applyFilter() {
 				break
 
 			default:
-				return {}
+				return undefined
 		}
 	})
 
-	emit('update:filter', { _and: conditions })
+	const conditions = {
+		_and: [
+			...andConditions,
+			{
+				_or: [...orConditions],
+			},
+		],
+	}
+
+	emit('update:filter', conditions)
 	filterActive.value = false
 }
 
 function clearFilter() {
-	for (let i = 0; i < filters.value.length; i++) {
-		filters.value[i] = { ...defaultRow }
-	}
-
+	filters.value = [{ ...defaultRow }]
 	filterActive.value = false
 
 	emit('update:filter', null)

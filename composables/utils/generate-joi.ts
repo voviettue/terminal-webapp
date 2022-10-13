@@ -154,11 +154,11 @@ function getJoi(operator: string, value: any) {
 	}
 
 	if (operator === '_empty') {
-		return Joi.any().valid('')
+		return Joi.any().valid('').valid(null)
 	}
 
 	if (operator === '_nempty') {
-		return Joi.any().invalid('')
+		return Joi.any().invalid('').invalid(null)
 	}
 
 	if (operator === '_between') {

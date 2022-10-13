@@ -71,7 +71,11 @@ function getKeyStyle(conditionOptions) {
 }
 
 function getValueStyle(conditionOptions) {
-	return getStylesBy('Right', conditionOptions)
+	const styles = getStylesBy('Right', conditionOptions)
+	if (conditionOptions?.displayOptions?.textAlign) {
+		styles.justifyContent = conditionOptions?.displayOptions?.textAlign
+	}
+	return styles
 }
 
 function getStylesBy(position: string, optionsStyle: Record<string, any>) {
@@ -109,9 +113,11 @@ onMounted(() => {
 			align-items: center;
 		}
 	}
-	span {
+	span,
+	p {
 		padding: 0 0.25rem;
 		background-color: v-bind('cssBinding.background');
+		z-index: 2;
 	}
 	> div {
 		margin: 0.875rem 0;
@@ -123,9 +129,6 @@ onMounted(() => {
 			width: 100%;
 			z-index: 1;
 			border-bottom: 1px #d1d5db v-bind('cssBinding.borderStyle');
-		}
-		> span {
-			z-index: 2;
 		}
 	}
 }

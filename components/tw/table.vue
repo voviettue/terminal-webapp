@@ -179,9 +179,6 @@ function toggleSort(header: any) {
 }
 
 function directionIcon(header: any) {
-	if (!sortBy.value)
-		return header.sortDirection === 'asc' ? 'expand_less' : 'expand_more'
-
 	if (header.key === sortBy.value && sortDirection.value) {
 		return sortDirection.value === 'asc' ? 'expand_less' : 'expand_more'
 	} else {

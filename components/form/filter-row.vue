@@ -50,6 +50,7 @@
 			}"
 		/>
 		<FormKit
+			v-if="showValue"
 			v-model="modelValue.value"
 			type="text"
 			name="value"
@@ -84,21 +85,47 @@ const modelValue = ref({
 })
 
 const filterFields = computed(() =>
-	props.fields.map((field: any) => ({ label: field.label, value: field.key }))
+	props.fields
+		.filter((field: any) => !field.hidden || !field.key)
+		.map((field: any) => ({ label: field.label, value: field.key }))
 )
 const filterOperators = computed(() => {
 	const field = modelValue.value.field
 	let type = props.fields.find((el: any) => el.key === field)?.display
+
 	switch (type) {
 		case 'number':
+		case 'percentage':
+		case 'duration':
 			type = 'integer'
 			break
 	}
 
-	return getFilterOperatorsForType(type).map((operator: any) => ({
-		value: operator,
-		label: operatorLabelMap.find((el: any) => el.value === operator)?.label,
-	}))
+	return getFilterOperatorsForType(type)
+		.filter(
+			(operator: any) =>
+				!['between', 'nbetween', 'in', 'nin', 'null', 'nnull'].includes(
+					operator
+				)
+		)
+		.map((operator: any) => ({
+			value: operator,
+			label: operatorLabelMap.find((el: any) => el.value === operator)?.label,
+		}))
+})
+
+const showValue = computed(() => {
+	switch (modelValue.value.operator) {
+		case 'empty':
+		case 'nempty':
+		case 'null':
+		case 'nnull':
+			modelValue.value.value = true
+			return false
+
+		default:
+			return true
+	}
 })
 
 function removeFilterRow() {
@@ -110,9 +137,7 @@ watch(
 	() => {
 		Object.assign(modelValue.value, { ...props.filterRow })
 	},
-	{
-		immediate: true,
-	}
+	{ immediate: true }
 )
 
 watch(
@@ -120,9 +145,7 @@ watch(
 	() => {
 		emit('update', modelValue.value)
 	},
-	{
-		deep: true,
-	}
+	{ deep: true }
 )
 </script>
 

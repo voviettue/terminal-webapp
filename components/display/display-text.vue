@@ -7,7 +7,8 @@ interface Props {
 	options?: any
 }
 const props = defineProps<Props>()
-const options = { ...props.options, text: props.value }
+const text = Array.isArray(props.value) ? props.value.join('\n') : props.value
+const options = { ...props.options, text }
 const widget = {
 	id: 'display-text',
 	name: 'Display Text',

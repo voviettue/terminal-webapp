@@ -99,6 +99,7 @@
 <script setup lang="ts">
 import { onUpdated } from 'vue'
 import { TableHeader } from '~/shared/types'
+import { get } from '~/utils/get-with-arrays'
 
 interface Props {
 	headers: (string | Partial<TableHeader>)[]
@@ -124,7 +125,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['toggleSort'])
 
 const { getStyles } = useUtils()
-const { get } = useLodash()
+
 const table = ref(null)
 const height = ref(props.height)
 const clickable = !!props.rowClick
@@ -142,8 +143,8 @@ const trClass = (header: any) => {
 const tdClass = (header: any) => {
 	return {
 		'py-4 px-3 text-gray-900': true,
-		'whitespace-pre': header?.columnWrapping !== true,
-		'whitespace-nowrap': header?.columnWrapping === true,
+		'whitespace-nowrap': header?.columnWrapping !== true,
+		'whitespace-pre-wrap': header?.columnWrapping === true,
 	}
 }
 

@@ -15,7 +15,7 @@
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.key}`"
-							class="py-4 px-3 cursor-pointer has-tooltip hover:bg-gray-50"
+							class="py-4 px-3 cursor-pointer has-tooltip hover:bg-gray-50 select-none"
 							scope="col"
 							@click="toggleSort(header)"
 						>
@@ -28,7 +28,7 @@
 								<div class="relative">
 									<span>{{ get(header, 'label') ?? '-' }}</span>
 									<span
-										v-if="sortable && get(header, 'sortDirection')"
+										v-if="sortable && get(header, 'key')"
 										class="absolute right-0 ml-1 rounded text-gray-900"
 									>
 										<TwIcon
@@ -45,7 +45,7 @@
 				</thead>
 				<tbody class="divide-y divide-gray-200 bg-white z-1">
 					<tr
-						v-for="(item, index) in tableData"
+						v-for="(item, index) in items"
 						:key="`tr-${Math.random()}-${index}`"
 						:class="{
 							'hover:bg-gray-100 cursor-pointer': clickable,
@@ -80,7 +80,7 @@
 						</td>
 					</tr>
 
-					<template v-if="!tableData || tableData.length === 0">
+					<template v-if="!items || items.length === 0">
 						<tr>
 							<td
 								:colspan="headers.length"
@@ -90,8 +90,8 @@
 							</td>
 						</tr>
 					</template>
-					<template v-else-if="minRow > 0 && tableData.length < minRow">
-						<tr v-for="k in minRow - tableData.length" :key="`pad-row-${k}`">
+					<template v-else-if="minRow > 0 && items.length < minRow">
+						<tr v-for="k in minRow - items.length" :key="`pad-row-${k}`">
 							<td :colspan="headers.length" class="py-4 opacity-0">—</td>
 						</tr>
 					</template>
@@ -103,7 +103,6 @@
 
 <script setup lang="ts">
 import { onUpdated } from 'vue'
-import orderBy from 'lodash/orderBy'
 import { TableHeader } from '~/shared/types'
 
 interface Props {
@@ -125,6 +124,7 @@ const props = withDefaults(defineProps<Props>(), {
 	shadow: null,
 	height: 'auto',
 })
+const emit = defineEmits(['toggleSort'])
 
 const { getStyles } = useUtils()
 const { get } = useLodash()
@@ -156,22 +156,26 @@ function alignHeightTable() {
 const sortDirection = ref<string>()
 const sortBy = ref<string>()
 
-const tableData = computed(() => {
-	const keys = sortBy.value ?? normalizedHeaders.value.map((el: any) => el.key)
-	const directions =
-		sortDirection.value ??
-		normalizedHeaders.value.map((el: any) => el.sortDirection)
-
-	return orderBy(props.items, keys, directions)
-})
-
 function toggleSort(header: any) {
-	if (!get(header, 'sortDirection')) return
-
-	const defaultSortDirection =
-		sortDirection.value ?? get(header, 'sortDirection')
-	sortDirection.value = defaultSortDirection === 'asc' ? 'desc' : 'asc'
+	if (!get(header, 'key')) return
 	sortBy.value = get(header, 'key')
+
+	switch (sortDirection.value) {
+		case undefined:
+		case null:
+			sortDirection.value = 'asc'
+			break
+
+		case 'asc':
+			sortDirection.value = 'desc'
+			break
+
+		case 'desc':
+			sortDirection.value = null
+			break
+	}
+
+	emit('toggleSort', { key: sortBy.value, direction: sortDirection.value })
 }
 
 function directionIcon(header: any) {

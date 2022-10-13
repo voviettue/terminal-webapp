@@ -21,6 +21,7 @@
 		:sortable="sortable"
 		:layout="layout"
 		:height="height"
+		@toggle-sort="toggleSort($event)"
 	></TwTable>
 	<template v-if="pagination && items.length > 0">
 		<TwPagination
@@ -38,6 +39,7 @@ import { TableHeader } from '~~/shared/types'
 interface Props {
 	widget: any
 }
+
 const props = defineProps<Props>()
 const { getStyles, parseJson } = useUtils()
 const { usePageStore } = useStore()
@@ -71,7 +73,9 @@ function updateFilter(value: any) {
 	filter.value = value
 }
 
-const { items, page, totalItem, limit } = usePagination(filteredItems, {
+const { toggleSort, items: sortedItems } = useSort(filteredItems, columns)
+
+const { items, page, totalItem, limit } = usePagination(sortedItems, {
 	limit: itemPerPage ? parseInt(itemPerPage) : undefined,
 	page: 1,
 })
@@ -84,7 +88,7 @@ const { items, page, totalItem, limit } = usePagination(filteredItems, {
 // 	return filteredItems.value ? filteredItems.value.length : 0
 // })
 
-watch(filteredItems, () => {
+watch(sortedItems, () => {
 	page.value = 1
 })
 

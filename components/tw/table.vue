@@ -4,18 +4,13 @@
 			:class="`overflow-auto shadow-${shadow}`"
 			:style="{ ...styles, height: height }"
 		>
-			<table
-				ref="table"
-				:class="`${
-					layout === 'fixed' ? 'table-fixed' : 'table-auto'
-				} w-full divide-y divide-gray-300 text-left`"
-			>
+			<table ref="table" :class="tableClass">
 				<thead v-if="!hideHeader" class="sticky top-0 bg-white z-10">
 					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.key}`"
-							class="py-4 px-3 cursor-pointer has-tooltip hover:bg-gray-50 select-none"
+							:class="trClass(header)"
 							scope="col"
 							@click="toggleSort(header)"
 						>
@@ -26,7 +21,7 @@
 									{{ get(header, 'tooltip') ?? get(header, 'label') }}
 								</span>
 								<div class="relative">
-									<span>{{ get(header, 'label') ?? '-' }}</span>
+									<span>{{ get(header, 'label') }}</span>
 									<span
 										v-if="sortable && get(header, 'key')"
 										class="absolute right-0 ml-1 rounded text-gray-900"
@@ -57,8 +52,8 @@
 						<td
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
-							class="py-4 px-3 text-gray-900"
-							:style="getStyles(header ?? {})"
+							:class="tdClass(header)"
+							:style="getStyles(header)"
 						>
 							<slot
 								:name="`item-${header?.key}`"
@@ -115,6 +110,7 @@ interface Props {
 	shadow?: string
 	verticalLines?: boolean
 	stripedRow?: boolean
+	minRow?: number
 	layout?: 'auto' | 'fixed'
 	height?: string
 }
@@ -122,6 +118,7 @@ const props = withDefaults(defineProps<Props>(), {
 	layout: 'auto',
 	styles: null,
 	shadow: null,
+	minRow: null,
 	height: 'auto',
 })
 const emit = defineEmits(['toggleSort'])
@@ -131,6 +128,24 @@ const { get } = useLodash()
 const table = ref(null)
 const height = ref(props.height)
 const clickable = !!props.rowClick
+const tableClass = {
+	'w-full divide-y divide-gray-300 text-left': true,
+	'table-fixed': props.layout === 'fixed',
+	'table-auto': props.layout === 'auto',
+}
+const trClass = (header: any) => {
+	return {
+		'py-4 px-3 has-tooltip select-none': true,
+		'cursor-pointer hover:bg-gray-50': props.sortable && !!header?.key,
+	}
+}
+const tdClass = (header: any) => {
+	return {
+		'py-4 px-3 text-gray-900': true,
+		'whitespace-pre': header?.columnWrapping !== true,
+		'whitespace-nowrap': header?.columnWrapping === true,
+	}
+}
 
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 	return props.headers

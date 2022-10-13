@@ -1,11 +1,16 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<p :style="styles" v-html="content"></p>
+	<div :style="styles" v-html="content"></div>
 </template>
-
+<!-- eslint-disable no-useless-escape -->
 <script setup lang="ts">
 import { RichTextWidget } from '~~/shared/types'
-
+const { getFileSrc } = useUtils()
+const regex = {
+	img: /<img\s.*?src=(?:'|\")([^'\">]+)(?:'|\").*?\/?>/g,
+	video: /<source\s.*?src=(?:'|\")([^'\">]+)(?:'|\").*?\/?>/g,
+	src: /src=(?:'|\")([^'\">]+)(?:'|\").*?/,
+}
 interface Props {
 	widget: RichTextWidget
 }
@@ -14,8 +19,25 @@ const props: any = defineProps<Props>()
 const { getStyles } = useUtils()
 
 const styles = getStyles(props.widget.options)
-const { result: content } = useBindData(
-	props.widget?.content,
-	props.widget?.context
-)
+const contents = ref(props.widget?.content)
+const replaceMedia = () => {
+	const imgs = (props.widget?.content || '').match(regex.img) || []
+	const videos = (props.widget?.content || '').match(regex.video) || []
+	imgs.forEach((item: string) => {
+		const idx = item.indexOf('/assets/')
+		const id = item.slice(idx + 8, idx + 44)
+		const src = getFileSrc(id)
+		const img = item.replace(regex.src, `src="${src}"`)
+		contents.value = contents.value.replace(item, img)
+	})
+	videos.forEach((item: string) => {
+		const idx = item.indexOf('/assets/')
+		const id = item.slice(idx + 8, idx + 44)
+		const src = getFileSrc(id)
+		const img = item.replace(regex.src, `src="${src}"`)
+		contents.value = contents.value.replace(item, img)
+	})
+}
+replaceMedia()
+const { result: content } = useBindData(contents.value, props.widget?.context)
 </script>

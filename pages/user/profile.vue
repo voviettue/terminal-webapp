@@ -107,6 +107,9 @@
 						/>
 					</div>
 				</FormKit>
+				<p v-if="errors.profile" class="mt-3 text-red-500 uppercase">
+					{{ errors.profile }}
+				</p>
 				<div class="flex flex-start items-center mt-10 mb-5">
 					<TwIcon
 						name="lock"
@@ -140,6 +143,9 @@
 						/>
 					</div>
 				</FormKit>
+				<p v-if="errors.password" class="mt-3 text-red-500 uppercase">
+					{{ errors.password }}
+				</p>
 			</div>
 		</div>
 	</div>
@@ -165,7 +171,7 @@ const forms = ref({
 	email: user.value.email,
 	password: '',
 })
-const errors = ref()
+const errors = ref({})
 const changeAvatar = async (event) => {
 	try {
 		const form = new FormData()
@@ -189,27 +195,22 @@ const removeAvatar = async () => {
 const submitProfile = async () => {
 	const { firstName, lastName, title, location } = forms.value
 	const fields = { first_name: firstName, last_name: lastName, title, location }
+	errors.value.profile = ''
 	try {
 		await directus.users.me.update(fields)
 	} catch (e) {
-		errors.value = e
+		errors.value.profile = e.message
 	}
 }
 const submitPassword = async () => {
-	const { password } = form.value
+	const { password } = forms.value
 	const fields = { password }
+	errors.value.password = ''
 	try {
 		await directus.users.me.update(fields)
+		forms.value.password = ''
 	} catch (e) {
-		errors.value = e
+		errors.value.password = e.message
 	}
 }
-
-onMounted(() => {
-	// const input = document.querySelector('.input-readonly')
-	// if (input) {
-	// 	input.setAttribute('readonly', true)
-	// 	input.style.backgroundColor = '#ccc'
-	// }
-})
 </script>

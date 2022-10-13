@@ -1,5 +1,5 @@
 <template>
-	<div class="min-h-full flex flex-col justify-center py-4 sm:px-2 lg:px-2">
+	<div class="min-h-full flex flex-col justify-center py-6 sm:px-2 lg:px-2">
 		<div class="sm:mx-auto sm:w-full sm:max-w-md">
 			<h1 class="text-center text-3xl font-extrabold text-gray-900">
 				Profile Setting
@@ -13,12 +13,12 @@
 			<div class="py-8 px-8 shadow sm:rounded sm:px-10">
 				<div class="flex justify-start items-center mb-5">
 					<TwIcon
-						name="image"
+						name="account_circle"
 						class="rounded-full border border-slate-500 border-solid p-1"
 					></TwIcon>
-					<span class="ml-2 font-bold">Avatar</span>
+					<span class="ml-2 font-bold text-xl">Avatar</span>
 				</div>
-				<div class="mb-4 flex justify-start items-center">
+				<div class="mb-10 flex justify-start items-center">
 					<img
 						v-if="avatarImg"
 						:src="avatarImg"
@@ -41,6 +41,7 @@
 						type="button"
 						label="Remove"
 						outer-class="ml-4 !mb-0"
+						input-class="!bg-transparent !text-slate-400 !border !border-solid !border-slate-400"
 						@click="removeAvatar"
 					/>
 					<input
@@ -56,7 +57,7 @@
 						name="co_present"
 						class="rounded-full border border-slate-500 border-solid p-1"
 					></TwIcon>
-					<span class="ml-2 font-bold">Profile</span>
+					<span class="ml-2 font-bold text-xl">Profile</span>
 				</div>
 				<FormKit
 					v-model="forms"
@@ -73,12 +74,32 @@
 							name="email"
 							label="Email"
 							outer-class="pointer-events-none"
-							input-class="bg-slate-200 pointer-events-none"
+							input-class="bg-slate-200 pointer-events-none rounded"
 						/>
-						<FormKit type="text" name="firstName" label="First Name" />
-						<FormKit type="text" name="lastName" label="Last Name" />
-						<FormKit type="text" name="title" label="Title" />
-						<FormKit type="text" name="location" label="Location" />
+						<FormKit
+							type="text"
+							name="firstName"
+							label="First Name"
+							input-class="rounded"
+						/>
+						<FormKit
+							type="text"
+							name="lastName"
+							label="Last Name"
+							input-class="rounded"
+						/>
+						<FormKit
+							type="text"
+							name="title"
+							label="Title"
+							input-class="rounded"
+						/>
+						<FormKit
+							type="text"
+							name="location"
+							label="Location"
+							input-class="rounded"
+						/>
 						<FormKit
 							type="submit"
 							label="Update Profile"
@@ -86,12 +107,12 @@
 						/>
 					</div>
 				</FormKit>
-				<div class="flex flex-start items-center my-6">
+				<div class="flex flex-start items-center mt-10 mb-5">
 					<TwIcon
-						name="co_present"
+						name="lock"
 						class="rounded-full border border-slate-500 border-solid p-1"
 					></TwIcon>
-					<span class="ml-2 font-bold">Password</span>
+					<span class="ml-2 font-bold text-xl">Password</span>
 				</div>
 				<FormKit
 					v-model="forms"
@@ -103,7 +124,12 @@
 					@submit="submitPassword()"
 				>
 					<div class="space-y-6">
-						<FormKit type="password" name="password" label="Password" />
+						<FormKit
+							type="password"
+							name="password"
+							label="Password"
+							input-class="rounded"
+						/>
 						<FormKit
 							type="submit"
 							label="Update Password"

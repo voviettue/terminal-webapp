@@ -1,38 +1,43 @@
-import { format, isValid, parseISO } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import { getFieldsFromTemplate } from '@directus/shared/utils'
 import { get, set } from 'lodash'
 import { render } from 'micromustache'
+import parseDate from './parse-date'
 
 export function calendarEventParse(item: any, options: any) {
-	if (!options?.startDateField) return null
+	if (!options?.startDateField || !parseDate(item[options?.startDateField])) {
+		return null
+	}
 
 	let endDate = ''
 
 	let isDateFormat = false
-	const date = new Date(item[options?.startDateField])
+	const startDate = parseDate(item[options?.startDateField])
+
 	if (
 		!options?.endDateField &&
-		isValid(date) &&
-		date?.getHours() === 0 &&
-		date?.getMinutes() === 0 &&
-		date?.getSeconds() === 0
+		isValid(startDate) &&
+		startDate?.getUTCHours() === 0 &&
+		startDate?.getUTCMinutes() === 0 &&
+		startDate?.getUTCSeconds() === 0
 	) {
 		isDateFormat = true
 	}
 
 	const allDay =
 		isDateFormat ||
-		(item[options?.endDateField] && new Date(item[options?.endDateField]))
+		(item[options?.endDateField] && parseDate(item[options?.endDateField]))
 
 	if (options?.endDateField) {
 		if (allDay && isValid(allDay)) {
-			const date = parseISO(item[options?.endDateField])
+			const date = parseDate(item[options?.endDateField])
 			// FullCalendar uses exclusive end moments, so we'll have to increment the end date by 1 to get the
 			// expected result in the calendar
 			date.setDate(date.getDate() + 1)
 			endDate = format(date, 'yyyy-MM-dd')
 		} else {
-			endDate = item[options?.endDateField]
+			const date = parseDate(item[options?.endDateField])
+			endDate = date ? format(date, 'yyyy-MM-dd') : null
 		}
 	}
 
@@ -40,7 +45,7 @@ export function calendarEventParse(item: any, options: any) {
 		id: item?.id,
 		title:
 			renderDisplayStringTemplate(item, options?.displayTemplate) || item?.name,
-		start: item[options?.startDateField],
+		start: startDate,
 		end: endDate,
 		allDay,
 	}

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { defineStore } from 'pinia'
 import { User } from '@directus/shared/types'
 
@@ -29,6 +30,8 @@ export const useUserStore = defineStore({
 				'avatar.type',
 				'avatar.title',
 				'avatar.id',
+				'location',
+				'title',
 			]
 
 			try {

@@ -59,7 +59,7 @@
 					<span class="ml-2 font-bold">Profile</span>
 				</div>
 				<FormKit
-					v-model="values"
+					v-model="forms"
 					type="form"
 					method="POST"
 					submit-label="UpdateProfile"
@@ -68,14 +68,15 @@
 					@submit="submitProfile()"
 				>
 					<div class="space-y-6">
-						<FormKit type="text" name="first_name" label="First Name" />
-						<FormKit type="text" name="last_name" label="Last Name" />
 						<FormKit
 							type="text"
 							name="email"
 							label="Email"
-							input-class="input-readonly"
+							outer-class="pointer-events-none"
+							input-class="bg-slate-200 pointer-events-none"
 						/>
+						<FormKit type="text" name="firstName" label="First Name" />
+						<FormKit type="text" name="lastName" label="Last Name" />
 						<FormKit type="text" name="title" label="Title" />
 						<FormKit type="text" name="location" label="Location" />
 						<FormKit
@@ -93,7 +94,7 @@
 					<span class="ml-2 font-bold">Password</span>
 				</div>
 				<FormKit
-					v-model="form"
+					v-model="forms"
 					type="form"
 					method="POST"
 					submit-label="Change Password"
@@ -102,16 +103,14 @@
 					@submit="submitPassword()"
 				>
 					<div class="space-y-6">
-						<FormKit
-							type="password"
-							name="password"
-							label="Password"
-							validation="required"
-						/>
+						<FormKit type="password" name="password" label="Password" />
 						<FormKit
 							type="submit"
 							label="Update Password"
 							input-class="!w-1/2"
+							:outer-class="
+								forms.password ? '' : 'pointer-events-none opacity-30'
+							"
 						/>
 					</div>
 				</FormKit>
@@ -132,8 +131,12 @@ const { useUserStore } = useStore()
 const userStore = useUserStore()
 const { user, avatarImg } = storeToRefs(userStore)
 const inputFile = ref(null)
-const values = ref(user)
-const form = ref({
+const forms = ref({
+	firstName: user.value.first_name,
+	lastName: user.value.last_name,
+	title: user.value.title,
+	location: user.value.location,
+	email: user.value.email,
 	password: '',
 })
 const errors = ref()
@@ -158,12 +161,7 @@ const removeAvatar = async () => {
 }
 
 const submitProfile = async () => {
-	const {
-		first_name: firstName,
-		last_name: lastName,
-		title,
-		location,
-	} = values.value
+	const { firstName, lastName, title, location } = forms.value
 	const fields = { first_name: firstName, last_name: lastName, title, location }
 	try {
 		await directus.users.me.update(fields)
@@ -182,8 +180,10 @@ const submitPassword = async () => {
 }
 
 onMounted(() => {
-	const input = document.querySelector('.input-readonly')
-	input.setAttribute('readonly', true)
-	input.style.backgroundColor = '#ccc'
+	// const input = document.querySelector('.input-readonly')
+	// if (input) {
+	// 	input.setAttribute('readonly', true)
+	// 	input.style.backgroundColor = '#ccc'
+	// }
 })
 </script>

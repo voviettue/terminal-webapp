@@ -67,22 +67,31 @@ function getWidgetStyle(conditionOptions) {
 }
 
 function getKeyStyle(conditionOptions) {
-	return getStylesBy('Left', conditionOptions)
+	const styles = getStylesBy('Left', conditionOptions)
+	const justifyContent = styles?.['text-align'] || null
+
+	return { ...styles, justifyContent }
 }
 
 function getValueStyle(conditionOptions) {
 	const styles = getStylesBy('Right', conditionOptions)
-	if (conditionOptions?.displayOptions?.textAlign) {
-		styles.justifyContent = conditionOptions?.displayOptions?.textAlign
-	}
-	return styles
+	const justifyContent =
+		conditionOptions?.displayOptions?.textAlign ||
+		styles?.['text-align'] ||
+		null
+
+	return { ...styles, justifyContent }
 }
 
 function getStylesBy(position: string, optionsStyle: Record<string, any>) {
 	const styles = {}
 	const widgetOptions = cloneDeep(props.widget.options)
-	const options = mergeWith({}, widgetOptions, optionsStyle, (o: any, s: any) =>
-		isNull(s) ? o : s
+	const options = mergeWith(
+		{},
+		widgetOptions,
+		optionsStyle,
+		optionsStyle?.displayOptions,
+		(o: any, s: any) => (isNull(s) ? o : s)
 	)
 
 	Object.keys(options).forEach((k) => {

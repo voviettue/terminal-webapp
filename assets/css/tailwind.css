@@ -64,28 +64,28 @@
 	@apply bg-gray-800 text-white font-medium leading-tight  hover:bg-gray-900 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out;
 }
 .btn.primary-outline {
-	@apply border border-indigo-600 text-indigo-600 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-indigo-600 text-indigo-600 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.secondary-outline {
-	@apply border border-indigo-700 text-indigo-700 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-indigo-700 text-indigo-700 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.success-outline {
-	@apply border border-green-500 text-green-500 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-green-500 text-green-500 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.danger-outline {
-	@apply border border-red-600 text-red-600 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-red-600 text-red-600 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.warning-outline {
-	@apply border border-yellow-500 text-yellow-500 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-yellow-500 text-yellow-500 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.info-outline {
-	@apply border border-blue-400 text-blue-400 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-blue-400 text-blue-400 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.light-outline {
-	@apply border border-gray-200 text-gray-200 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-gray-200 text-gray-200 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.dark-outline {
-	@apply border border-gray-800 text-gray-800 font-medium text-xs leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
+	@apply border border-gray-800 text-gray-800 font-medium leading-tight  hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150  active:shadow-lg ease-in-out;
 }
 .btn.sm {
 	@apply px-4 py-1.5 text-xs;

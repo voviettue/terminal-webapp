@@ -1,44 +1,46 @@
-import merge from 'lodash/merge'
-import isEmpty from 'lodash/isEmpty'
+import { TextWidget } from '~~/shared/types'
 
-export function applyConditions(item: Record<string, any>, valueCompare: any) {
-	if (item?.options && Array.isArray(item?.condition)) {
-		const matchingCondition = matchedConditions(item?.condition, valueCompare)
-		if (!isEmpty(matchingCondition)) {
-			const widget = {
-				...item,
-				options: merge({}, item.options || {}, matchingCondition[0]),
-			}
-
-			const text = matchingCondition[0]?.text || valueCompare
-			return { widget, text }
-		}
-
-		return { widget: item, text: valueCompare }
-	} else {
-		return { widget: item, text: valueCompare }
-	}
+interface Condition {
+	operator: string
+	value: any
 }
 
-function matchedConditions(
-	conditions: Record<string, any>[],
-	valueCompare: any
-) {
+export function applyConditions(item: TextWidget, valueCompare: any) {
+	if (Array.isArray(item?.condition)) {
+		const conditions: any = item.condition
+		const matchedCondition = conditions.find((condition) =>
+			matchCondition(condition, valueCompare)
+		)
+
+		if (matchedCondition) {
+			const widget = {
+				...item,
+				options: { ...item.options, ...matchedCondition },
+			}
+
+			const text = matchedCondition?.text || valueCompare
+			return { widget, text }
+		}
+	}
+
+	return { widget: item, text: valueCompare }
+}
+
+export function matchCondition(condition: Condition, valueCompare: any) {
 	const type = isNaN(valueCompare)
 		? typeof valueCompare
 		: typeof parseInt(valueCompare)
 
 	if (type !== 'string' && type !== 'number') return false
+	const { operator, value } = condition
 
-	return (conditions || []).filter(({ operator, value }) => {
-		if (type === 'string') {
-			return matchString(valueCompare, value, operator)
-		} else {
-			const left = parseInt(valueCompare)
-			const right = !isNaN(value) ? parseInt(value) : value
-			return matchNumber(left, right, operator)
-		}
-	})
+	if (type === 'string') {
+		return matchString(valueCompare, value, operator)
+	} else {
+		const left = parseInt(valueCompare)
+		const right = !isNaN(value) ? parseInt(value) : value
+		return matchNumber(left, right, operator)
+	}
 }
 
 function matchString(left: string, right: string, operator: string) {
@@ -53,6 +55,8 @@ function matchString(left: string, right: string, operator: string) {
 			return left.startsWith(right)
 		case 'ends_with':
 			return left.endsWith(right)
+		default:
+			return false
 	}
 }
 
@@ -70,5 +74,7 @@ function matchNumber(left: number, right: number, operator: string) {
 			return left < right
 		case 'lte':
 			return left <= right
+		default:
+			return false
 	}
 }

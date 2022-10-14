@@ -19,6 +19,7 @@ export interface TextWidget extends Widget {
 	fontFamily?: string
 	background?: string
 	border?: string
+	condition?: Record<string, any>[]
 }
 
 export interface KeyValueWidget extends Widget {

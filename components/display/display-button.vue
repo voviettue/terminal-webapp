@@ -1,4 +1,3 @@
-s
 <template>
 	<WidgetButton :widget="widget" />
 </template>

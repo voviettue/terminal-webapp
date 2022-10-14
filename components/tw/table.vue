@@ -10,21 +10,17 @@
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.key}`"
+							v-tooltip="header?.tooltip"
 							:class="trClass(header)"
 							scope="col"
 							@click="toggleSort(header)"
 						>
 							<slot :name="`header-${header.key}`" :header="header">
-								<span
-									class="tooltip -mt-8 py-1 px-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity dark:bg-gray-700"
-								>
-									{{ get(header, 'tooltip') ?? get(header, 'label') }}
-								</span>
-								<div class="relative">
+								<div class="flex justify-between">
 									<span>{{ get(header, 'label') }}</span>
 									<span
 										v-if="sortable && header.sortable"
-										class="absolute right-0 ml-1 rounded text-gray-900"
+										class="shrink-0 rounded text-gray-900"
 									>
 										<TwIcon
 											v-if="directionIcon(header)"
@@ -138,7 +134,7 @@ const tableClass = {
 const trClass = (header: any) => {
 	return {
 		'py-4 px-3 has-tooltip select-none': true,
-		'cursor-pointer hover:bg-gray-50': props.sortable && !!header?.key,
+		'cursor-pointer': props.sortable && !!header?.key,
 	}
 }
 const tdClass = (header: any) => {
@@ -155,8 +151,8 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 			header instanceof Object ? header : { key: header, label: header }
 		)
 		.map((header: any) => {
-			header.key = header?.key || uniqueId('undefined-')
 			header.sortable = !!header?.key
+			header.key = header?.key || uniqueId('undefined-')
 
 			return header
 		})

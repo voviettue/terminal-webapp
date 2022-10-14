@@ -98,6 +98,7 @@
 
 <script setup lang="ts">
 import { onUpdated } from 'vue'
+import uniqueId from 'lodash/uniqueId'
 import { TableHeader } from '~/shared/types'
 import { get } from '~/utils/get-with-arrays'
 
@@ -153,6 +154,10 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 		.map((header: any) =>
 			header instanceof Object ? header : { key: header, label: header }
 		)
+		.map((header: any) => {
+			header.key = header.key || uniqueId('undefined-')
+			return header
+		})
 		.filter((header: any) => !header.hidden)
 })
 

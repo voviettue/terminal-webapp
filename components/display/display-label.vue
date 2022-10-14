@@ -5,8 +5,9 @@
 				v-for="item in items"
 				:key="`dot-${item.value}`"
 				class="bg-green-400 inline-block h-3 w-3 flex-shrink-0 rounded-full"
-				:style="{ background: item.background }"
+				:style="{ background: item.background ?? '#000000' }"
 			/>
+			<br />
 		</template>
 		<template v-else>
 			<span
@@ -25,7 +26,7 @@
 </template>
 <script setup lang="ts">
 import { formatTitle } from '@directus/format-title'
-import isEmpty from 'lodash/isEmpty'
+import { matchCondition } from '~~/utils/apply-conditions'
 
 interface Props {
 	value: any
@@ -33,39 +34,25 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { showAsDot, format, choices, type = 'string' } = props.options
+const { showAsDot, format, choices } = props.options
+const values = Array.isArray(props.value) ? props.value : [props.value]
 
-const items = computed(() => {
-	let items: string[]
+const items = values
+	.map((value) => {
+		if (typeof value === 'object') value = JSON.stringify(value)
+		if (typeof value !== 'string') value = ''
 
-	if (isEmpty(props.value)) items = []
-	else if (type === 'string') items = [props.value as string]
-	else items = props.value as string[]
+		const choice = (choices || []).find((choice: any) => {
+			return matchCondition({ operator: 'eq', value: choice.value }, value)
+		})
 
-	return items.map((item) => {
-		const choice = (choices || []).find((choice: any) => choice.value === item)
-
-		let itemStringValue: string
-
-		if (typeof item === 'object') {
-			itemStringValue = JSON.stringify(item)
-		} else {
-			itemStringValue = format ? formatTitle(item) : item
-		}
-
-		if (choice === undefined) {
-			return {
-				value: item,
-				text: itemStringValue,
-			}
-		} else {
-			return {
-				value: item,
-				text: choice.text || itemStringValue,
-				foreground: choice.foreground,
-				background: choice.background,
-			}
+		const text = format ? formatTitle(value) : value
+		return {
+			value,
+			text: choice?.text || text,
+			foreground: choice?.foreground,
+			background: choice?.background,
 		}
 	})
-})
+	.filter((e) => !!e.value)
 </script>

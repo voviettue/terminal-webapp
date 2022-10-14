@@ -14,6 +14,7 @@ export interface TableHeader {
 	label?: string
 	display?: string
 	tooltip?: string
+	sortable?: boolean
 	sortDirection?: string
 	displayOptions?: Record<string, any>
 }

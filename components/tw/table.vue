@@ -23,7 +23,7 @@
 								<div class="relative">
 									<span>{{ get(header, 'label') }}</span>
 									<span
-										v-if="sortable && get(header, 'key')"
+										v-if="sortable && header.sortable"
 										class="absolute right-0 ml-1 rounded text-gray-900"
 									>
 										<TwIcon
@@ -155,7 +155,9 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 			header instanceof Object ? header : { key: header, label: header }
 		)
 		.map((header: any) => {
-			header.key = header.key || uniqueId('undefined-')
+			header.key = header?.key || uniqueId('undefined-')
+			header.sortable = !!header?.key
+
 			return header
 		})
 		.filter((header: any) => !header.hidden)

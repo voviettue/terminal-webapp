@@ -14,12 +14,12 @@ export default async function renderTemplate(template: any, context: any) {
 		try {
 			// eslint-disable-next-line no-new-func
 			const fn = new Function('$item', '$query', statement)
-			const value = (await fn($item, $query)) ?? block
-			const replacement =
+			const value = await fn($item, $query)
+			const replaceValue =
 				typeof value === 'string' ? value : JSON.stringify(value)
-			result = result.replace(block, replacement)
+			result = result.replace(block, replaceValue)
 		} catch (err) {
-			// do nothing
+			result = result.replace(block, '')
 		}
 	}
 

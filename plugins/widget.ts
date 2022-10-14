@@ -13,6 +13,7 @@ import WidgetIconButton from '~/components/widget/widget-icon-button.vue'
 import WidgetCalendar from '~/components/widget/widget-calendar.vue'
 import WidgetTextInput from '~/components/widget/widget-text-input.vue'
 import WidgetNumberInput from '~/components/widget/widget-number-input.vue'
+// import WidgetSelect from '~/components/widget/widget-select.vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-container', WidgetContainer)
@@ -30,4 +31,5 @@ export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-calendar', WidgetCalendar)
 	nuxtApp.vueApp.component('widget-text-input', WidgetTextInput)
 	nuxtApp.vueApp.component('widget-number-input', WidgetNumberInput)
+	// nuxtApp.vueApp.component('widget-select', WidgetSelect)
 })

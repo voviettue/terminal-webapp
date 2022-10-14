@@ -15,11 +15,11 @@
 			:class="[
 				'btn icon',
 				`${buttonSize || 'sm'}`,
-				`${buttonVariant || 'light'}${outline ? '-outline' : ''}`,
+				`${buttonVariant || 'primary'}${outline ? '-outline' : ''}`,
 				`shadow-${shadow || 'md'}`,
 				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
 			]"
-			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '50%' }"
+			:style="{ 'border-radius': (borderRadius || 0) + 'px' }"
 			@click="onButtonClick"
 		>
 			<TwIcon :name="icon" />

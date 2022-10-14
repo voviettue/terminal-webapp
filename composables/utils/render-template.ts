@@ -1,39 +1,22 @@
-import isEmpty from 'lodash/isEmpty'
+// @TODO: write test case for this function
+export default async function renderTemplate(template: any, context: any) {
+	if (typeof template !== 'string') return template
 
-export default async function renderTemplate(
-	template: string,
-	context: any
-): Promise<string> {
-	if (!template || isEmpty(context)) return template
-
-	const regexFunction = /(\(\s?{{(?:{.*}|[^{])*}}\s?\))/g
-	const matchesFunction =
-		typeof template === 'string' ? [...template.matchAll(regexFunction)] : []
-
-	const regex = /({{(?:{.*}|[^{])*}})/g
+	const regex = /({{.*?}})/g
 	const matches =
 		typeof template === 'string' ? [...template.matchAll(regex)] : []
-
 	let result = template
 
-	for (let i = 0; i < matches.length; i++) {
-		const block = matches[i][0]
-		let statement = 'return ' + block.replace(/^{{|}}$/g, '')
-
-		if (!isEmpty([...statement.matchAll(regex)])) {
-			statement = await renderTemplate(statement, context)
-		}
-
+	for (const match of matches) {
+		const block = match[0]
+		const statement = 'return ' + block.replace(/^{{|}}$/g, '')
 		const { $query, $item } = context
 		try {
 			// eslint-disable-next-line no-new-func
 			const fn = new Function('$item', '$query', statement)
 			const value = (await fn($item, $query)) ?? block
-
 			const replacement =
-				typeof value === 'string' && isEmpty(matchesFunction)
-					? value
-					: JSON.stringify(value)
+				typeof value === 'string' ? value : JSON.stringify(value)
 			result = result.replace(block, replacement)
 		} catch (err) {
 			// do nothing

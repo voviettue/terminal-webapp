@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<div :style="styles" v-html="content"></div>
+	<div :style="styles" class="richtext-wrapper" v-html="content"></div>
 </template>
 <!-- eslint-disable no-useless-escape -->
 <script setup lang="ts">
@@ -41,20 +41,22 @@ const replaceMedia = () => {
 replaceMedia()
 const { result: content } = useBindData(contents.value, props.widget?.context)
 </script>
-<style lang="scss">
-h4 {
-	@apply text-base font-bold;
-}
-h5 {
-	@apply text-sm font-bold;
-}
-h6 {
-	@apply text-xs font-bold;
-}
-ul {
-	@apply list-disc;
-}
-ol {
-	@apply list-decimal;
+<style lang="scss" scoped>
+.richtext-wrapper {
+	:deep() h4 {
+		@apply text-base font-bold;
+	}
+	:deep() h5 {
+		@apply text-sm font-bold;
+	}
+	:deep() h6 {
+		@apply text-xs font-bold;
+	}
+	:deep()ul {
+		@apply list-disc;
+	}
+	:deep() ol {
+		@apply list-decimal;
+	}
 }
 </style>

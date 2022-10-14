@@ -41,3 +41,20 @@ const replaceMedia = () => {
 replaceMedia()
 const { result: content } = useBindData(contents.value, props.widget?.context)
 </script>
+<style lang="scss">
+h4 {
+	@apply text-base font-bold;
+}
+h5 {
+	@apply text-sm font-bold;
+}
+h6 {
+	@apply text-xs font-bold;
+}
+ul {
+	@apply list-disc;
+}
+ol {
+	@apply list-decimal;
+}
+</style>

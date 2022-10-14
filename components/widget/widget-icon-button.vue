@@ -15,9 +15,8 @@
 			:class="[
 				'btn icon',
 				`${buttonSize || 'sm'}`,
-				`${buttonVariant || 'light'}`,
+				`${buttonVariant || 'light'}${outline ? '-outline' : ''}`,
 				`shadow-${shadow || 'md'}`,
-				outline ? 'outline' : '',
 				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
 			]"
 			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '50%' }"

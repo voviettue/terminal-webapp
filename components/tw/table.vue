@@ -16,16 +16,18 @@
 							@click="toggleSort(header)"
 						>
 							<slot :name="`header-${header.key}`" :header="header">
-								<div class="flex justify-between">
+								<div class="flex">
 									<span>{{ get(header, 'label') }}</span>
 									<span
 										v-if="sortable && header.sortable"
-										class="shrink-0 rounded text-gray-900"
+										class="ml-2 shrink-0 rounded text-gray-800"
 									>
 										<TwIcon
 											v-if="directionIcon(header)"
 											:name="directionIcon(header)"
-											class="flex-shrink-0"
+											:class="`flex-shrink-0 ${
+												sortBy !== header.key ? 'text-gray-400' : ''
+											}`"
 											aria-hidden="true"
 										></TwIcon>
 									</span>
@@ -151,10 +153,11 @@ const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
 			header instanceof Object ? header : { key: header, label: header }
 		)
 		.map((header: any) => {
-			header.sortable = !!header?.key
-			header.key = header?.key || uniqueId('undefined-')
-
-			return header
+			return {
+				...header,
+				sortable: !!header?.key,
+				key: header?.key || uniqueId('undefined-'),
+			}
 		})
 		.filter((header: any) => !header.hidden)
 })
@@ -190,6 +193,7 @@ function toggleSort(header: any) {
 			break
 
 		case 'desc':
+			sortBy.value = null
 			sortDirection.value = null
 			break
 	}

@@ -5,29 +5,27 @@
 			:style="{ ...styles, height: height }"
 		>
 			<table ref="table" :class="tableClass">
-				<thead v-if="!hideHeader" class="sticky top-0 bg-white z-10">
+				<thead v-if="!hideHeader" class="sticky top-0 z-10">
 					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
 						<th
 							v-for="header in normalizedHeaders"
 							:key="`th-${header?.key}`"
 							v-tooltip="header?.tooltip"
-							:class="trClass(header)"
+							:class="thClass(header)"
+							:style="header?.thStyle"
 							scope="col"
 							@click="toggleSort(header)"
 						>
 							<slot :name="`header-${header.key}`" :header="header">
 								<div class="flex">
 									<span>{{ get(header, 'label') }}</span>
-									<span
-										v-if="sortable && header.sortable"
-										class="ml-2 shrink-0 rounded text-gray-800"
-									>
+									<span v-if="header.sortable" class="ml-2 shrink-0">
 										<TwIcon
-											v-if="directionIcon(header)"
-											:name="directionIcon(header)"
-											:class="`flex-shrink-0 ${
-												sortBy !== header.key ? 'text-gray-400' : ''
-											}`"
+											:name="sortIcon(header)"
+											:class="{
+												'flex-shrink-0': true,
+												'opacity-50': sortBy !== header.key,
+											}"
 											aria-hidden="true"
 										></TwIcon>
 									</span>
@@ -51,7 +49,7 @@
 							v-for="header in normalizedHeaders"
 							:key="`td-${header}`"
 							:class="tdClass(header)"
-							:style="getStyles(header)"
+							:style="header.tdStyle"
 						>
 							<slot
 								:name="`item-${header?.key}`"
@@ -96,16 +94,13 @@
 
 <script setup lang="ts">
 import { onUpdated } from 'vue'
-import uniqueId from 'lodash/uniqueId'
 import { TableHeader } from '~/shared/types'
 import { get } from '~/utils/get-with-arrays'
 
 interface Props {
 	headers: (string | Partial<TableHeader>)[]
 	items: Record<string, any>[]
-	rowClick: (item: any) => void
 	hideHeader: boolean
-	sortable: boolean
 	styles?: Record<string, any>
 	shadow?: string
 	verticalLines?: boolean
@@ -113,6 +108,9 @@ interface Props {
 	minRow?: number
 	layout?: 'auto' | 'fixed'
 	height?: string
+	thClass?: Record<string, any>
+	tdClass?: Record<string, any>
+	rowClick: (item: any) => void
 }
 const props = withDefaults(defineProps<Props>(), {
 	layout: 'auto',
@@ -120,10 +118,10 @@ const props = withDefaults(defineProps<Props>(), {
 	shadow: null,
 	minRow: null,
 	height: 'auto',
+	thClass: null,
+	tdClass: null,
 })
 const emit = defineEmits(['toggleSort'])
-
-const { getStyles } = useUtils()
 
 const table = ref(null)
 const height = ref(props.height)
@@ -133,34 +131,26 @@ const tableClass = {
 	'table-fixed': props.layout === 'fixed',
 	'table-auto': props.layout === 'auto',
 }
-const trClass = (header: any) => {
+const thClass = (header: any) => {
 	return {
 		'py-4 px-3 has-tooltip select-none': true,
-		'cursor-pointer': props.sortable && !!header?.key,
+		'cursor-pointer': !!header?.sortable,
+		...header?.thClass,
 	}
 }
 const tdClass = (header: any) => {
 	return {
 		'py-4 px-3 text-gray-900': true,
-		'whitespace-nowrap': header?.columnWrapping !== true,
-		'whitespace-pre-wrap': header?.columnWrapping === true,
+		...header.tdClass,
 	}
 }
-
 const normalizedHeaders = computed<Partial<TableHeader>[]>(() => {
-	return props.headers
-		.map((header: any) =>
-			header instanceof Object ? header : { key: header, label: header }
-		)
-		.map((header: any) => {
-			return {
-				...header,
-				sortable: !!header?.key,
-				key: header?.key || uniqueId('undefined-'),
-			}
-		})
-		.filter((header: any) => !header.hidden)
+	return props.headers.map((header: any) =>
+		header instanceof Object ? header : { key: header, label: header }
+	)
 })
+const sortDirection = ref<string>(null)
+const sortBy = ref<string>(null)
 
 onUpdated(() => {
 	if (props.height === 'auto') {
@@ -168,44 +158,25 @@ onUpdated(() => {
 	}
 })
 
+function toggleSort(header: any) {
+	const state = [null, 'asc', 'desc', null]
+	const key = header.key
+	const index = sortBy.value === key ? state.indexOf(sortDirection.value) : 0
+	sortDirection.value = state[index + 1]
+	sortBy.value = sortDirection.value ? key : null
+	emit('toggleSort', { key: sortBy.value, direction: sortDirection.value })
+}
+
+function sortIcon(header: any) {
+	if (sortBy.value !== header.key || sortDirection.value === null)
+		return 'unfold_more'
+	return sortDirection.value === 'asc' ? 'expand_less' : 'expand_more'
+}
+
 function alignHeightTable() {
 	const h = table.value.offsetHeight
 	if (height.value === 'auto' || h > parseInt(height.value)) {
 		height.value = `${h}px`
-	}
-}
-
-const sortDirection = ref<string>()
-const sortBy = ref<string>()
-
-function toggleSort(header: any) {
-	if (!get(header, 'key')) return
-	sortBy.value = get(header, 'key')
-
-	switch (sortDirection.value) {
-		case undefined:
-		case null:
-			sortDirection.value = 'asc'
-			break
-
-		case 'asc':
-			sortDirection.value = 'desc'
-			break
-
-		case 'desc':
-			sortBy.value = null
-			sortDirection.value = null
-			break
-	}
-
-	emit('toggleSort', { key: sortBy.value, direction: sortDirection.value })
-}
-
-function directionIcon(header: any) {
-	if (header.key === sortBy.value && sortDirection.value) {
-		return sortDirection.value === 'asc' ? 'expand_less' : 'expand_more'
-	} else {
-		return 'unfold_more'
 	}
 }
 

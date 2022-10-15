@@ -11,14 +11,13 @@
 		></FormFilter>
 	</template>
 	<TwTable
-		:headers="columns"
+		:headers="headers"
 		:items="items"
 		:row-click="widget?.onRowClick ? onRowClick : null"
 		:styles="styles"
 		:shadow="shadow"
 		:vertical-lines="verticalLines"
 		:striped-row="strippedRow"
-		:sortable="sortable"
 		:layout="layout"
 		:height="height"
 		@toggle-sort="toggleSort($event)"
@@ -34,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import uniqueId from 'lodash/uniqueId'
 import { TableHeader } from '~~/shared/types'
 
 interface Props {
@@ -44,16 +44,9 @@ const props = defineProps<Props>()
 const { getStyles, parseJson } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
+const widget = props.widget
 const columns = ref(props.widget.columns ?? ([] as TableHeader[]))
 const styles = getStyles(props.widget.options)
-const { result: rawData } = useBindData(
-	props.widget?.data,
-	props.widget?.context
-)
-const data = computed(() => {
-	return parseJson(rawData.value, [])
-})
-
 const {
 	activeSearch,
 	activeFilter,
@@ -67,26 +60,53 @@ const {
 	height,
 } = props.widget.options
 
+const { result: rawData } = useBindData(
+	props.widget?.data,
+	props.widget?.context
+)
+
+const headers = computed(() => {
+	return columns.value
+		.filter((column: any) => column?.hidden !== true)
+		.map((column) => {
+			return {
+				key: column?.key || uniqueId('undefined-'),
+				label: column?.label,
+				tooltip: column?.tooltip,
+				sortable: !!sortable && !!column?.key,
+				display: column?.display,
+				displayOptions: column?.displayOptions,
+				thClass: {
+					'bg-white': true,
+				},
+				tdClass: {
+					'whitespace-nowrap': column?.columnWrapping !== true,
+					'whitespace-pre-wrap': column?.columnWrapping === true,
+				},
+				thStyle: {
+					background: widget?.headerBackground,
+					color: widget?.headerColor,
+					width: column?.width,
+				},
+				tdStyle: getStyles(column),
+			}
+		}) as TableHeader[]
+})
+
+const data = computed(() => {
+	return parseJson(rawData.value, [])
+})
+
 const { search, filter, items: filteredItems } = useFilter(data)
-
-function updateFilter(value: any) {
-	filter.value = value
-}
-
 const { toggleSort, items: sortedItems } = useSort(filteredItems, columns)
-
 const { items, page, totalItem, limit } = usePagination(sortedItems, {
 	limit: itemPerPage ? parseInt(itemPerPage) : undefined,
 	page: 1,
 })
 
-// const minRow = computed(() => {
-// 	if (height) return null;
-// 	if (pagination) {
-// 		return page.value > 1 || search.value || filter.value ? limit.value : null
-// 	}
-// 	return filteredItems.value ? filteredItems.value.length : 0
-// })
+function updateFilter(value: any) {
+	filter.value = value
+}
 
 watch(sortedItems, () => {
 	page.value = 1

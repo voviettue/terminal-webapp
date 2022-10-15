@@ -20,6 +20,7 @@ export default function getStyles(options: Record<string, any>): CSSProperties {
 		textTransform,
 		borderWidth,
 		height,
+		width,
 		maxWidth,
 	} = options
 	const styles = {
@@ -42,6 +43,7 @@ export default function getStyles(options: Record<string, any>): CSSProperties {
 		transform: zoom ? `scale(${zoom})` : null,
 		'border-radius': borderRadius ?? null,
 		'text-transform': textTransform ?? null,
+		width: width ?? null,
 		'max-width': maxWidth ?? null,
 		height,
 	}

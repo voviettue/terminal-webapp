@@ -12,11 +12,14 @@ export interface Display {
 export interface TableHeader {
 	key: string
 	label?: string
-	display?: string
 	tooltip?: string
 	sortable?: boolean
-	sortDirection?: string
+	display?: string
 	displayOptions?: Record<string, any>
+	thClass?: Record<string, any>
+	tdClass?: Record<string, any>
+	thStyle?: Record<string, any>
+	tdStyle?: Record<string, any>
 }
 
 export interface Page {

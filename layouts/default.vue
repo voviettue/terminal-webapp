@@ -1,7 +1,24 @@
 <template>
 	<div id="layout-wrapper">
 		<PageTopbar></PageTopbar>
-		<slot></slot>
+		<!-- <slot></slot> -->
+		<br />
+		<div class="w-[200px] mx-auto">
+			<br />
+			<br />
+			<label>Owner:</label>
+			<TwDropdown :value="2" :options="options" />
+			<br />
+			<br />
+			<FormKit
+				v-model="value"
+				label="Owner:"
+				type="dropdown"
+				validation="required"
+				validation-visibility="live"
+				:options="options"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -20,6 +37,13 @@ useHead({
 
 const customCss = ref('')
 const maxWidth = ref('')
+const value = ref(2)
+const options = ref([
+	{ value: null, text: 'Select' },
+	{ value: 1, text: 'Leslie Alexander' },
+	{ value: 2, text: 'Tu Nguyen' },
+	{ value: 3, text: 'Tu Nguyen ss' },
+])
 await init()
 
 async function init() {

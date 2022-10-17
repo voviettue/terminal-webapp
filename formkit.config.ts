@@ -1,4 +1,6 @@
 import { generateClasses } from '@formkit/themes'
+import { createInput } from '@formkit/vue'
+import DropdownComponent from './components/formkit/dropdown.vue'
 
 const textClassification = {
 	outer: 'mb-5',
@@ -94,5 +96,10 @@ const theme = {
 export default {
 	config: {
 		classes: generateClasses(theme),
+	},
+	inputs: {
+		dropdown: createInput(DropdownComponent, {
+			props: ['value', 'options'],
+		}),
 	},
 }

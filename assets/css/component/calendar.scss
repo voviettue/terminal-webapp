@@ -125,11 +125,13 @@
 	border-bottom-left-radius: v-bind(borderRadius);
 	border-bottom-right-radius: v-bind(borderRadius);
 }
-:deep(.fc-daygrid-dot-event) {
+:deep(.fc-daygrid-day-events), :deep(.fc-daygrid-dot-event), :deep(.fc-timegrid-event) {
 	.fc-event-title {
 		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }
+
 :deep(.fc-h-event) {
 	border: 1px solid rgb(256 256 256 / var(--tw-bg-opacity));
 }

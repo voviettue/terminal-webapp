@@ -17,9 +17,9 @@ export function calendarEventParse(item: any, options: any) {
 	if (
 		!options?.endDateField &&
 		isValid(startDate) &&
-		startDate?.getUTCHours() === 0 &&
-		startDate?.getUTCMinutes() === 0 &&
-		startDate?.getUTCSeconds() === 0
+		startDate?.getHours() === 0 &&
+		startDate?.getMinutes() === 0 &&
+		startDate?.getSeconds() === 0
 	) {
 		isDateFormat = true
 	}

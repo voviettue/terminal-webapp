@@ -54,16 +54,20 @@ const { result: rawData } = useBindData(
 	props.widget?.context
 )
 
-watch(rawData, () => {
-	const data = parseJson(rawData.value, [])
-	if (!Array.isArray(data)) return
+watch(
+	rawData,
+	() => {
+		const data = parseJson(rawData.value, [])
+		if (!Array.isArray(data)) return
 
-	events.value = data
-		.map((item) => calendarEventParse(item, props.widget?.options))
-		.filter((e) => e)
+		events.value = data
+			.map((item) => calendarEventParse(item, props.widget?.options))
+			.filter((e) => e)
 
-	calendarOptions.value = { ...calendarOptions.value, events: events.value }
-})
+		calendarOptions.value = { ...calendarOptions.value, events: events.value }
+	},
+	{ immediate: true }
+)
 
 function onItemClick(item) {
 	if (!props.widget?.onItemClick) return

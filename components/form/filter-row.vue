@@ -51,7 +51,6 @@
 		/>
 		<FormKit
 			v-if="showValue"
-			v-model="modelValue.value"
 			:type="inputValueType"
 			name="value"
 			placeholder="Enter value"
@@ -59,6 +58,7 @@
 				input: 'w-max py-2',
 				outer: 'w-max !m-0',
 			}"
+			@input="onInputFilterValue"
 		/>
 	</div>
 </template>
@@ -99,6 +99,9 @@ const filterOperators = computed(() => {
 		case 'number':
 		case 'percentage':
 			type = 'integer'
+			break
+		case 'date':
+			type = 'date'
 			break
 		case 'duration':
 			type = field?.displayOptions?.type === 'time' ? 'string' : 'integer'
@@ -142,6 +145,11 @@ const showValue = computed(() => {
 			return true
 	}
 })
+
+function onInputFilterValue(event: any) {
+	modelValue.value.value =
+		inputValueType.value === 'number' ? Number(event) : event
+}
 
 function removeFilterRow() {
 	emit('remove', props.index)

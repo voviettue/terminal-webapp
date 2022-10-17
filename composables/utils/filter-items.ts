@@ -2,6 +2,11 @@ import { Query } from '@directus/shared/types'
 import get from 'lodash/get'
 import generateJoi from './generate-joi'
 
+/*
+ Note: Filtering is normally done through SQL in run-ast. This function can be used in case an already
+ existing array of items has to be filtered using the same filter syntax as used in the ast-to-sql flow
+ */
+
 export default function filterItems(
 	items: Record<string, any>[],
 	filter: Query['filter']
@@ -19,27 +24,27 @@ export default function filterItems(
 		if (!filter) return true
 
 		if (Object.keys(filter)[0] === '_and') {
-			const subFilter = Object.values(filter)[0] as Query['filter'][]
+			const subfilter = Object.values(filter)[0] as Query['filter'][]
 
-			return subFilter.every((subFilter) => {
+			return subfilter.every((subFilter) => {
 				return passesFilter(item, subFilter)
 			})
 		}
 
 		if (Object.keys(filter)[0] === '_or') {
-			const subFilter = Object.values(filter)[0] as Query['filter'][]
+			const subfilter = Object.values(filter)[0] as Query['filter'][]
 
-			return subFilter.some((subFilter) => {
+			return subfilter.some((subFilter) => {
 				return passesFilter(item, subFilter)
 			})
 		}
 
 		// handle nested field
-		const subFilter = Object.values(filter)[0]
-		const operator = Object.keys(subFilter)[0]
+		const subfilter = Object.values(filter)[0]
+		const operator = Object.keys(subfilter)[0]
 		if (!String(operator).startsWith('_')) {
 			const key = Object.keys(filter)[0]
-			return passesFilter(get(item, key, {}), subFilter)
+			return passesFilter(get(item, key, {}), subfilter)
 		}
 
 		const schema = generateJoi(filter)
@@ -47,11 +52,13 @@ export default function filterItems(
 		if (Array.isArray(item)) {
 			return item.some((record: any) => {
 				const { error } = schema.validate(record)
+				// console.log({ error, filter, item });
 				return error === undefined
 			})
 		}
 
 		const { error } = schema.validate(item)
+		// console.log({ error, filter, item });
 		return error === undefined
 	}
 }

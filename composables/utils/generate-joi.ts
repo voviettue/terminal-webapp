@@ -1,8 +1,19 @@
-import BaseJoi, { AnySchema } from 'joi'
+import BaseJoi, {
+	AnySchema,
+	StringSchema as BaseStringSchema,
+	NumberSchema,
+	DateSchema,
+} from 'joi'
 import escapeRegExp from 'lodash/escapeRegExp'
+import merge from 'lodash/merge'
 import { Filter } from '@directus/shared/types'
 
-const Joi: typeof BaseJoi = BaseJoi.extend({
+export interface StringSchema extends BaseStringSchema {
+	contains(substring: string): this
+	ncontains(substring: string): this
+}
+
+export const Joi: typeof BaseJoi = BaseJoi.extend({
 	type: 'string',
 	base: BaseJoi.string(),
 	messages: {
@@ -26,7 +37,6 @@ const Joi: typeof BaseJoi = BaseJoi.extend({
 				if (value.includes(substring) === false) {
 					return helpers.error('string.contains', { substring })
 				}
-
 				return value
 			},
 		},
@@ -53,132 +63,295 @@ const Joi: typeof BaseJoi = BaseJoi.extend({
 	},
 })
 
-export default function generateJoi(filter: Filter | null): AnySchema {
+export type JoiOptions = {
+	requireAll?: boolean
+}
+
+const defaults: JoiOptions = {
+	requireAll: false,
+}
+
+/**
+ * Generate a Joi schema from a filter object.
+ *
+ * @param {Filter} filter - Field filter object. Note: does not support _and/_or filters.
+ * @param {JoiOptions} [options] - Options for the schema generation.
+ * @returns {AnySchema} Joi schema.
+ */
+
+export default function generateJoi(
+	filter: Filter | null,
+	options?: JoiOptions
+): AnySchema {
 	filter = filter || {}
 
-	if (Object.keys(filter).length === 0) return Joi.any()
+	options = merge({}, defaults, options)
 
-	let schema: any
+	const schema: Record<string, AnySchema> = {}
 
-	for (const [key, value] of Object.entries(filter)) {
-		if (key.startsWith('_') === false) {
-			if (!schema) schema = {}
+	const key = Object.keys(filter)[0]
 
-			const operator = Object.keys(value)[0]
-			const val = Object.values(value)[0]
+	if (!key) {
+		throw new Error(
+			`[generateJoi] Filter doesn't contain field key. Passed filter: ${JSON.stringify(
+				filter
+			)}`
+		)
+	}
 
-			schema[key] = getJoi(operator, val)
+	const value = Object.values(filter)[0]
+
+	if (!value) {
+		throw new Error(
+			`[generateJoi] Filter doesn't contain filter rule. Passed filter: ${JSON.stringify(
+				filter
+			)}`
+		)
+	}
+
+	if (Object.keys(value)[0]?.startsWith('_') === false) {
+		schema[key] = generateJoi(value as Filter, options)
+	} else {
+		const operator = Object.keys(value)[0]
+		const compareValue = Object.values(value)[0]
+
+		const getAnySchema = () => schema[key] ?? Joi.any()
+		const getStringSchema = () => (schema[key] ?? Joi.string()) as StringSchema
+		const getNumberSchema = () => (schema[key] ?? Joi.number()) as NumberSchema
+		const getDateSchema = () => (schema[key] ?? Joi.date()) as DateSchema
+
+		if (operator === '_eq') {
+			schema[key] = getAnySchema().equal(compareValue)
+		}
+
+		if (operator === '_neq') {
+			schema[key] = getAnySchema().not(compareValue)
+		}
+
+		if (operator === '_contains') {
+			if (
+				compareValue === null ||
+				compareValue === undefined ||
+				typeof compareValue !== 'string'
+			) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				schema[key] = getStringSchema().contains(compareValue)
+			}
+		}
+
+		if (operator === '_icontains') {
+			if (
+				compareValue === null ||
+				compareValue === undefined ||
+				typeof compareValue !== 'string'
+			) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				schema[key] = getStringSchema().contains(compareValue)
+			}
+		}
+
+		if (operator === '_ncontains') {
+			if (
+				compareValue === null ||
+				compareValue === undefined ||
+				typeof compareValue !== 'string'
+			) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				schema[key] = getStringSchema().ncontains(compareValue)
+			}
+		}
+
+		if (operator === '_starts_with') {
+			if (
+				compareValue === null ||
+				compareValue === undefined ||
+				typeof compareValue !== 'string'
+			) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				schema[key] = getStringSchema().pattern(
+					new RegExp(`^${escapeRegExp(compareValue)}.*`),
+					{
+						name: 'starts_with',
+					}
+				)
+			}
+		}
+
+		if (operator === '_nstarts_with') {
+			if (
+				compareValue === null ||
+				compareValue === undefined ||
+				typeof compareValue !== 'string'
+			) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				schema[key] = getStringSchema().pattern(
+					new RegExp(`^${escapeRegExp(compareValue)}.*`),
+					{
+						name: 'starts_with',
+						invert: true,
+					}
+				)
+			}
+		}
+
+		if (operator === '_ends_with') {
+			if (
+				compareValue === null ||
+				compareValue === undefined ||
+				typeof compareValue !== 'string'
+			) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				schema[key] = getStringSchema().pattern(
+					new RegExp(`.*${escapeRegExp(compareValue)}$`),
+					{
+						name: 'ends_with',
+					}
+				)
+			}
+		}
+
+		if (operator === '_nends_with') {
+			if (
+				compareValue === null ||
+				compareValue === undefined ||
+				typeof compareValue !== 'string'
+			) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				schema[key] = getStringSchema().pattern(
+					new RegExp(`.*${escapeRegExp(compareValue)}$`),
+					{
+						name: 'ends_with',
+						invert: true,
+					}
+				)
+			}
+		}
+
+		if (operator === '_in') {
+			schema[key] = getAnySchema().equal(
+				...(compareValue as (string | number)[])
+			)
+		}
+
+		if (operator === '_nin') {
+			schema[key] = getAnySchema().not(...(compareValue as (string | number)[]))
+		}
+
+		if (operator === '_gt') {
+			const isDate =
+				compareValue instanceof Date || Number.isNaN(Number(compareValue))
+			schema[key] = isDate
+				? getDateSchema().greater(compareValue as string | Date)
+				: getNumberSchema().greater(Number(compareValue))
+		}
+
+		if (operator === '_gte') {
+			const isDate =
+				compareValue instanceof Date || Number.isNaN(Number(compareValue))
+			schema[key] = isDate
+				? getDateSchema().min(compareValue as string | Date)
+				: getNumberSchema().min(Number(compareValue))
+		}
+
+		if (operator === '_lt') {
+			const isDate =
+				compareValue instanceof Date || Number.isNaN(Number(compareValue))
+			schema[key] = isDate
+				? getDateSchema().less(compareValue as string | Date)
+				: getNumberSchema().less(Number(compareValue))
+		}
+
+		if (operator === '_lte') {
+			const isDate =
+				compareValue instanceof Date || Number.isNaN(Number(compareValue))
+			schema[key] = isDate
+				? getDateSchema().max(compareValue as string | Date)
+				: getNumberSchema().max(Number(compareValue))
+		}
+
+		if (operator === '_null') {
+			schema[key] = getAnySchema().valid(null)
+		}
+
+		if (operator === '_nnull') {
+			schema[key] = getAnySchema().invalid(null)
+		}
+
+		if (operator === '_empty') {
+			schema[key] = getAnySchema().valid('').valid(null)
+		}
+
+		if (operator === '_nempty') {
+			schema[key] = getAnySchema().invalid('').invalid(null)
+		}
+
+		if (operator === '_between') {
+			if (
+				(compareValue as any).every((value: any) => {
+					const val = Number(value instanceof Date ? NaN : value)
+					return !Number.isNaN(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER
+				})
+			) {
+				const values = compareValue as [number, number]
+				schema[key] = getNumberSchema()
+					.min(Number(values[0]))
+					.max(Number(values[1]))
+			} else {
+				const values = compareValue as [string, string]
+				schema[key] = getDateSchema().min(values[0]).max(values[1])
+			}
+		}
+
+		if (operator === '_nbetween') {
+			if (
+				(compareValue as any).every((value: any) => {
+					const val = Number(value instanceof Date ? NaN : value)
+					return !Number.isNaN(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER
+				})
+			) {
+				const values = compareValue as [number, number]
+				schema[key] = getNumberSchema()
+					.less(Number(values[0]))
+					.greater(Number(values[1]))
+			} else {
+				const values = compareValue as [string, string]
+				schema[key] = getDateSchema().less(values[0]).greater(values[1])
+			}
+		}
+
+		if (operator === '_submitted') {
+			schema[key] = getAnySchema().required()
+		}
+
+		if (operator === '_regex') {
+			if (compareValue === null || compareValue === undefined) {
+				schema[key] = Joi.any().equal(true)
+			} else {
+				const wrapped =
+					typeof compareValue === 'string'
+						? compareValue.startsWith('/') && compareValue.endsWith('/')
+						: false
+				schema[key] = getStringSchema().regex(
+					new RegExp(
+						wrapped ? (compareValue as any).slice(1, -1) : compareValue
+					)
+				)
+			}
 		}
 	}
 
+	schema[key] = schema[key] ?? Joi.any()
+
+	if (options.requireAll) {
+		schema[key] = schema[key]!.required()
+	}
+
 	return Joi.object(schema).unknown()
-}
-
-function getJoi(operator: string, value: any) {
-	if (operator === '_eq') {
-		return Joi.any().equal(value)
-	}
-
-	if (operator === '_neq') {
-		return Joi.any().not(value)
-	}
-
-	if (operator === '_contains') {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		return Joi.string().contains(value)
-	}
-
-	if (operator === '_ncontains') {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		return Joi.string().ncontains(value)
-	}
-
-	if (operator === '_starts_with') {
-		return Joi.string().pattern(new RegExp(`^${escapeRegExp(value)}.*`), {
-			name: 'starts_with',
-		})
-	}
-
-	if (operator === '_nstarts_with') {
-		return Joi.string().pattern(new RegExp(`^${escapeRegExp(value)}.*`), {
-			name: 'starts_with',
-			invert: true,
-		})
-	}
-
-	if (operator === '_ends_with') {
-		return Joi.string().pattern(new RegExp(`.*${escapeRegExp(value)}$`), {
-			name: 'ends_with',
-		})
-	}
-
-	if (operator === '_nends_with') {
-		return Joi.string().pattern(new RegExp(`.*${escapeRegExp(value)}$`), {
-			name: 'ends_with',
-			invert: true,
-		})
-	}
-
-	if (operator === '_in') {
-		return Joi.any().equal(...(value as (string | number)[]))
-	}
-
-	if (operator === '_nin') {
-		return Joi.any().not(...(value as (string | number)[]))
-	}
-
-	if (operator === '_gt') {
-		return Joi.number().greater(Number(value))
-	}
-
-	if (operator === '_gte') {
-		return Joi.number().min(Number(value))
-	}
-
-	if (operator === '_lt') {
-		return Joi.number().less(Number(value))
-	}
-
-	if (operator === '_lte') {
-		return Joi.number().max(Number(value))
-	}
-
-	if (operator === '_null') {
-		return Joi.any().valid(null)
-	}
-
-	if (operator === '_nnull') {
-		return Joi.any().invalid(null)
-	}
-
-	if (operator === '_empty') {
-		return Joi.any().valid('').valid(null)
-	}
-
-	if (operator === '_nempty') {
-		return Joi.any().invalid('').invalid(null)
-	}
-
-	if (operator === '_between') {
-		const values = value as number[]
-		return Joi.number().greater(values[0]).less(values[1])
-	}
-
-	if (operator === '_nbetween') {
-		const values = value as number[]
-		return Joi.number().less(values[0]).greater(values[1])
-	}
-
-	if (operator === '_submitted') {
-		return Joi.required()
-	}
-
-	if (operator === '_regex') {
-		const wrapped = value.startsWith('/') && value.endsWith('/')
-		return Joi.string().regex(new RegExp(wrapped ? value.slice(1, -1) : value))
-	}
-
-	return Joi
 }

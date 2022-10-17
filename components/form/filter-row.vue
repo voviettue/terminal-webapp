@@ -51,30 +51,29 @@
 		/>
 		<FormKit
 			v-if="showValue"
-			v-model="modelValue.value"
-			type="text"
+			:type="inputValueType"
 			name="value"
 			placeholder="Enter value"
 			:classes="{
 				input: 'w-max py-2',
 				outer: 'w-max !m-0',
 			}"
+			@input="onInputFilterValue"
 		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { getFilterOperatorsForType } from '@directus/shared/utils'
-import operatorLabelMap from './operators'
+import isEmpty from 'lodash/isEmpty'
+import operatorLabelMap from '~/shared/configs/operators'
+import getFilterOperatorsForType from '~/utils/get-filter-operators-for-type'
 
 interface Props {
 	filterRow: any
 	index: number
 	fields: any
 }
-
 const props = defineProps<Props>()
-
 const emit = defineEmits(['update', 'remove'])
 
 const modelValue = ref({
@@ -86,27 +85,34 @@ const modelValue = ref({
 
 const filterFields = computed(() =>
 	props.fields
-		.filter((field: any) => !field.hidden || !field.key)
+		.filter((field: any) => !field.hidden && !isEmpty(field.key))
 		.map((field: any) => ({ label: field.label, value: field.key }))
 )
-const filterOperators = computed(() => {
-	const field = modelValue.value.field
-	let type = props.fields.find((el: any) => el.key === field)?.display
 
-	switch (type) {
+const filterOperators = computed(() => {
+	let type = 'string'
+	const field = props.fields.find(
+		(el: any) => el.key === modelValue.value.field
+	)
+
+	switch (field?.display) {
 		case 'number':
 		case 'percentage':
-		case 'duration':
 			type = 'integer'
+			break
+		case 'date':
+			type = 'date'
+			break
+		case 'duration':
+			type = field?.displayOptions?.type === 'time' ? 'string' : 'integer'
 			break
 	}
 
+	// TODO: New version will be support advanced operators
 	return getFilterOperatorsForType(type)
 		.filter(
 			(operator: any) =>
-				!['between', 'nbetween', 'in', 'nin', 'null', 'nnull'].includes(
-					operator
-				)
+				!['between', 'nbetween', 'in', 'nin'].includes(operator)
 		)
 		.map((operator: any) => ({
 			value: operator,
@@ -114,19 +120,36 @@ const filterOperators = computed(() => {
 		}))
 })
 
+const inputValueType = computed(() => {
+	const field = props.fields.find(
+		(el: any) => el.key === modelValue.value.field
+	)
+
+	switch (field?.display) {
+		case 'date':
+			return 'date'
+		case 'duration':
+			return field?.displayOptions?.type === 'time' ? 'text' : 'number'
+		default:
+			return 'text'
+	}
+})
+
 const showValue = computed(() => {
 	switch (modelValue.value.operator) {
 		case 'empty':
 		case 'nempty':
-		case 'null':
-		case 'nnull':
-			modelValue.value.value = true
-			return false
+			return !!modelValue.value.value
 
 		default:
 			return true
 	}
 })
+
+function onInputFilterValue(event: any) {
+	modelValue.value.value =
+		inputValueType.value === 'number' ? Number(event) : event
+}
 
 function removeFilterRow() {
 	emit('remove', props.index)

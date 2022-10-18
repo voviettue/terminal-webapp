@@ -51,6 +51,7 @@
 		/>
 		<FormKit
 			v-if="showValue"
+			v-model="modelValue.value"
 			:type="inputValueType"
 			name="value"
 			placeholder="Enter value"

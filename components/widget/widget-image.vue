@@ -34,7 +34,7 @@ watch(bindValue, () => {
 
 function getSrc() {
 	const src = type === 'file' ? getFileSrc(bindValue.value) : bindValue.value
-	if (!src) return defaultSrc
+	return src || defaultSrc
 }
 
 // functions

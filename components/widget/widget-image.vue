@@ -2,12 +2,14 @@
 	<img
 		:class="`w-full shadow-${shadow}`"
 		:style="styles"
-		:src="url"
+		:src="src"
 		@error="onError()"
 	/>
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
+import getFileSrc from '~~/composables/utils/get-file-src'
 import { ImageWidget } from '~~/shared/types'
 
 interface Props {
@@ -15,22 +17,32 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const options = props.widget.options
 const { defaultImage, shadow } = props.widget as any
 const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
-const { result: url } = useBindData(props.widget?.url, props.widget?.context)
-if (!url.value) {
-	onError()
-}
+const { type, url, file } = options
+const value = type === 'file' ? file : url
+const src = ref(value)
+
+const { result: bindValue } = useBindData(value, props.widget?.context)
+
+watch(bindValue, () => {
+	if (type === 'file') {
+		src.value = getFileSrc(bindValue.value)
+		return
+	}
+	src.value = url
+})
 
 // functions
 function onError() {
 	if (!defaultImage) {
-		url.value = 'img/default-img.png'
+		src.value = 'img/default-img.png'
 		return
 	}
 
 	const { getFileSrc } = useUtils()
-	url.value = getFileSrc(defaultImage)
+	src.value = getFileSrc(defaultImage)
 }
 </script>

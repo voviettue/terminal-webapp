@@ -43,7 +43,9 @@ export interface RichTextWidget extends Widget {
 }
 
 export interface ImageWidget extends Widget {
+	type?: 'url' | 'file'
 	url?: string
+	file?: string
 	defaultImage?: string
 	objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 	ratioWidth?: number

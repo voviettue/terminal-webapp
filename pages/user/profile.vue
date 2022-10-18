@@ -10,7 +10,7 @@
 		</div>
 
 		<div class="mx-4 mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-			<div class="py-8 px-8 shadow sm:rounded sm:px-10">
+			<div class="pt-8 pb-10 px-8 shadow sm:rounded sm:px-10">
 				<div class="flex justify-start items-center mb-5">
 					<TwIcon
 						name="account_circle"
@@ -107,10 +107,13 @@
 						/>
 					</div>
 				</FormKit>
-				<p v-if="errors.profile" class="mt-3 text-red-500 uppercase">
+				<p v-if="errors.profile" class="mt-3 text-red-500 absolute">
 					{{ errors.profile }}
 				</p>
-				<div class="flex flex-start items-center mt-10 mb-5">
+				<p v-else-if="success.profile" class="mt-3 text-green-500 absolute">
+					{{ success.profile }}
+				</p>
+				<div class="flex flex-start items-center mt-12 mb-5">
 					<TwIcon
 						name="lock"
 						class="rounded-full border border-slate-500 border-solid p-1"
@@ -143,8 +146,11 @@
 						/>
 					</div>
 				</FormKit>
-				<p v-if="errors.password" class="mt-3 text-red-500 uppercase">
+				<p v-if="errors.password" class="mt-3 text-red-500 absolute">
 					{{ errors.password }}
+				</p>
+				<p v-else-if="success.password" class="mt-3 text-green-500 absolute">
+					{{ success.password }}
 				</p>
 			</div>
 		</div>
@@ -172,6 +178,7 @@ const forms = ref({
 	password: '',
 })
 const errors = ref({})
+const success = ref({})
 const changeAvatar = async (event) => {
 	try {
 		const form = new FormData()
@@ -198,6 +205,10 @@ const submitProfile = async () => {
 	errors.value.profile = ''
 	try {
 		await directus.users.me.update(fields)
+		success.value.profile = 'Profile was successfully updated !!!'
+		setTimeout(() => {
+			success.value.profile = ''
+		}, 3000)
 	} catch (e) {
 		errors.value.profile = e.message
 	}
@@ -209,6 +220,10 @@ const submitPassword = async () => {
 	try {
 		await directus.users.me.update(fields)
 		forms.value.password = ''
+		success.value.password = 'Password was successfully updated !!!'
+		setTimeout(() => {
+			success.value.password = ''
+		}, 3000)
 	} catch (e) {
 		errors.value.password = e.message
 	}

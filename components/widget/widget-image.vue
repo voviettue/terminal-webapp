@@ -23,22 +23,24 @@ const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
 const { type, url, file } = options
 const value = type === 'file' ? file : url
-const src = ref(value)
 
 const { result: bindValue } = useBindData(value, props.widget?.context)
+const defaultSrc = 'img/default-img.png'
+const src = ref(getSrc())
 
 watch(bindValue, () => {
-	if (type === 'file') {
-		src.value = getFileSrc(bindValue.value)
-		return
-	}
-	src.value = url
+	src.value = getSrc()
 })
+
+function getSrc() {
+	const src = type === 'file' ? getFileSrc(bindValue.value) : bindValue.value
+	if (!src) return defaultSrc
+}
 
 // functions
 function onError() {
 	if (!defaultImage) {
-		src.value = 'img/default-img.png'
+		src.value = defaultSrc
 		return
 	}
 

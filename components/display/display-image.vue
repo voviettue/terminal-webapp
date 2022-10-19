@@ -11,7 +11,7 @@ const props = defineProps<Props>()
 const options = {
 	...props.options,
 	url: props.options?.url || props.value,
-	file: props.options?.url || props.value,
+	file: props.options?.file || props.value,
 }
 
 const displayContext = inject('display-context')

@@ -18,7 +18,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const options = props.widget.options
-const { defaultImage, shadow } = props.widget as any
+const { defaultImg, shadow } = props.widget as any
 const { getStyles } = useUtils()
 const styles = getStyles(props.widget.options)
 const { type, url, file } = options
@@ -34,17 +34,14 @@ watch(bindValue, () => {
 
 function getSrc() {
 	const src = type === 'file' ? getFileSrc(bindValue.value) : bindValue.value
-	return src || defaultSrc
+	if (!src) {
+		return defaultImg ? getFileSrc(defaultImg) : defaultSrc
+	}
+	return src
 }
 
 // functions
 function onError() {
-	if (!defaultImage) {
-		src.value = defaultSrc
-		return
-	}
-
-	const { getFileSrc } = useUtils()
-	src.value = getFileSrc(defaultImage)
+	src.value = defaultImg ? getFileSrc(defaultImg) : defaultSrc
 }
 </script>

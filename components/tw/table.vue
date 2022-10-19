@@ -128,8 +128,8 @@ const height = ref(props.height)
 const clickable = !!props.rowClick
 const tableClass = {
 	'w-full divide-y divide-gray-300 text-left': true,
-	'table-fixed': props.layout === 'fixed',
-	'table-auto': props.layout === 'auto',
+	'table-auto': true,
+	'md:table-fixed': props.layout === 'fixed',
 }
 const thClass = (header: any) => {
 	return {

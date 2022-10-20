@@ -1,5 +1,5 @@
 <template>
-	<div :class="`calendar-${calendarScreens}`">
+	<div :class="`calendar calendar-${calendarScreens}`">
 		<div
 			class="toolbar flex flex-none items-center justify-between border-x border-t border-gray-300 bg-gray-100 py-4 px-6"
 		>
@@ -195,6 +195,7 @@ const calendarOptions = ref({
 	firstDay: props.widget?.firstDay || 0,
 	select: onDateClick,
 	eventClick: onItemClick,
+	contentHeight: null,
 })
 
 const { result: rawData } = useBindData(
@@ -211,7 +212,7 @@ watch(view, (val) => {
 })
 
 watch(calendarScreens, (val) => {
-	calendarOptions.value.events = val === 'mobile' ? [] : events.value
+	calendarOptions.value.contentHeight = val === 'mobile' ? 350 : null
 })
 
 watch(
@@ -300,8 +301,8 @@ onMounted(() => {
 })
 
 onUpdated(() => {
-	calendarOptions.value.events =
-		calendarScreens.value !== 'mobile' ? events.value : []
+	calendarOptions.value.contentHeight =
+		calendarScreens.value === 'mobile' ? 350 : null
 })
 
 onUnmounted(() => {

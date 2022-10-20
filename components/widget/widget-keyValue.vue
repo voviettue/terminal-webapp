@@ -7,7 +7,7 @@
 					get(data, item.key) &&
 					!item?.hidden
 				"
-				:key="index"
+				:key="`tr-${Math.random()}-${index}`"
 				class="key-value-grid"
 				:class="getWidgetStyle(item)"
 			>

@@ -123,7 +123,7 @@ onMounted(() => {
 		}
 	}
 	span,
-	p {
+	:deep(p) {
 		padding: 0 0.25rem;
 		background-color: v-bind('cssBinding.background');
 		z-index: 2;

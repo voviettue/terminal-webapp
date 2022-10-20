@@ -22,6 +22,8 @@ export default function getStyles(options: Record<string, any>): CSSProperties {
 		height,
 		width,
 		maxWidth,
+		padding,
+		gap,
 	} = options
 	const styles = {
 		'font-size': textSize,
@@ -43,9 +45,11 @@ export default function getStyles(options: Record<string, any>): CSSProperties {
 		transform: zoom ? `scale(${zoom})` : null,
 		'border-radius': borderRadius ?? null,
 		'text-transform': textTransform ?? null,
+		height,
 		width: width ?? null,
 		'max-width': maxWidth ?? null,
-		height,
+		padding,
+		gap,
 	}
 
 	Object.keys(styles).forEach((k) => {

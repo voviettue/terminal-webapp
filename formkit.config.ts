@@ -99,7 +99,7 @@ export default {
 	},
 	inputs: {
 		dropdown: createInput(DropdownComponent, {
-			props: ['value', 'options'],
+			props: ['value', 'options', 'allowSearch', 'placeholder', 'disabled'],
 		}),
 	},
 }

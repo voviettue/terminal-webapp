@@ -1,10 +1,15 @@
 <template>
-	<Combobox v-model="selectedOption" as="div" class="relative">
+	<Combobox
+		v-model="selectedOption"
+		as="div"
+		class="relative w-full"
+		:disabled="disabled"
+	>
 		<ComboboxInput
-			class="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+			class="input-select w-full border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
 			:display-value="(person: any) => person?.text"
-			placeholder="Select"
-			@change="query = $event.target.value"
+			:placeholder="placeholder"
+			@change="hanldeChangeInput"
 		/>
 		<ComboboxButton
 			class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
@@ -63,11 +68,17 @@ import {
 interface Props {
 	value?: string | number
 	options: { value: string | number; text: string }[]
+	allowSearch?: boolean
+	placeholder?: string
+	disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
 	value: null,
 	options: () => [],
+	allowSearch: false,
+	placeholder: 'Select',
+	disabled: false,
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -79,6 +90,11 @@ const filteredOptions = computed(() =>
 		e.text?.toLowerCase().includes(query.value?.toLowerCase())
 	)
 )
+const hanldeChangeInput = (event) => {
+	if (props.allowSearch) {
+		query.value = event.target.value
+	}
+}
 watch(selectedOption, () => {
 	emit('update:modelValue', selectedOption.value?.value)
 })

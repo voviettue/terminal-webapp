@@ -171,3 +171,10 @@ export interface NumberInputWidget extends InputWidget {
 	autoFocus?: boolean
 	reset?: boolean
 }
+
+export interface SelectWidget extends InputWidget {
+	allowOther?: boolean
+	allowSearching?: boolean
+	choices: Record<string, string | number>[]
+	alignment?: string
+}

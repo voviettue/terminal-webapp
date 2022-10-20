@@ -1,8 +1,8 @@
 <template>
 	<div id="layout-wrapper">
 		<PageTopbar></PageTopbar>
-		<!-- <slot></slot> -->
-		<br />
+		<slot></slot>
+		<!-- <br />
 		<div class="w-[200px] mx-auto">
 			<br />
 			<br />
@@ -18,7 +18,7 @@
 				validation-visibility="live"
 				:options="options"
 			/>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -37,13 +37,13 @@ useHead({
 
 const customCss = ref('')
 const maxWidth = ref('')
-const value = ref(2)
-const options = ref([
-	{ value: null, text: 'Select' },
-	{ value: 1, text: 'Leslie Alexander' },
-	{ value: 2, text: 'Tu Nguyen' },
-	{ value: 3, text: 'Tu Nguyen ss' },
-])
+// const value = ref(2)
+// const options = ref([
+// 	{ value: null, text: 'Select' },
+// 	{ value: 1, text: 'Leslie Alexander' },
+// 	{ value: 2, text: 'Tu Nguyen' },
+// 	{ value: 3, text: 'Tu Nguyen ss' },
+// ])
 await init()
 
 async function init() {

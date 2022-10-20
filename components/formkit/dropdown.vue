@@ -2,6 +2,9 @@
 	<Dropdown
 		:value="context._value"
 		:options="context.options"
+		:allow-search="context.allowSearch"
+		:placeholder="context.placeholder"
+		:disabled="context.disabled"
 		@update:model-value="updateValue"
 	/>
 </template>

@@ -20,7 +20,7 @@
 							:name="item.display"
 							:value="get(data, item.key)"
 							:options="item?.displayOptions"
-							:context="{ $item: get(data, item.key) }"
+							:context="{ $item: data, $value: get(data, item.key) }"
 						></RenderDisplay>
 					</template>
 					<template v-else>

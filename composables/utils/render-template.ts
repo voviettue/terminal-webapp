@@ -10,11 +10,11 @@ export default async function renderTemplate(template: any, context: any) {
 	for (const match of matches) {
 		const block = match[0]
 		const statement = 'return ' + block.replace(/^{{|}}$/g, '')
-		const { $query, $item } = context
+		const { $query, $item, $value } = context
 		try {
 			// eslint-disable-next-line no-new-func
-			const fn = new Function('$item', '$query', statement)
-			const value = await fn($item, $query)
+			const fn = new Function('$query', '$item', '$value', statement)
+			const value = await fn($query, $item, $value)
 			const replaceValue = !value
 				? ''
 				: typeof value === 'string'

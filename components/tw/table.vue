@@ -2,7 +2,7 @@
 	<div class="w-full inline-block align-middle">
 		<div
 			:class="`overflow-auto shadow-${shadow}`"
-			:style="{ ...styles, height: height }"
+			:style="{ ...styles, height: height, 'min-height': minHeight }"
 		>
 			<table ref="table" :class="tableClass">
 				<thead v-if="!hideHeader" class="sticky top-0 z-10">
@@ -125,6 +125,7 @@ const emit = defineEmits(['toggleSort'])
 
 const table = ref(null)
 const height = ref(props.height)
+const minHeight = ref(props.height)
 const clickable = !!props.rowClick
 const tableClass = {
 	'w-full divide-y divide-gray-300 text-left': true,
@@ -140,7 +141,7 @@ const thClass = (header: any) => {
 }
 const tdClass = (header: any) => {
 	return {
-		'py-4 px-3 text-gray-900': true,
+		'py-4 px-3 text-gray-900 space-y-2': true,
 		...header.tdClass,
 	}
 }
@@ -154,7 +155,9 @@ const sortBy = ref<string>(null)
 
 onUpdated(() => {
 	if (props.height === 'auto') {
-		alignHeightTable()
+		setTimeout(() => {
+			alignHeightTable()
+		}, 1000)
 	}
 })
 
@@ -175,8 +178,8 @@ function sortIcon(header: any) {
 
 function alignHeightTable() {
 	const h = table.value.offsetHeight
-	if (height.value === 'auto' || h > parseInt(height.value)) {
-		height.value = `${h}px`
+	if (minHeight.value === 'auto' || h > parseInt(minHeight.value)) {
+		minHeight.value = `${h}px`
 	}
 }
 

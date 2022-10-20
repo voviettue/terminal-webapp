@@ -37,10 +37,10 @@
 <script setup lang="ts">
 import upperFirst from 'lodash/upperFirst'
 import startCase from 'lodash/startCase'
-import get from 'lodash/get'
 import mergeWith from 'lodash/mergeWith'
 import cloneDeep from 'lodash/cloneDeep'
 import isNull from 'lodash/isNull'
+import { get } from '~/utils/get-with-arrays'
 import { KeyValueWidget } from '~/shared/types'
 
 interface Props {

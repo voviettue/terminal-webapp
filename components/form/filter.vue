@@ -52,7 +52,9 @@
 								@update="updateFilterRow($event, index)"
 								@remove="removeFilterRow"
 							></FormFilterRow>
-							<div class="flex justify-between items-center mt-4">
+							<div
+								class="flex flex-col space-y-4 md:flex-row md:justify-between md:items-center mt-4"
+							>
 								<button
 									class="inline-flex items-center gap-1 text-sm bg-transparent text-gray-600 hover:text-gray-900 leading-tight uppercase"
 									@click="addFilterRow"

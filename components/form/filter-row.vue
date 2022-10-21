@@ -2,7 +2,7 @@
 	<div
 		:class="`${
 			index === 0 ? 'justify-end' : ''
-		} flex flex-row flex-nowrap items-baseline gap-4 px-1 py-2 leading-normal hover:bg-gray-50 hover:rounded-lg`"
+		} flex flex-col md:flex-row flex-nowrap items-baseline gap-2 px-1 py-2 leading-normal hover:bg-gray-50 hover:rounded-lg`"
 	>
 		<button
 			v-if="index > 0"
@@ -35,8 +35,8 @@
 			name="field"
 			:options="[{ label: 'Select field', value: null }, ...filterFields]"
 			:classes="{
-				input: 'w-min py-2',
-				outer: '!m-0',
+				outer: 'w-full md:w-max !m-0',
+				input: 'md:w-min py-2',
 			}"
 		/>
 		<FormKit
@@ -45,8 +45,8 @@
 			name="operator"
 			:options="[{ label: 'Select operator', value: null }, ...filterOperators]"
 			:classes="{
-				input: 'w-min py-2',
 				outer: '!m-0',
+				input: 'md:w-min py-2',
 			}"
 		/>
 		<FormKit
@@ -56,8 +56,8 @@
 			name="value"
 			placeholder="Enter value"
 			:classes="{
-				input: 'w-max py-2',
-				outer: 'w-max !m-0',
+				outer: 'w-full md:w-max !m-0',
+				input: 'md:w-min py-2',
 			}"
 			@input="onInputFilterValue"
 		/>

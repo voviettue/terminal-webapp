@@ -1,23 +1,24 @@
 <template>
 	<div class="w-full inline-block align-middle">
-		<div
-			:class="`overflow-auto shadow-${shadow}`"
-			:style="{ ...styles, height: height, 'min-height': minHeight }"
-		>
-			<table ref="table" :class="tableClass">
-				<thead v-if="!hideHeader" class="sticky top-0 z-10">
-					<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
-						<th
-							v-for="header in normalizedHeaders"
-							:key="`th-${header?.key}`"
-							v-tooltip="header?.tooltip"
-							:class="thClass(header)"
-							:style="header?.thStyle"
-							scope="col"
-							@click="toggleSort(header)"
-						>
-							<slot :name="`header-${header.key}`" :header="header">
-								<div class="flex">
+		<div class="overflow-auto" :style="{ 'min-height': minHeight }">
+			<div :class="`shadow-${shadow}`" :style="{ height: height }">
+				<table
+					ref="table"
+					:style="{ ...styles, height: 'auto' }"
+					:class="tableClass"
+				>
+					<thead v-if="!hideHeader" class="sticky top-0 z-10">
+						<tr :class="{ 'divide-x divide-gray-200': verticalLines }">
+							<th
+								v-for="header in normalizedHeaders"
+								:key="`th-${header?.key}`"
+								v-tooltip="header?.tooltip"
+								:class="thClass(header)"
+								:style="header?.thStyle"
+								scope="col"
+								@click="toggleSort(header)"
+							>
+								<slot :name="`header-${header.key}`" :header="header">
 									<span>{{ get(header, 'label') }}</span>
 									<span v-if="header.sortable" class="ml-2 shrink-0">
 										<TwIcon
@@ -29,65 +30,65 @@
 											aria-hidden="true"
 										></TwIcon>
 									</span>
-								</div>
-							</slot>
-						</th>
-					</tr>
-				</thead>
-				<tbody class="divide-y divide-gray-200 bg-white z-1">
-					<tr
-						v-for="(item, index) in items"
-						:key="`tr-${Math.random()}-${index}`"
-						:class="{
-							'hover:bg-gray-100 cursor-pointer': clickable,
-							'bg-gray-50': stripedRow && index % 2 === 0,
-							'divide-x divide-gray-200': verticalLines,
-						}"
-						@click="onRowClick(item)"
-					>
-						<td
-							v-for="header in normalizedHeaders"
-							:key="`td-${header}`"
-							:class="tdClass(header)"
-							:style="header.tdStyle"
+								</slot>
+							</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-200 bg-white z-1">
+						<tr
+							v-for="(item, index) in items"
+							:key="`tr-${Math.random()}-${index}`"
+							:class="{
+								'hover:bg-gray-100 cursor-pointer': clickable,
+								'bg-gray-50': stripedRow && index % 2 === 0,
+								'divide-x divide-gray-200': verticalLines,
+							}"
+							@click="onRowClick(item)"
 						>
-							<slot
-								:name="`item-${header?.key}`"
-								:item="item"
-								:value="get(item, header.key)"
-							>
-								<template v-if="header?.display">
-									<RenderDisplay
-										:name="header.display"
-										:value="get(item, header.key)"
-										:options="header?.displayOptions"
-										:context="{ $item: item, $value: get(item, header.key) }"
-									></RenderDisplay>
-								</template>
-								<template v-else>
-									{{ get(item, header.key) ?? '—' }}
-								</template>
-							</slot>
-						</td>
-					</tr>
-
-					<template v-if="!items || items.length === 0">
-						<tr>
 							<td
-								:colspan="headers.length"
-								class="py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
+								v-for="header in normalizedHeaders"
+								:key="`td-${header}`"
+								:class="tdClass(header)"
+								:style="header.tdStyle"
 							>
-								No records found
+								<slot
+									:name="`item-${header?.key}`"
+									:item="item"
+									:value="get(item, header.key)"
+								>
+									<template v-if="header?.display">
+										<RenderDisplay
+											:name="header.display"
+											:value="get(item, header.key)"
+											:options="header?.displayOptions"
+											:context="{ $item: item, $value: get(item, header.key) }"
+										></RenderDisplay>
+									</template>
+									<template v-else>
+										{{ get(item, header.key) ?? '—' }}
+									</template>
+								</slot>
 							</td>
 						</tr>
-					</template>
-					<template v-else-if="minRow > 0 && items.length < minRow">
-						<tr v-for="k in minRow - items.length" :key="`pad-row-${k}`">
-							<td :colspan="headers.length" class="py-4 opacity-0">—</td>
-						</tr>
-					</template>
-				</tbody>
-			</table>
+
+						<template v-if="!items || items.length === 0">
+							<tr>
+								<td
+									:colspan="headers.length"
+									class="py-4 pl-4 pr-3 text-gray-900 sm:pl-6 md:pl-0 text-center text-gray-400"
+								>
+									No records found
+								</td>
+							</tr>
+						</template>
+						<template v-else-if="minRow > 0 && items.length < minRow">
+							<tr v-for="k in minRow - items.length" :key="`pad-row-${k}`">
+								<td :colspan="headers.length" class="py-4 opacity-0">—</td>
+							</tr>
+						</template>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </template>
@@ -117,7 +118,7 @@ const props = withDefaults(defineProps<Props>(), {
 	styles: null,
 	shadow: null,
 	minRow: null,
-	height: 'auto',
+	height: null,
 	thClass: null,
 	tdClass: null,
 })
@@ -154,7 +155,7 @@ const sortDirection = ref<string>(null)
 const sortBy = ref<string>(null)
 
 onUpdated(() => {
-	if (props.height === 'auto') {
+	if (!props.height) {
 		setTimeout(() => {
 			alignHeightTable()
 		}, 1000)
@@ -178,7 +179,7 @@ function sortIcon(header: any) {
 
 function alignHeightTable() {
 	const h = table.value.offsetHeight
-	if (minHeight.value === 'auto' || h > parseInt(minHeight.value)) {
+	if (!minHeight.value || h > parseInt(minHeight.value)) {
 		minHeight.value = `${h}px`
 	}
 }

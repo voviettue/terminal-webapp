@@ -41,7 +41,7 @@
 					>
 						<div
 							v-if="filterActive"
-							class="table w-full absolute right-0 z-50 mt-2 p-4 w-max origin-top-right rounded-md bg-white drop-shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+							class="w-full absolute right-0 z-50 mt-2 p-4 w-max origin-top-right rounded-md bg-white drop-shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none"
 						>
 							<FormFilterRow
 								v-for="(filterRow, index) in filters"

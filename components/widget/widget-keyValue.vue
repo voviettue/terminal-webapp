@@ -106,7 +106,7 @@ function getStylesBy(position: string, optionsStyle: Record<string, any>) {
 
 onMounted(() => {
 	cssBinding.value.borderStyle = props.widget.borderType || 'solid'
-	cssBinding.value.background = props.widget?.options?.background || '#fafafa'
+	cssBinding.value.background = props.widget?.options?.background || '#fff'
 })
 </script>
 

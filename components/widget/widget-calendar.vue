@@ -143,7 +143,7 @@
 			<template #eventContent="{ timeText, event }">
 				<span>
 					<strong>{{ getTime(event.start, timeText) }}</strong>
-					{{ event.title }}
+					<span class="ml-1" v-html="event.title"></span>
 				</span>
 			</template>
 		</FullCalendar>
@@ -262,11 +262,7 @@ function onDateClick(item) {
 function getTime(dateTime: string, timeText: string) {
 	if (!timeText) return null
 	const date = new Date(dateTime)
-	let formatTyle = 'H:m aaa'
-
-	if (date.getMinutes() === 0) {
-		formatTyle = 'H aaa'
-	}
+	const formatTyle = date.getMinutes() === 0 ? 'haaa' : 'h:maaa'
 
 	return format(new Date(dateTime), formatTyle)
 }

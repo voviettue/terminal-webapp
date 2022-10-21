@@ -1,7 +1,4 @@
 import { format, isValid } from 'date-fns'
-import { getFieldsFromTemplate } from '@directus/shared/utils'
-import { get, set } from 'lodash'
-import { render } from 'micromustache'
 import parseDate from './parse-date'
 
 export function calendarEventParse(item: any, options: any) {
@@ -43,39 +40,45 @@ export function calendarEventParse(item: any, options: any) {
 
 	return {
 		id: item?.id,
-		title:
-			renderDisplayStringTemplate(item, options?.displayTemplate) || item?.name,
+		title: renderDisplayTemplate(item, options),
 		start: startDate,
 		end: endDate,
 		allDay,
 	}
 }
 
-function renderDisplayStringTemplate(
+function renderDisplayTemplate(
 	item: Record<string, any>,
-	template: string
+	widgets: Record<string, any>
 ) {
-	const fields = getFieldsFromTemplate(template)
-	const parsedItem: Record<string, any> = {}
+	const template = widgets?.displayTemplate
 
-	for (const key of fields) {
-		set(parsedItem, key, get(item, key))
-	}
+	const regex = /({{.*?}})/g
+	const newInnerHTML = template
+		.split(regex)
+		.map((part) => {
+			if (part.startsWith('{{') === false) {
+				return `<span class="text">${part}</span>`
+			}
 
-	return renderPlainStringTemplate(template, parsedItem)
-}
+			const fieldKey = part.replace(/({|})/g, '').trim()
+			const value = item[fieldKey]
 
-export function renderPlainStringTemplate(
-	template: string,
-	item?: Record<string, any> | null
-): string | null {
-	const fieldsInTemplate = getFieldsFromTemplate(template)
+			if (value === null || value === undefined || value === '') return ''
 
-	if (!item || !template || !fieldsInTemplate) return null
+			const matchCondition = widgets?.conditionStyle?.find(
+				(e: any) => fieldKey === e?.conditionField && e?.value === value
+			)
 
-	try {
-		return render(template, item, { propsExist: true }) || '—'
-	} catch {
-		return '—'
-	}
+			const style = matchCondition?.background
+				? `"background-color:${matchCondition.background}; color:${
+						matchCondition?.textColor || 'unset'
+				  }; padding: 1px 4px 1px 4px; margin: 4px 4px 0 4px; border-radius: 4px"`
+				: `"color:${matchCondition?.textColor || 'unset'};"`
+
+			return `<span contenteditable="false" data-field="${fieldKey}" style=${style}>${value}</span>`
+		})
+		.join('')
+
+	return newInnerHTML
 }

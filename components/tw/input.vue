@@ -12,7 +12,8 @@
 				: '',
 		]"
 	>
-		<slot name="prefix-icon" class="h-full"></slot>
+		<TwIcon v-if="prefixIcon" :name="prefixIcon"></TwIcon>
+		<slot v-else name="prefix-icon" class="h-full"></slot>
 		<slot name="prefix" class="h-full"></slot>
 		<input
 			v-model="text"
@@ -23,19 +24,13 @@
 			:readonly="readonly"
 			class="h-full w-full border border-solid border-slate-400 px-3 py-2 rounded relative"
 			:class="[readonly ? 'bg-slate-200 ' : '']"
-			@onBlur="emit('blur', $event.target.value)"
+			@onBlur="emit('blur', $event)"
 			@input="handleInput($event)"
 		/>
-		<TwIcon
-			v-if="clearable && type === 'text'"
-			name="close"
-			class="p-0.5 rounded-full border border-solid border-slate-400 hover:border-slate-600 !absolute right-5"
-			@click="text = ''"
-		></TwIcon>
 
 		<slot name="suffix" class="h-full"></slot>
-
-		<slot name="suffix-icon" class="h-full"></slot>
+		<TwIcon v-if="suffixIcon" :name="suffixIcon"></TwIcon>
+		<slot v-else name="suffix-icon" class="h-full"></slot>
 		<slot class="h-full"></slot>
 	</div>
 </template>
@@ -46,20 +41,22 @@ const props = withDefaults(
 		placeholder?: string
 		type: string
 		autocompleted?: string
-		clearable?: boolean
 		name?: string
 		readonly?: boolean
 		disabled?: boolean
+		prefixIcon?: string
+		suffixIcon?: string
 	}>(),
 	{
 		modelValue: '',
 		placeholder: '',
 		type: 'text',
 		autocompleted: 'off',
-		clearable: false,
 		name: '',
 		readonly: false,
 		disabled: false,
+		prefixIcon: '',
+		suffixIcon: '',
 	}
 )
 const text = ref(props.modelValue || '')

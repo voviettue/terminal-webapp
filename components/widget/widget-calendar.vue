@@ -140,10 +140,10 @@
 			:class="`shadow-${widget?.shadow} calendar-rounded`"
 			:options="calendarOptions"
 		>
-			<template #eventContent="{ timeText, event }">
+			<template #eventContent="context">
 				<span>
-					<strong>{{ getTime(event.start, timeText) }}</strong>
-					<span class="ml-1" v-html="event.title"></span>
+					<strong>{{ getTime(context) }}</strong>
+					<span class="ml-1" v-html="context.event.title"></span>
 				</span>
 			</template>
 		</FullCalendar>
@@ -159,6 +159,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import format from 'date-fns/format'
+import startOfDay from 'date-fns/startOfDay'
 import { calendarEventParse } from '../../utils/calendar-event-parse'
 import { CalendarWidget } from '~/shared/types'
 
@@ -208,7 +209,7 @@ const calendarApi = computed(() => {
 })
 
 watch(view, (val) => {
-	action('changeView', val)
+	if (val) action('changeView', val)
 })
 
 watch(calendarScreens, (val) => {
@@ -259,16 +260,21 @@ function onDateClick(item) {
 	fn(...Object.values(context))
 }
 
-function getTime(dateTime: string, timeText: string) {
-	if (!timeText) return null
-	const date = new Date(dateTime)
+function getTime(context: any) {
+	if (!context.timeText) return null
+
+	if (!context?.isStart) {
+		return format(startOfDay(new Date(context.event.end)), 'haaa')
+	}
+
+	const date = new Date(context.event.start)
 	const formatTyle = date.getMinutes() === 0 ? 'haaa' : 'h:maaa'
 
-	return format(new Date(dateTime), formatTyle)
+	return format(new Date(context.event.start), formatTyle)
 }
 
 function _resizeHandler() {
-	setCalendarScreens(calendar.value.$el.offsetWidth)
+	setCalendarScreens(calendar.value?.$el.offsetWidth)
 }
 
 function setCalendarScreens(width) {
@@ -290,8 +296,9 @@ function setCalendarScreens(width) {
 
 onMounted(() => {
 	borderRadius.value = (props.widget?.borderRadius || 0) + 'px'
+	view.value = props.widget?.defaultView
 	getTitle()
-	setCalendarScreens(calendar.value.$el.offsetWidth)
+	setCalendarScreens(calendar.value?.$el.offsetWidth)
 
 	window.addEventListener('resize', _resizeHandler)
 })

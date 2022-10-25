@@ -1,6 +1,7 @@
 import { generateClasses } from '@formkit/themes'
 import { createInput } from '@formkit/vue'
 import DropdownComponent from './components/formkit/dropdown.vue'
+import CustomInputComponent from './components/formkit/input.vue'
 
 const textClassification = {
 	outer: 'mb-5',
@@ -100,6 +101,26 @@ export default {
 	inputs: {
 		dropdown: createInput(DropdownComponent, {
 			props: ['value', 'options', 'allowSearch', 'placeholder', 'disabled'],
+		}),
+		customInput: createInput(CustomInputComponent, {
+			props: [
+				'value',
+				'placeholder',
+				'inputType',
+				'autocomplete',
+				'nameId',
+				'readonly',
+				'disabled',
+				'prefixIcon',
+				'suffixIcon',
+				'min',
+				'max',
+				'showWorkLimit',
+				'minLength',
+				'maxLength',
+				'prefix',
+				'suffix',
+			],
 		}),
 	},
 }

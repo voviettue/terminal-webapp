@@ -11,4 +11,5 @@
 
 <style>
 @import '~/assets/css/main.css';
+@import '~/assets/css/component/button.scss';
 </style>

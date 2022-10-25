@@ -14,16 +14,15 @@ export function calendarEventParse(item: any, options: any) {
 	if (
 		!options?.endDateField &&
 		isValid(startDate) &&
-		startDate?.getHours() === 0 &&
-		startDate?.getMinutes() === 0 &&
-		startDate?.getSeconds() === 0
+		item[options?.startDateField]?.length < 12
 	) {
 		isDateFormat = true
 	}
 
 	const allDay =
 		isDateFormat ||
-		(item[options?.endDateField] && parseDate(item[options?.endDateField]))
+		(item[options?.endDateField]?.length < 12 &&
+			parseDate(item[options?.endDateField]))
 
 	if (options?.endDateField) {
 		if (allDay && isValid(allDay)) {
@@ -34,7 +33,7 @@ export function calendarEventParse(item: any, options: any) {
 			endDate = format(date, 'yyyy-MM-dd')
 		} else {
 			const date = parseDate(item[options?.endDateField])
-			endDate = date ? format(date, 'yyyy-MM-dd') : null
+			endDate = date ? format(date, "yyyy-MM-dd'T'HH:mm:ss") : null
 		}
 	}
 

@@ -16,8 +16,8 @@
 		:show-work-limit="context.showWorkLimit"
 		:prefix="context.prefix"
 		:suffix="context.suffix"
-		@change="emit('change', $event)"
-		@blur="emit('blur', $event)"
+		@change="handleChange"
+		@blur="handleBlur"
 		@update:model-value="updateValue"
 	></TwInput>
 </template>
@@ -26,7 +26,14 @@ import TwInput from '../tw/input.vue'
 interface Props {
 	context: any
 }
-const emit = defineEmits(['blur', 'change'])
+const handleChange = ($event) => {
+	if (typeof props.context.attrs.onChange === 'function')
+		props.context.attrs.onChange($event)
+}
+const handleBlur = ($event) => {
+	if (typeof props.context.attrs.onBlur === 'function')
+		props.context.attrs.onBlur($event)
+}
 const props = withDefaults(defineProps<Props>(), {})
 
 function updateValue(value) {

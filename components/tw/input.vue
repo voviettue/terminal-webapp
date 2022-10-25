@@ -37,7 +37,7 @@
 			:max-length="maxLength"
 			class="h-full w-full border-none px-3 py-2 rounded relative focus:border-none focus:outline-none"
 			:class="[readonly ? 'bg-slate-200 ' : '']"
-			@onBlur="emit('blur', $event)"
+			@blur="emit('blur', $event)"
 			@input="handleInput($event)"
 		/>
 

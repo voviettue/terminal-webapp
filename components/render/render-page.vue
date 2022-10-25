@@ -1,7 +1,7 @@
 <template>
 	<div
 		id="page-body"
-		class="lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6"
+		class="lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6 content-start"
 	>
 		<template v-if="loaded === false">
 			<RenderSkeleton

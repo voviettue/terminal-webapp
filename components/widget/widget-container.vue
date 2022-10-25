@@ -1,6 +1,6 @@
 <template>
 	<div
-		:class="`lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6  mx-auto ${
+		:class="`lg:grid lg:grid-cols-6 lg:gap-6 lg:space-y-0 space-y-6 mx-auto content-start ${
 			shadow ? `shadow-${shadow}` : ''
 		}`"
 		:style="styles"

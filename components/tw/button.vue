@@ -46,6 +46,3 @@ const buttonClass = [
 
 const emit = defineEmits(['click'])
 </script>
-<style scoped>
-@import './style.scss';
-</style>

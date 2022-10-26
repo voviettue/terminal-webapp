@@ -146,6 +146,7 @@ export interface InputWidget extends Widget {
 	prefix?: string
 	suffix?: string
 	helpText?: string
+	labelFontStyle?: string[]
 }
 
 export interface TextInputWidget extends InputWidget {

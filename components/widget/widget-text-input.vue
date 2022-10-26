@@ -13,6 +13,8 @@
 			type="customInput"
 			:input-type="masked ? 'password' : 'text'"
 			:validation="validation.rules"
+			:validation-messages="validation.messages"
+			validation-visibility="live"
 			:placeholder="placeholder"
 			:maxlength="maxLength"
 			:minlength="minLength"
@@ -77,6 +79,7 @@ const {
 	prefix,
 	suffix,
 	helpText,
+	labelFontStyle,
 } = props.widget.options
 const emit = defineEmits(['input', 'reset'])
 const text: Ref<string> = ref(defaultValue || '')
@@ -104,6 +107,7 @@ const styleLabel = getStyles({
 	textColor: labelColor,
 	textSize: labelSize,
 	fontFamily: labelFontFamily,
+	textStyle: labelFontStyle,
 })
 
 const validation = ref<Validation>({ rules: [], messages: [] })

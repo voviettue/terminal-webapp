@@ -18,13 +18,13 @@
 			<FormKit
 				v-model="text"
 				:type="masked ? 'password' : 'text'"
-				:validation="validates"
+				:validation="validation.rules"
 				:placeholder="placeholder"
 				:maxlength="maxLength"
 				:minlength="minLength"
 				:name="label"
-				validation-visibility="live"
-				:validation-messages="errorsMessage"
+				validation-visibility="blur"
+				:validation-messages="validation.messages"
 				:wrapper-class="getWrapperClass"
 				@input="onChangeText"
 			>
@@ -44,8 +44,14 @@
 import { ref, Ref, onMounted, watch, defineEmits } from 'vue'
 import { TextInputWidget } from '~/shared/types'
 
+const booleanRules = ['accepted', 'email', 'number', 'required', 'url']
+
 interface Props {
 	widget: TextInputWidget
+}
+type Validation = {
+	rules: any[]
+	messages: Record<string, any>
 }
 
 const emit = defineEmits(['input', 'reset'])
@@ -54,22 +60,18 @@ const props: any = defineProps<Props>()
 const { getStyles } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
-// const options = ref(props.widget.options)
-const validates = ref('')
-const errorsMessage: Ref<Record<string, any>> = ref({})
 const {
 	defaultValue,
 	required,
 	minLength,
 	maxLength,
+	validations = [],
 	placeholder,
 	leftIcon,
 	rightIcon,
 	trim,
 	masked,
 	disable,
-	regex,
-	errorMessage,
 	label,
 	labelPosition,
 	alignment,
@@ -78,7 +80,6 @@ const {
 	labelFontFamily,
 	labelWidth,
 	onChange,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	borderRadius,
 	shadow,
 	autoFocus,
@@ -114,6 +115,8 @@ const styleLabel = getStyles({
 	fontFamily: labelFontFamily,
 })
 
+const validation = ref<Validation>({ rules: [], messages: [] })
+
 const getClassLabel = () => {
 	const classes = { 'label-input': true }
 	if (labelPosition === 'left') {
@@ -135,14 +138,32 @@ const clickLabel = () => {
 	input.focus()
 }
 
-onMounted(() => {
+watchEffect(() => {
+	validation.value.rules = []
+	validation.value.messages = []
+
+	for (const v of validations) {
+		let value = v.value
+		if (v.rule === 'matches') {
+			value = RegExp(value.replace(/^\//, '').replace(/\/$/, ''))
+		}
+
+		if (booleanRules.includes(v.rule)) {
+			validation.value.rules.unshift([v.rule])
+		} else {
+			validation.value.rules.push([v.rule, value])
+		}
+
+		if (v.errorMessage) {
+			validation.value.messages[v.rule] = v.errorMessage
+		}
+	}
 	if (required) {
-		validates.value = 'required'
+		validation.value.rules.unshift(['required'])
 	}
-	if (regex) {
-		validates.value += `|matches:${new RegExp(regex)}`
-		errorsMessage.value.matches = errorMessage
-	}
+})
+
+onMounted(() => {
 	text.value = defaultValue || ''
 	emit('reset', !!reset)
 
@@ -194,7 +215,7 @@ onMounted(() => {
 		}
 	}
 	:deep().formkit-message {
-		position: absolute;
+		// position: absolute;
 		width: 100%;
 	}
 	:deep().formkit-inner {

@@ -146,6 +146,7 @@ export interface InputWidget extends Widget {
 export interface TextInputWidget extends InputWidget {
 	minLength?: number
 	maxLength?: number
+	validations?: Record<string, any>[]
 	leftIcon?: string
 	rightIcon?: string
 	trim?: boolean

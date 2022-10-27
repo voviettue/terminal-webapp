@@ -39,15 +39,10 @@
 <script setup lang="ts">
 import { ref, Ref, watch, defineEmits } from 'vue'
 import { TextInputWidget } from '~/shared/types'
-
-const booleanRules = ['accepted', 'email', 'number', 'required', 'url']
+import { useValidation } from '~/composables/use-validation'
 
 interface Props {
 	widget: TextInputWidget
-}
-type Validation = {
-	rules: any[]
-	messages: Record<string, any>
 }
 const props: any = defineProps<Props>()
 const {
@@ -110,38 +105,13 @@ const styleLabel = getStyles({
 	textStyle: labelFontStyle,
 })
 
-const validation = ref<Validation>({ rules: [], messages: [] })
+const { validation } = useValidation(validations, required)
 
 const getClassInput = () => {
 	const classes = {}
 	if (shadow) classes[`shadow-${shadow}`] = true
 	return classes
 }
-
-watchEffect(() => {
-	validation.value.rules = []
-	validation.value.messages = []
-
-	for (const v of validations) {
-		let value = v.value
-		if (v.rule === 'matches') {
-			value = RegExp(value.replace(/^\//, '').replace(/\/$/, ''))
-		}
-
-		if (booleanRules.includes(v.rule)) {
-			validation.value.rules.unshift([v.rule])
-		} else {
-			validation.value.rules.push([v.rule, value])
-		}
-
-		if (v.errorMessage) {
-			validation.value.messages[v.rule] = v.errorMessage
-		}
-	}
-	if (required) {
-		validation.value.rules.unshift(['required'])
-	}
-})
 </script>
 <style lang="scss" scoped>
 .form-text-input {

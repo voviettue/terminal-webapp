@@ -4,11 +4,7 @@
 			v-for="item in items"
 			:key="`text-${item.value}`"
 			class="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-800"
-			:style="{
-				...styles,
-				color: item.textColor ?? styles.color,
-				background: item.background ?? styles.background,
-			}"
+			:style="{ ...styles, ...item.style }"
 		>
 			{{ item.text }}
 		</span>
@@ -28,7 +24,7 @@ const { getStyles, parseJson } = useUtils()
 
 const options = ref(props.widget.options)
 const styles = ref(getStyles(options.value))
-const { delimiters, allowWrap, conditions } = options.value
+const { delimiter, allowWrap, conditions } = options.value
 
 const { result: rawData } = useBindData(
 	props.widget?.data,
@@ -37,10 +33,7 @@ const { result: rawData } = useBindData(
 
 const values = computed(() => {
 	const parsedValue = parseJson(rawData.value)
-	const regex = new RegExp(
-		`[${delimiters?.join('').replace('space', ' ')}]`,
-		'g'
-	)
+	const regex = new RegExp(`[${delimiter ?? ','}]`, 'g')
 	return Array.isArray(parsedValue) ? parsedValue : parsedValue.split(regex)
 })
 
@@ -57,9 +50,8 @@ const items = values.value
 
 		return {
 			value,
-			text: item?.value || value,
-			textColor: item?.textColor,
-			background: item?.background,
+			text: item?.text || value,
+			style: getStyles(item),
 		}
 	})
 	.filter((e) => !!e.value)

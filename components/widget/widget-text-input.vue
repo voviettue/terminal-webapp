@@ -1,47 +1,43 @@
 <template>
-	<div
-		ref="textInput"
-		:class="[
-			'form-text-input',
-			alignment === 'right' ? 'align-right' : '',
-			leftIcon || rightIcon ? 'has-icon' : '',
-			disable ? 'readonly' : '',
-			labelPosition !== 'left' ? 'label-top' : 'label-left',
-			'w-full',
-			tooltip ? 'tooltip' : '',
-		]"
+	<FormField
+		v-tooltip="tooltip"
+		:label="label"
+		:label-position="labelPosition"
+		:label-alignment="alignment"
+		:hide-label="hideLabel"
+		:label-width="labelWidth"
+		:label-style="styleLabel"
 	>
-		<div :class="getClassLabel()" :style="styleLabel" @click="clickLabel">
-			<span>{{ label }}</span>
-		</div>
-		<div :class="getClassFormKitInput()">
-			<FormKit
-				v-model="text"
-				:type="masked ? 'password' : 'text'"
-				:validation="validation.rules"
-				:placeholder="placeholder"
-				:maxlength="maxLength"
-				:minlength="minLength"
-				:name="label"
-				validation-visibility="blur"
-				:validation-messages="validation.messages"
-				:wrapper-class="getWrapperClass"
-				@input="onChangeText"
-			>
-				<template v-if="leftIcon" #prefixIcon>
-					<TwIcon :name="leftIcon" class="mx-2" />
-				</template>
-				<template v-if="rightIcon" #suffixIcon>
-					<TwIcon :name="rightIcon" class="mx-2" />
-				</template>
-			</FormKit>
-		</div>
-		<span v-if="tooltip" class="tooltiptext">{{ tooltip }}</span>
-	</div>
+		<FormKit
+			v-model="text"
+			type="customInput"
+			:input-type="masked ? 'password' : 'text'"
+			:validation="validation.rules"
+			:validation-messages="validation.messages"
+			validation-visibility="live"
+			:placeholder="placeholder"
+			:maxlength="maxLength"
+			:minlength="minLength"
+			:name-id="label"
+			:readonly="readonly"
+			:disabled="disabled"
+			:suffix="suffix"
+			:prefix="prefix"
+			:prefix-icon="prefixIcon"
+			:suffix-icon="suffixIcon"
+			:autofocus="autoFocus"
+			:input-custom-class="getClassInput()"
+			:input-style="{
+				borderRadius: `${borderRadius}px`,
+			}"
+			:help="helpText"
+			@input="onChangeText"
+		></FormKit>
+	</FormField>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted, watch, defineEmits } from 'vue'
+import { ref, Ref, watch, defineEmits } from 'vue'
 import { TextInputWidget } from '~/shared/types'
 
 const booleanRules = ['accepted', 'email', 'number', 'required', 'url']
@@ -53,13 +49,7 @@ type Validation = {
 	rules: any[]
 	messages: Record<string, any>
 }
-
-const emit = defineEmits(['input', 'reset'])
-const text: Ref<string> = ref('')
 const props: any = defineProps<Props>()
-const { getStyles } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
 const {
 	defaultValue,
 	required,
@@ -67,11 +57,11 @@ const {
 	maxLength,
 	validations = [],
 	placeholder,
-	leftIcon,
-	rightIcon,
+	prefixIcon,
+	suffixIcon,
 	trim,
 	masked,
-	disable,
+	disabled,
 	label,
 	labelPosition,
 	alignment,
@@ -83,15 +73,26 @@ const {
 	borderRadius,
 	shadow,
 	autoFocus,
-	reset,
 	tooltip,
+	hideLabel,
+	readonly,
+	prefix,
+	suffix,
+	helpText,
+	labelFontStyle,
 } = props.widget.options
+const emit = defineEmits(['input', 'reset'])
+const text: Ref<string> = ref(defaultValue || '')
+
+const { getStyles } = useUtils()
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
+
 watch(text, (newValue) => {
 	if (trim) {
 		text.value = newValue.trim()
 	}
 })
-const textInput = ref(null)
 const onChangeText = (val) => {
 	emit('input', val)
 	if (!onChange) return
@@ -102,40 +103,19 @@ const onChangeText = (val) => {
 	fn(...Object.values(context))
 }
 
-const getWrapperClass = () => {
-	if (!shadow) return {}
-	const res = {}
-	res[`shadow-${shadow}`] = true
-	return res
-}
-
 const styleLabel = getStyles({
 	textColor: labelColor,
 	textSize: labelSize,
 	fontFamily: labelFontFamily,
+	textStyle: labelFontStyle,
 })
 
 const validation = ref<Validation>({ rules: [], messages: [] })
 
-const getClassLabel = () => {
-	const classes = { 'label-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${labelWidth || 2}`] = true
-	}
+const getClassInput = () => {
+	const classes = {}
+	if (shadow) classes[`shadow-${shadow}`] = true
 	return classes
-}
-
-const getClassFormKitInput = () => {
-	const classes = { 'form-kit-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${6 - labelWidth || 4}`] = true
-	}
-	return classes
-}
-
-const clickLabel = () => {
-	const input = textInput.value.querySelector('.formkit-input')
-	input.focus()
 }
 
 watchEffect(() => {
@@ -160,29 +140,6 @@ watchEffect(() => {
 	}
 	if (required) {
 		validation.value.rules.unshift(['required'])
-	}
-})
-
-onMounted(() => {
-	text.value = defaultValue || ''
-	emit('reset', !!reset)
-
-	if (autoFocus || disable) {
-		const input = textInput.value.querySelector('.formkit-input')
-		autoFocus && input.focus()
-		if (disable) {
-			input.setAttribute('readonly', true)
-			input.style.backgroundColor = '#E5E8E8'
-			input.blur()
-		}
-	}
-	if (borderRadius) {
-		const inner = textInput.value.querySelector('.formkit-inner')
-		const input = textInput.value.querySelector('.formkit-input')
-		const wrapper = textInput.value.querySelector('.formkit-wrapper')
-		wrapper.style.borderRadius = `${borderRadius}px`
-		inner.style.borderRadius = `${borderRadius}px`
-		if (!leftIcon && !rightIcon) input.style.border = 'none'
 	}
 })
 </script>

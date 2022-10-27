@@ -6,26 +6,31 @@
 			'form-item',
 		]"
 	>
-		<label
-			:for="nameId"
-			:style="labelStyle"
-			:class="getClassLabel()"
-			class="label-field"
-		>
-			{{ label }}
-		</label>
+		<div :class="getClassLabel()">
+			<label
+				v-if="!hideLabel"
+				:for="nameId"
+				:style="labelStyle"
+				class="label-field"
+			>
+				{{ label }}
+			</label>
+		</div>
 		<div :class="getClassSlot()">
 			<slot></slot>
 		</div>
 	</div>
 </template>
 <script setup lang="ts">
+import { CSSProperties } from 'vue'
 interface Props {
 	nameId?: string
 	label?: string
+	hideLabel: boolean
 	labelPosition?: string
 	labelWidth?: number
-	labelStyle?: Record<string, string>
+	labelStyle?: Record<string, string> | CSSProperties
+	labelAlignment?: string
 }
 const props = withDefaults(defineProps<Props>(), {
 	nameId: '',
@@ -33,10 +38,17 @@ const props = withDefaults(defineProps<Props>(), {
 	labelPosition: 'left',
 	labelWidth: 2,
 	labelStyle: () => ({}),
+	hideLabel: false,
+	labelAlignment: 'left',
 })
 const getClassLabel = () => {
-	const classes = {}
+	const classes = {
+		flex: true,
+		'items-start': true,
+	}
 	if (props.labelPosition === 'left') classes[`grid-${props.labelWidth}`] = true
+	if (props.labelAlignment === 'left') classes['justify-start'] = true
+	else classes['justify-end'] = true
 	return classes
 }
 const getClassSlot = () => {

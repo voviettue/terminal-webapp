@@ -131,7 +131,7 @@ export interface InputWidget extends Widget {
 	defaultValue?: string | number
 	required?: boolean
 	placeholder?: string
-	disable?: boolean
+	disabled?: boolean
 	label: string
 	labelPosition?: string
 	labelColor?: string
@@ -141,14 +141,20 @@ export interface InputWidget extends Widget {
 	onChange?: string
 	borderRadius?: number
 	shadow?: string
+	hideLabel?: boolean
+	readonly?: boolean
+	prefix?: string
+	suffix?: string
+	helpText?: string
+	labelFontStyle?: string[]
 }
 
 export interface TextInputWidget extends InputWidget {
 	minLength?: number
 	maxLength?: number
 	validations?: Record<string, any>[]
-	leftIcon?: string
-	rightIcon?: string
+	prefixIcon?: string
+	suffixIcon?: string
 	trim?: boolean
 	masked?: boolean
 	regex?: string

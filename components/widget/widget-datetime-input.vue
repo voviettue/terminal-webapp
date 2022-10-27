@@ -1,49 +1,49 @@
 <template>
-	<div
-		ref="dateInput"
-		:class="[
-			'form-text-input',
-			alignment === 'right' ? 'align-right' : '',
-			leftIcon || rightIcon ? 'has-icon' : '',
-			disable ? 'readonly' : '',
-			labelPosition !== 'left' ? 'label-top' : 'label-left',
-			'w-full',
-			tooltip ? 'tooltip' : '',
-		]"
+	<FormField
+		v-tooltip="tooltip"
+		:label="label"
+		:label-position="labelPosition"
+		:label-alignment="alignment"
+		:hide-label="hideLabel"
+		:label-width="labelWidth"
+		:label-style="styleLabel"
 	>
-		<div :class="getClassLabel()" :style="styleLabel" @click="clickLabel">
-			<span>{{ label }}</span>
-		</div>
-		<div :class="getClassFormKitInput()">
-			<FormKit
-				v-model="text"
-				:type="timePrecision ? 'datetime-local' : 'date'"
-				:validation="validates"
-				:name="label"
-				:min="min"
-				:max="max"
-				:step="step"
-				validation-visibility="live"
-				:validation-messages="errorsMessage"
-				:wrapper-class="getWrapperClass"
-				@input="onChangeText"
-			>
-				<template v-if="leftIcon" #prefixIcon>
-					<TwIcon :name="leftIcon" class="mx-2" />
-				</template>
-				<template v-if="rightIcon" #suffixIcon>
-					<TwIcon :name="rightIcon" class="mx-2" />
-				</template>
-			</FormKit>
-		</div>
-		<span v-if="tooltip" class="tooltiptext">{{ tooltip }}</span>
-	</div>
+		<FormKit
+			:id="widget.key"
+			v-model="value"
+			:name="name"
+			type="customInput"
+			:input-type="timePrecision ? 'datetime-local' : 'date'"
+			:validation="validation.rules"
+			:validation-messages="validation.messages"
+			validation-visibility="live"
+			:placeholder="placeholder"
+			:min="min"
+			:max="max"
+			:step="step"
+			:readonly="readonly"
+			:disabled="disabled"
+			:suffix="suffix"
+			:prefix="prefix"
+			:prefix-icon="prefixIcon"
+			:suffix-icon="suffixIcon"
+			:autofocus="autoFocus"
+			:class="getClassInput()"
+			:style="{
+				borderRadius: borderRadius ?? undefined,
+			}"
+			:help="helpText"
+			@input="onChangeText"
+		></FormKit>
+	</FormField>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted, defineEmits } from 'vue'
+import { ref, watch, defineEmits } from 'vue'
 import { parse, format } from 'date-fns'
 import { DatetimeInputWidget } from '~/shared/types'
+import { useValidation } from '~/composables/use-validation'
+import { strToSlug } from '~~/utils/str-to-slug'
 
 interface Props {
 	widget: DatetimeInputWidget
@@ -51,28 +51,18 @@ interface Props {
 
 const emit = defineEmits(['input', 'reset'])
 const props: any = defineProps<Props>()
-
-const text: Ref<string> = ref('')
-const min: Ref<string | null> = ref(null)
-const max: Ref<string | null> = ref(null)
-const step: Ref<number | null> = ref(null)
-
-const { getStyles } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
-const validates = ref('')
-const errorsMessage: Ref<Record<string, any>> = ref({})
 const {
 	defaultValue,
 	required,
-	leftIcon,
-	rightIcon,
-	disable,
-	regex,
-	errorMessage,
+	validations = [],
+	placeholder,
+	prefixIcon,
+	suffixIcon,
+	trim,
 	minDate,
 	maxDate,
 	timePrecision,
+	disabled,
 	label,
 	labelPosition,
 	alignment,
@@ -84,106 +74,73 @@ const {
 	borderRadius,
 	shadow,
 	autoFocus,
-	reset,
 	tooltip,
+	hideLabel,
+	readonly,
+	prefix,
+	suffix,
+	helpText,
+	labelFontStyle,
 } = props.widget.options
-const dateInput = ref(null)
+
+const value = ref(defaultValue)
+const name = strToSlug(props.widget.name || '')
+
+const { result } = useBindData(defaultValue)
+watch([result], () => {
+	value.value = result.value
+})
+
+const { getStyles } = useUtils()
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
+
+watch(value, (newValue) => {
+	if (trim) {
+		value.value = newValue.trim()
+	}
+})
 const onChangeText = (val) => {
 	emit('input', val)
 	if (!onChange) return
-	const context = { ...pageStore.context, ...props.widget.context }
+	const context = { ...pageStore.context, ...props.widget.context, $value: val }
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
 	const fn = AsyncFunction(...Object.keys(context), onChange)
 	fn(...Object.values(context))
 }
 
-const getWrapperClass = () => {
-	if (!shadow) return {}
-	const res = {}
-	res[`shadow-${shadow}`] = true
-	return res
-}
-
 const styleLabel = getStyles({
 	textColor: labelColor,
 	textSize: labelSize,
 	fontFamily: labelFontFamily,
+	textStyle: labelFontStyle,
 })
 
-const getClassLabel = () => {
-	const classes = { 'label-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${labelWidth || 2}`] = true
-	}
+const { validation } = useValidation(validations, required)
+
+const getClassInput = () => {
+	const classes = {}
+	if (shadow) classes[`shadow-${shadow}`] = true
 	return classes
 }
 
-const getClassFormKitInput = () => {
-	const classes = { 'form-kit-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${6 - labelWidth || 4}`] = true
-	}
-	return classes
-}
+const min = computed(() => {
+	const minDateObj = parse(minDate, 'yyyy-MM-dd', new Date())
+	return format(minDateObj, timePrecision ? "yyyy-MM-dd'T'HH:mm" : 'yyyy-MM-dd')
+})
 
-const clickLabel = () => {
-	const input = dateInput.value.querySelector('.formkit-input')
-	input.focus()
-}
+const max = computed(() => {
+	const maxDateObj = parse(maxDate, 'yyyy-MM-dd', new Date())
+	return format(maxDateObj, timePrecision ? "yyyy-MM-dd'T'HH:mm" : 'yyyy-MM-dd')
+})
 
-onMounted(() => {
-	if (required) {
-		validates.value = 'required'
-	}
-	if (regex) {
-		validates.value += `|matches:${new RegExp(regex)}`
-		errorsMessage.value.matches = errorMessage
-	}
-	text.value = defaultValue || ''
-	emit('reset', !!reset)
-
-	if (autoFocus || disable) {
-		const input = dateInput.value.querySelector('.formkit-input')
-		autoFocus && input.focus()
-		if (disable) {
-			input.setAttribute('readonly', true)
-			input.style.backgroundColor = '#E5E8E8'
-			input.blur()
-		}
-	}
-	if (borderRadius) {
-		const inner = dateInput.value.querySelector('.formkit-inner')
-		const input = dateInput.value.querySelector('.formkit-input')
-		const wrapper = dateInput.value.querySelector('.formkit-wrapper')
-		wrapper.style.borderRadius = `${borderRadius}px`
-		inner.style.borderRadius = `${borderRadius}px`
-		if (!leftIcon && !rightIcon) input.style.border = 'none'
-	}
-	if (minDate) {
-		const minDateObj = parse(minDate, 'yyyy-MM-dd', new Date())
-		min.value = format(
-			minDateObj,
-			timePrecision ? "yyyy-MM-dd'T'HH:mm" : 'yyyy-MM-dd'
-		)
-	}
-	if (maxDate) {
-		const maxDateObj = parse(maxDate, 'yyyy-MM-dd', new Date())
-		max.value = format(
-			maxDateObj,
-			timePrecision ? "yyyy-MM-dd'T'HH:mm" : 'yyyy-MM-dd'
-		)
-	}
-	if (timePrecision) {
-		switch (timePrecision) {
-			case 'hh:mm':
-				step.value = 60
-				break
-
-			case 'hh:mm:ss':
-				step.value = 1
-				break
-		}
+const step = computed(() => {
+	switch (timePrecision) {
+		case 'hh:mm':
+			return 60
+		case 'hh:mm:ss':
+			return 1
 	}
 })
 </script>
@@ -216,7 +173,7 @@ onMounted(() => {
 		}
 	}
 	:deep().formkit-message {
-		position: absolute;
+		// position: absolute;
 		width: 100%;
 	}
 	:deep().formkit-inner {

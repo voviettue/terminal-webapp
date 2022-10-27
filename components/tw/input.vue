@@ -1,11 +1,19 @@
 <template>
-	<div :class="inputClass">
-		<div class="text-base flex items-center h-full bg-slate-200">
-			<span v-if="prefix" class="px-2 h-max">{{ prefix }}</span>
+	<div class="input" :class="inputClass">
+		<div
+			class="text-base flex items-center h-full bg-gray-50 border-r border-gray-200"
+		>
+			<span v-if="prefix" class="prefix px-2 h-max opacity-80">
+				{{ prefix }}
+			</span>
 			<slot v-else name="prefix" class="h-full px-2"></slot>
 		</div>
 		<div class="text-xl flex items-center h-full">
-			<TwIcon v-if="prefixIcon" :name="prefixIcon" class="pl-2 h-max"></TwIcon>
+			<TwIcon
+				v-if="prefixIcon"
+				:name="prefixIcon"
+				class="pl-2 h-max opacity-80"
+			></TwIcon>
 			<slot v-else name="prefix-icon" class="h-full pl-2"></slot>
 		</div>
 
@@ -22,7 +30,7 @@
 			:max="max"
 			:min-length="minLength"
 			:max-length="maxLength"
-			class="h-full w-full border-none px-3 py-2 rounded relative focus:border-none focus:outline-none"
+			class="h-full w-full border-none px-3 py-2 rounded relative focus:border-none outline-none"
 			:class="[readonly ? 'bg-slate-200 ' : '']"
 			:autofocus="autofocus"
 			@blur="emit('blur', $event)"
@@ -104,6 +112,7 @@ const inputClass = [
 	'w-full',
 	'bg-white',
 	'h-9',
+	'text-gray-800',
 	props.disabled
 		? 'bg-slate-200 opacity-50 pointer-events-none cursor-not-allowed'
 		: '',
@@ -112,4 +121,17 @@ const inputClass = [
 	attrs?.class,
 ]
 </script>
-<style scoped></style>
+<style scoped>
+.input {
+	font-family: 'Inter';
+}
+
+.input:focus-within {
+	@apply ring-indigo-500;
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+		var(--tw-shadow);
+	border-color: #2563eb;
+}
+</style>

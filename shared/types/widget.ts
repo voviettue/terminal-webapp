@@ -1,5 +1,6 @@
 export interface Widget {
 	id: number
+	key: string
 	name: string
 	width: string
 	widget: string

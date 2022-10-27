@@ -9,7 +9,9 @@
 		:label-style="styleLabel"
 	>
 		<FormKit
-			v-model="text"
+			:id="widget.key"
+			v-model="value"
+			:name="name"
 			type="customInput"
 			:input-type="masked ? 'password' : 'text'"
 			:validation="validation.rules"
@@ -18,7 +20,6 @@
 			:placeholder="placeholder"
 			:maxlength="maxLength"
 			:minlength="minLength"
-			:name-id="label"
 			:readonly="readonly"
 			:disabled="disabled"
 			:suffix="suffix"
@@ -26,9 +27,9 @@
 			:prefix-icon="prefixIcon"
 			:suffix-icon="suffixIcon"
 			:autofocus="autoFocus"
-			:input-custom-class="getClassInput()"
-			:input-style="{
-				borderRadius: `${borderRadius}px`,
+			:class="getClassInput()"
+			:style="{
+				borderRadius: borderRadius ?? undefined,
 			}"
 			:help="helpText"
 			@input="onChangeText"
@@ -37,13 +38,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, watch, defineEmits } from 'vue'
+import { ref, watch, defineEmits } from 'vue'
 import { TextInputWidget } from '~/shared/types'
 import { useValidation } from '~/composables/use-validation'
+import { strToSlug } from '~~/utils/str-to-slug'
 
 interface Props {
 	widget: TextInputWidget
 }
+
+const emit = defineEmits(['input', 'reset'])
 const props: any = defineProps<Props>()
 const {
 	defaultValue,
@@ -76,22 +80,28 @@ const {
 	helpText,
 	labelFontStyle,
 } = props.widget.options
-const emit = defineEmits(['input', 'reset'])
-const text: Ref<string> = ref(defaultValue || '')
+
+const value = ref(defaultValue)
+const name = strToSlug(props.widget.name || '')
+
+const { result } = useBindData(defaultValue)
+watch([result], () => {
+	value.value = result.value
+})
 
 const { getStyles } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
 
-watch(text, (newValue) => {
+watch(value, (newValue) => {
 	if (trim) {
-		text.value = newValue.trim()
+		value.value = newValue.trim()
 	}
 })
 const onChangeText = (val) => {
 	emit('input', val)
 	if (!onChange) return
-	const context = { ...pageStore.context, ...props.widget.context }
+	const context = { ...pageStore.context, ...props.widget.context, $value: val }
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
 	const fn = AsyncFunction(...Object.keys(context), onChange)

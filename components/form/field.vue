@@ -6,7 +6,7 @@
 			'form-item',
 		]"
 	>
-		<div :class="getClassLabel()">
+		<div :class="labelClass">
 			<label
 				v-if="!hideLabel"
 				:for="nameId"
@@ -16,7 +16,7 @@
 				{{ label }}
 			</label>
 		</div>
-		<div :class="getClassSlot()">
+		<div class="space-y-4" :class="classSlot">
 			<slot></slot>
 		</div>
 	</div>
@@ -41,24 +41,26 @@ const props = withDefaults(defineProps<Props>(), {
 	hideLabel: false,
 	labelAlignment: 'left',
 })
-const getClassLabel = () => {
-	const classes = {
-		flex: true,
-		'items-start': true,
-	}
-	if (props.labelPosition === 'left') classes[`grid-${props.labelWidth}`] = true
-	if (props.labelAlignment === 'left') classes['justify-start'] = true
-	else classes['justify-end'] = true
-	return classes
+
+const labelWidth = props.labelPosition === 'top' ? 6 : props.labelWidth
+const inputWidth = props.labelPosition === 'top' ? 6 : 6 - labelWidth
+
+const labelClass = {
+	'flex items-start': true,
+	[`grid-${labelWidth}`]: true,
+	'justify-end': props.labelAlignment === 'right',
+	'!justify-start':
+		props.labelPosition === 'top' || props.labelAlignment === 'left',
 }
-const getClassSlot = () => {
-	const classes = { 'slot-field': true }
-	if (props.labelPosition === 'left')
-		classes[`grid-${6 - props.labelWidth}`] = true
-	return classes
+
+const classSlot = {
+	'slot-field': true,
+	[`grid-${inputWidth}`]: true,
 }
 </script>
+
 <style lang="scss">
+// @TODO: use common css class
 .form-item {
 	display: grid;
 	grid-template-columns: repeat(6, minmax(0, 1fr));

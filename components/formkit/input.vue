@@ -1,10 +1,11 @@
 <template>
 	<TwInput
+		:id="context?.id"
+		:name="context.node.name"
 		:model-value="context._value"
 		:input-type="context.inputType"
 		:placeholder="context.placeholder"
 		:autocomplete="context.autocomplete"
-		:name-id="context.nameId"
 		:readonly="context.readonly"
 		:disabled="context.disabled"
 		:prefix-icon="context.prefixIcon"
@@ -16,9 +17,9 @@
 		:show-work-limit="context.showWorkLimit"
 		:prefix="context.prefix"
 		:suffix="context.suffix"
-		:input-style="context.inputStyle"
+		:style="context.style"
 		:autofocus="context.autofocus"
-		:input-custom-class="context.inputCustomClass"
+		:class="context.class"
 		@change="handleChange"
 		@blur="handleBlur"
 		@update:model-value="updateValue"
@@ -29,6 +30,7 @@ import TwInput from '../tw/input.vue'
 interface Props {
 	context: any
 }
+
 const handleChange = ($event) => {
 	if (typeof props.context.attrs.onChange === 'function')
 		props.context.attrs.onChange($event)

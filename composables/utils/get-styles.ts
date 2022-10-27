@@ -43,7 +43,7 @@ export default function getStyles(options: Record<string, any>): CSSProperties {
 			ratioWidth && ratioHeight ? `${ratioWidth}/${ratioHeight}` : null,
 		'object-fit': objectFit ?? null,
 		transform: zoom ? `scale(${zoom})` : null,
-		'border-radius': borderRadius ?? null,
+		'border-radius': `${borderRadius}px` ?? null,
 		'text-transform': textTransform ?? null,
 		height,
 		width: width ?? null,

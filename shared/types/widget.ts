@@ -186,3 +186,8 @@ export interface SelectWidget extends InputWidget {
 	choices: Record<string, string | number>[]
 	alignment?: string
 }
+
+export interface TagsWidget extends Widget {
+	delimiter?: string
+	allowWrap?: boolean
+}

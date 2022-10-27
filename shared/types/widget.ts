@@ -207,3 +207,16 @@ export interface TabsWidget extends Widget {
 	borderRadius?: string
 	onTabSelected: string
 }
+
+export interface DatetimeInputWidget extends InputWidget {
+	minLength?: number
+	rightIcon?: string
+	errorMessage?: string
+	alignment?: string
+	autoFocus?: boolean
+	reset?: boolean
+	tooltip?: string
+	minDate?: string
+	maxDate?: string
+	timePrecision?: string
+}

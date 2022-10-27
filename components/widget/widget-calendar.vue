@@ -44,7 +44,7 @@
 					<FormKit
 						v-model="view"
 						type="select"
-						name="small_country"
+						name="calendarView"
 						:options="[
 							{ label: 'Month view', value: 'dayGridMonth' },
 							{ label: 'Week view', value: 'timeGridWeek' },

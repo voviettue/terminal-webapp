@@ -186,3 +186,19 @@ export interface SelectWidget extends InputWidget {
 	choices: Record<string, string | number>[]
 	alignment?: string
 }
+
+export interface TabItem {
+	key: string
+	label: string
+	hidden: boolean
+	icon?: string
+	widgets?: number[]
+}
+
+export interface TabsWidget extends Widget {
+	tabs: TabItem[]
+	tabDefault: string
+	border?: string
+	borderRadius?: string
+	onTabSelected: string
+}

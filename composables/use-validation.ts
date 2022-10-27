@@ -1,7 +1,7 @@
 import { Ref } from 'vue'
 
 interface Validation {
-	rules: any[]
+	rules: string
 	messages: Record<string, any>
 }
 
@@ -9,12 +9,12 @@ export const useValidation = (
 	validations: Record<string, any>[],
 	required: boolean
 ) => {
-	const validation: Ref<Validation> = ref({ rules: [], messages: {} })
+	const validation: Ref<Validation> = ref({ rules: '', messages: {} })
 	const booleanRules = ['accepted', 'email', 'number', 'required', 'url']
 	watchEffect(() => {
-		validation.value.rules = []
+		validation.value.rules = ''
 		validation.value.messages = {}
-
+		let rules = []
 		for (const v of validations) {
 			let value = v.value
 			if (v.rule === 'matches') {
@@ -22,18 +22,24 @@ export const useValidation = (
 			}
 
 			if (booleanRules.includes(v.rule)) {
-				validation.value.rules.unshift([v.rule])
+				rules.unshift([v.rule])
 			} else {
-				validation.value.rules.push([v.rule, value])
+				rules.push([v.rule, value])
 			}
-
 			if (v.errorMessage) {
 				validation.value.messages[v.rule] = v.errorMessage
 			}
 		}
 		if (required) {
-			validation.value.rules.unshift(['required'])
+			if (rules.join('').includes('required'))
+				rules = rules.filter(
+					(v) => JSON.stringify(v) !== JSON.stringify(['required'])
+				)
+			rules.unshift(['required'])
 		}
+		validation.value.rules = rules
+			.map((rule: string[]) => rule.join(':'))
+			.join('|')
 	})
 	return { validation }
 }

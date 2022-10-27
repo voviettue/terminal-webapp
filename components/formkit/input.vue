@@ -1,6 +1,6 @@
 <template>
 	<TwInput
-		:value="context._value"
+		:model-value="context._value"
 		:input-type="context.inputType"
 		:placeholder="context.placeholder"
 		:autocomplete="context.autocomplete"

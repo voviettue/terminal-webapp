@@ -1,21 +1,25 @@
 <template>
 	<div class="input" :class="inputClass">
-		<div
-			class="text-base flex items-center h-full bg-gray-50 border-r border-gray-200"
-		>
-			<span v-if="prefix" class="prefix px-2 h-max opacity-80">
-				{{ prefix }}
-			</span>
-			<slot v-else name="prefix" class="h-full px-2"></slot>
-		</div>
-		<div class="text-xl flex items-center h-full">
-			<TwIcon
-				v-if="prefixIcon"
-				:name="prefixIcon"
-				class="pl-2 h-max opacity-80"
-			></TwIcon>
-			<slot v-else name="prefix-icon" class="h-full pl-2"></slot>
-		</div>
+		<slot name="prefix" class="px-2">
+			<div
+				v-if="prefix"
+				class="flex items-center bg-gray-50 border-r border-gray-200"
+			>
+				<span class="prefix px-2 h-max opacity-80">
+					{{ prefix }}
+				</span>
+			</div>
+		</slot>
+		<slot name="prefix-icon" class="pl-2">
+			<div v-if="prefixIcon" class="text-xl flex items-center">
+				<TwIcon
+					v-if="prefixIcon"
+					:name="prefixIcon"
+					class="pl-2 h-max opacity-70"
+				></TwIcon>
+				<slot v-else name="prefix-icon" class="pl-2"></slot>
+			</div>
+		</slot>
 
 		<input
 			:id="id"
@@ -30,21 +34,30 @@
 			:max="max"
 			:min-length="minLength"
 			:max-length="maxLength"
-			class="h-full w-full border-none px-3 py-2 rounded relative focus:border-none outline-none"
+			class="w-full border-none px-3 py-2 rounded relative focus:border-none outline-none"
 			:class="[readonly ? 'bg-slate-200 ' : '']"
 			:autofocus="autofocus"
 			@blur="emit('blur', $event)"
 		/>
 
-		<div class="text-xl flex items-center h-full">
-			<TwIcon v-if="suffixIcon" :name="suffixIcon" class="pr-2 h-max"></TwIcon>
-			<slot v-else name="suffix-icon" class="h-full pr-2"></slot>
-		</div>
-		<div class="text-base flex items-center h-full bg-slate-200">
-			<span v-if="suffix" class="px-2 h-max">{{ suffix }}</span>
-			<slot v-else name="suffix" class="h-full px-2"></slot>
-		</div>
-		<slot class="h-full"></slot>
+		<slot name="suffix-icon" class="pr-2">
+			<div v-if="suffixIcon" class="text-xl flex items-center">
+				<TwIcon
+					v-if="suffixIcon"
+					:name="suffixIcon"
+					class="pr-2 h-max opacity-70"
+				></TwIcon>
+			</div>
+		</slot>
+
+		<slot name="suffix" class="px-2">
+			<div
+				v-if="suffix"
+				class="flex items-center bg-gray-50 border-l border-gray-200"
+			>
+				<span class="px-2 h-max opacity-80">{{ suffix }}</span>
+			</div>
+		</slot>
 	</div>
 </template>
 <script setup lang="ts">
@@ -109,9 +122,10 @@ const inputClass = [
 	'flex',
 	'justify-start',
 	'items-center',
+	'items-stretch',
 	'w-full',
 	'bg-white',
-	'h-9',
+	'leading-5',
 	'text-gray-800',
 	props.disabled
 		? 'bg-slate-200 opacity-50 pointer-events-none cursor-not-allowed'

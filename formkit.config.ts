@@ -4,7 +4,7 @@ import DropdownComponent from './components/formkit/dropdown.vue'
 import CustomInputComponent from './components/formkit/input.vue'
 
 const textClassification = {
-	outer: 'mb-5',
+	outer: '',
 	label: 'block text-sm font-medium text-gray-700 mb-1',
 	inner: 'rounded mb-1 overflow-hidden focus-within:border-blue-500',
 	input:
@@ -31,10 +31,10 @@ const boxClassification = {
 const theme = {
 	// the global key will apply to all inputs
 	global: {
-		outer: 'mb-5 formkit-disabled:opacity-50',
-		help: 'text-xs text-gray-500 mt-2',
-		messages: 'list-none p-0 mt-1 mb-0',
-		message: 'text-red-500 mb-1 text-xs',
+		outer: 'space-y-2 formkit-disabled:opacity-50',
+		help: 'text-xs text-gray-500',
+		messages: 'list-none p-0 space-y-1',
+		message: 'text-red-500 text-xs',
 	},
 	text: textClassification,
 	button: buttonClassification,

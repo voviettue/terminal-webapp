@@ -96,13 +96,14 @@ export interface ButtonWidget extends Widget {
 	buttonSize?: string
 	leftIcon?: string
 	rightIcon?: string
-	disable: boolean
+	disabled: boolean
 	buttonVariant?: string
 	borderRadius?: number
 	shadow?: string
 	position: string
 	outline?: boolean
 	onClick?: string
+	buttonType?: string
 }
 export interface IconButtonWidget extends Widget {
 	icon: string
@@ -148,14 +149,14 @@ export interface InputWidget extends Widget {
 	suffix?: string
 	helpText?: string
 	labelFontStyle?: string[]
+	validations?: Record<string, any>[]
+	prefixIcon?: string
+	suffixIcon?: string
 }
 
 export interface TextInputWidget extends InputWidget {
 	minLength?: number
 	maxLength?: number
-	validations?: Record<string, any>[]
-	prefixIcon?: string
-	suffixIcon?: string
 	trim?: boolean
 	masked?: boolean
 	regex?: string
@@ -170,14 +171,15 @@ export interface NumberInputWidget extends InputWidget {
 	minValue?: number
 	maxValue?: number
 	tooltip?: string
-	leftIcon?: string
-	rightIcon?: string
 	masked?: boolean
 	regex?: string
 	errorMessage?: string
 	alignment?: string
 	autoFocus?: boolean
 	reset?: boolean
+	decimalPlaces?: number
+	showThousandsSeparator?: boolean
+	stepInterval?: number
 }
 
 export interface SelectWidget extends InputWidget {

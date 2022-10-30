@@ -1,11 +1,5 @@
 <template>
-	<div
-		:class="[
-			'w-full',
-			labelPosition !== 'left' ? 'label-top' : 'label-left',
-			'form-item',
-		]"
-	>
+	<div :class="formFieldClass">
 		<div :class="labelClass">
 			<label
 				v-if="!hideLabel"
@@ -57,6 +51,14 @@ const classSlot = {
 	'slot-field': true,
 	[`grid-${inputWidth}`]: true,
 }
+const attrs = useAttrs()
+
+const formFieldClass = [
+	'w-full',
+	props.labelPosition !== 'left' ? 'label-top' : 'label-left',
+	'form-item',
+	attrs?.class,
+]
 </script>
 
 <style lang="scss">

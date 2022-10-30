@@ -1,6 +1,5 @@
 <template>
 	<FormField
-		v-tooltip="tooltip"
 		:label="label"
 		:label-position="labelPosition"
 		:label-alignment="alignment"
@@ -27,6 +26,7 @@
 			:prefix-icon="prefixIcon"
 			:suffix-icon="suffixIcon"
 			:autofocus="autoFocus"
+			:tooltip="tooltip"
 			:class="getClassInput()"
 			:style="{
 				borderRadius: borderRadius ?? undefined,
@@ -47,7 +47,7 @@ interface Props {
 	widget: TextInputWidget
 }
 
-const emit = defineEmits(['input', 'reset'])
+const emit = defineEmits(['input'])
 const props: any = defineProps<Props>()
 const {
 	defaultValue,
@@ -186,45 +186,6 @@ const getClassInput = () => {
 		}
 	}
 
-	&.tooltip {
-		position: relative;
-		word-wrap: break-word;
-		.tooltiptext {
-			visibility: hidden;
-			background-color: black;
-			color: #fff;
-			text-align: center;
-			border-radius: 6px;
-			padding: 5px;
-			position: absolute;
-			z-index: 1000;
-			top: -35px;
-			left: 50%;
-			opacity: 0;
-			transition: opacity 0.3s;
-			font-size: 12px;
-			font-style: normal;
-			font-weight: 400;
-			transform: translateX(-50%);
-			width: max-content;
-			&::after {
-				content: '';
-				position: absolute;
-				top: 100%;
-				left: 50%;
-				margin-left: -5px;
-				border-width: 5px;
-				border-style: solid;
-				border-color: #555 transparent transparent transparent;
-			}
-		}
-		&:hover {
-			.tooltiptext {
-				visibility: visible;
-				opacity: 1;
-			}
-		}
-	}
 	&.label-top {
 		.form-kit-input,
 		.label-input {

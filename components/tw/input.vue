@@ -1,5 +1,5 @@
 <template>
-	<div class="input" :class="inputClass">
+	<div v-tooltip="tooltip" class="input" :class="inputClass">
 		<slot name="prefix" class="px-2">
 			<div
 				v-if="prefix"
@@ -17,7 +17,6 @@
 					:name="prefixIcon"
 					class="pl-2 h-max opacity-70"
 				></TwIcon>
-				<slot v-else name="prefix-icon" class="pl-2"></slot>
 			</div>
 		</slot>
 
@@ -32,6 +31,7 @@
 			:disabled="disabled"
 			:min="min"
 			:max="max"
+			:step="step"
 			:min-length="minLength"
 			:max-length="maxLength"
 			class="w-full border-none px-3 py-2 rounded relative focus:border-none outline-none"
@@ -82,6 +82,8 @@ const props = withDefaults(
 		prefix?: string
 		suffix?: string
 		autofocus?: boolean
+		step?: number
+		tooltip?: string
 	}>(),
 	{
 		id: undefined,
@@ -101,6 +103,8 @@ const props = withDefaults(
 		prefix: '',
 		suffix: '',
 		autofocus: false,
+		step: 1,
+		tooltip: '',
 	}
 )
 // @TODO: use attributes for min/max/minLength/maxLength/.....

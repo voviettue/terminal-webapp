@@ -21,6 +21,7 @@
 		:style="context.style"
 		:autofocus="context.autofocus"
 		:class="context.class"
+		:tooltip="context.tooltip"
 		@change="handleChange"
 		@blur="handleBlur"
 		@update:model-value="updateValue"

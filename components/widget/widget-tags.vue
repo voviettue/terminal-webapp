@@ -34,28 +34,37 @@ const { result: rawData } = useBindData(
 	props.widget?.context
 )
 
-const values = computed(() => {
-	const parsedValue = parseJson(rawData.value)
-	const regex = new RegExp(`[${delimiter ?? ','}]`, 'g')
-	return Array.isArray(parsedValue) ? parsedValue : parsedValue.split(regex)
-})
+const values = ref([])
+watch(
+	rawData,
+	() => {
+		const parsedValue = parseJson(rawData.value)
+		const regex = new RegExp(`[${delimiter ?? ','}]`, 'g')
+		values.value = Array.isArray(parsedValue)
+			? parsedValue
+			: parsedValue.split(regex)
+	},
+	{ immediate: true }
+)
 
-const items = values.value
-	.map((value) => {
-		if (typeof value === 'object') value = JSON.stringify(value)
+const items = computed(() => {
+	return values.value
+		.map((value) => {
+			if (typeof value === 'object') value = JSON.stringify(value)
 
-		const item = (conditions || []).find((condition: any) => {
-			return matchCondition(
-				{ operator: condition.operator, value: condition.value },
-				value
-			)
+			const item = (conditions || []).find((condition: any) => {
+				return matchCondition(
+					{ operator: condition.operator, value: condition.value },
+					value
+				)
+			})
+
+			return {
+				value,
+				text: item?.text || value,
+				style: getStyles(item),
+			}
 		})
-
-		return {
-			value,
-			text: item?.text || value,
-			style: getStyles(item),
-		}
-	})
-	.filter((e) => !!e.value)
+		.filter((e) => !!e.value)
+})
 </script>

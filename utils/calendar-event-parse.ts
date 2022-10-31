@@ -37,12 +37,19 @@ export function calendarEventParse(item: any, options: any) {
 		}
 	}
 
+	const { title, textColor, backgroundColor } = renderDisplayTemplate(
+		item,
+		options
+	)
+
 	return {
 		id: item?.id,
-		title: renderDisplayTemplate(item, options),
+		title,
 		start: startDate,
 		end: endDate,
 		allDay,
+		backgroundColor,
+		textColor,
 	}
 }
 
@@ -51,6 +58,8 @@ function renderDisplayTemplate(
 	widgets: Record<string, any>
 ) {
 	const template = widgets?.displayTemplate
+	let backgroundColor = null
+	let textColor = null
 
 	const regex = /({{.*?}})/g
 	const newInnerHTML = template
@@ -69,6 +78,9 @@ function renderDisplayTemplate(
 				(e: any) => fieldKey === e?.conditionField && e?.value === value
 			)
 
+			backgroundColor = matchCondition?.dateBackground
+			textColor = matchCondition?.dateColor
+
 			const style = matchCondition?.background
 				? `"background-color:${matchCondition.background}; color:${
 						matchCondition?.textColor || 'unset'
@@ -79,5 +91,5 @@ function renderDisplayTemplate(
 		})
 		.join('')
 
-	return newInnerHTML
+	return { title: newInnerHTML, textColor, backgroundColor }
 }

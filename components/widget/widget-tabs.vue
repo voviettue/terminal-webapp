@@ -1,14 +1,14 @@
 <template>
 	<div :style="styles" class="bg-white px-4 py-6 sm:px-6 lg:px-8">
 		<div class="mx-auto max-w-7xl">
-			<TabGroup :selected-index="selectedIndex" @change="onTabSelected">
+			<TabGroup :selected-index="selectedIndex" @change="onChangeTab">
 				<div class="sm:hidden">
 					<FormKit
 						:value="selectedIndex"
 						type="select"
 						name="tabs"
 						:options="optionTabs"
-						@input="onTabSelected"
+						@input="onChangeTab"
 					></FormKit>
 				</div>
 				<div class="hidden sm:block">
@@ -70,6 +70,7 @@ interface Props {
 	widget: TabsWidget
 }
 const props: any = defineProps<Props>()
+const options = props.widget.options
 const widgets: Widget[] = inject('widgets')
 
 const { getStyles } = useUtils()
@@ -78,7 +79,7 @@ const pageStore = usePageStore()
 
 const tabs = ref([])
 const selectedIndex = ref(0)
-const styles = getStyles(props.widget?.options)
+const styles = getStyles(options)
 
 const optionTabs = computed(() => {
 	return (
@@ -98,16 +99,25 @@ function getListWidgetInTab(tab: TabItem) {
 	)
 }
 
-function onTabSelected(value) {
+async function onChangeTab(value) {
 	selectedIndex.value = value
 	const tab = tabs.value[value]
-
-	if (!props.widget?.onTabSelected) return
+	const selectedTab = options?.tabs?.[value]
+	const { onClick } = selectedTab
+	const { onChangeTab } = props.widget
 	const context = { ...pageStore.context, $item: tab }
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
-	const fn = AsyncFunction(...Object.keys(context), props.widget.onTabSelected)
-	fn(...Object.values(context))
+
+	if (onClick) {
+		const fn = AsyncFunction(...Object.keys(context), onClick)
+		await fn(...Object.values(context))
+	}
+
+	if (onChangeTab) {
+		const fn = AsyncFunction(...Object.keys(context), onChangeTab)
+		await fn(...Object.values(context))
+	}
 }
 
 // Handler logic

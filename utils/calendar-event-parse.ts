@@ -12,7 +12,7 @@ export function calendarEventParse(item: any, options: any) {
 	const startDate = parseDate(item[options?.startDateField])
 
 	if (
-		!options?.endDateField &&
+		!item[options?.endDateField] &&
 		isValid(startDate) &&
 		item[options?.startDateField]?.length < 12
 	) {
@@ -24,7 +24,7 @@ export function calendarEventParse(item: any, options: any) {
 		(item[options?.endDateField]?.length < 12 &&
 			parseDate(item[options?.endDateField]))
 
-	if (options?.endDateField) {
+	if (item[options?.endDateField]) {
 		if (allDay && isValid(allDay)) {
 			const date = parseDate(item[options?.endDateField])
 			// FullCalendar uses exclusive end moments, so we'll have to increment the end date by 1 to get the
@@ -37,12 +37,19 @@ export function calendarEventParse(item: any, options: any) {
 		}
 	}
 
+	const { title, textColor, backgroundColor } = renderDisplayTemplate(
+		item,
+		options
+	)
+
 	return {
 		id: item?.id,
-		title: renderDisplayTemplate(item, options),
+		title,
 		start: startDate,
 		end: endDate,
 		allDay,
+		backgroundColor,
+		textColor,
 	}
 }
 
@@ -51,6 +58,8 @@ function renderDisplayTemplate(
 	widgets: Record<string, any>
 ) {
 	const template = widgets?.displayTemplate
+	let backgroundColor = null
+	let textColor = null
 
 	const regex = /({{.*?}})/g
 	const newInnerHTML = template
@@ -69,6 +78,9 @@ function renderDisplayTemplate(
 				(e: any) => fieldKey === e?.conditionField && e?.value === value
 			)
 
+			backgroundColor = matchCondition?.dateBackground
+			textColor = matchCondition?.dateColor
+
 			const style = matchCondition?.background
 				? `"background-color:${matchCondition.background}; color:${
 						matchCondition?.textColor || 'unset'
@@ -79,5 +91,5 @@ function renderDisplayTemplate(
 		})
 		.join('')
 
-	return newInnerHTML
+	return { title: newInnerHTML, textColor, backgroundColor }
 }

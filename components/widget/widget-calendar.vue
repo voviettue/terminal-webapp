@@ -141,7 +141,7 @@
 			:options="calendarOptions"
 		>
 			<template #eventContent="context">
-				<span>
+				<span v-tooltip="{ content: context.event.title, allowHTML: true }">
 					<strong>{{ getTime(context) }}</strong>
 					<span class="ml-1" v-html="context.event.title"></span>
 				</span>
@@ -193,10 +193,10 @@ const calendarOptions = ref({
 	dayMaxEvents: true,
 	weekends: true,
 	themeSystem: 'bootstrap5',
+	contentHeight: null,
 	firstDay: props.widget?.firstDay || 0,
 	select: onDateClick,
 	eventClick: onItemClick,
-	contentHeight: null,
 })
 
 const { result: rawData } = useBindData(

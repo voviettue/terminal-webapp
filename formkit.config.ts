@@ -2,7 +2,7 @@ import { generateClasses } from '@formkit/themes'
 import { createInput } from '@formkit/vue'
 import DropdownComponent from './components/formkit/dropdown.vue'
 import CustomInputComponent from './components/formkit/input.vue'
-
+import CustomButtonComponet from './components/formkit/button.vue'
 const textClassification = {
 	outer: '',
 	label: 'block text-sm font-medium text-gray-700 mb-1',
@@ -121,6 +121,24 @@ export default {
 				'suffix',
 				'style',
 				'autofocus',
+				'class',
+				'step',
+				'tooltip',
+			],
+		}),
+		customButton: createInput(CustomButtonComponet, {
+			props: [
+				'variant',
+				'disabled',
+				'prefix',
+				'suffix',
+				'leftIcon',
+				'rightIcon',
+				'buttonType',
+				'size',
+				'tooltip',
+				'text',
+				'style',
 				'class',
 			],
 		}),

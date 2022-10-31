@@ -1,13 +1,6 @@
 <template>
-	<div
-		:class="[
-			'flex',
-			position === 'left'
-				? 'justify-start'
-				: position === 'right'
-				? 'justify-end'
-				: 'justify-center',
-		]"
+	<!-- <div
+		
 	>
 		<button
 			type="button"
@@ -25,7 +18,27 @@
 			{{ text }}
 			<TwIcon v-if="rightIcon" :name="rightIcon" class="ml-1" />
 		</button>
-	</div>
+	</div> -->
+	<FormField>
+		<div :class="buttonClass">
+			<FormKit
+				type="customButton"
+				:disabled="disabled"
+				:left-icon="leftIcon"
+				:right-icon="rightIcon"
+				:variant="buttonVariant"
+				:size="buttonSize"
+				:style="{
+					borderRadius: borderRadius || '0px',
+				}"
+				:class="[`shadow-${shadow || null}`]"
+				:button-type="buttonType"
+				@click="onButtonClick"
+			>
+				{{ text }}
+			</FormKit>
+		</div>
+	</FormField>
 </template>
 
 <script setup lang="ts">
@@ -44,15 +57,25 @@ const {
 	label,
 	buttonVariant,
 	position,
-	outline,
 	buttonSize,
 	shadow,
 	borderRadius,
 	onClick,
-	disable,
+	disabled,
+	buttonType,
 } = (props.widget?.options || {}) as Partial<ButtonWidget>
 
 const { result: text } = useBindData(label, props.widget?.context)
+
+const buttonClass = [
+	'w-full',
+	'flex',
+	position === 'left'
+		? 'justify-start'
+		: position === 'right'
+		? 'justify-end'
+		: 'justify-center',
+]
 
 function onButtonClick() {
 	if (!onClick) return

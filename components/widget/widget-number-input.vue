@@ -1,75 +1,69 @@
-<!-- eslint-disable vue/attributes-order -->
 <template>
-	<div
-		:class="[
-			'form-number-input',
-			alignment === 'right' ? 'align-right' : '',
-			leftIcon || rightIcon ? 'has-icon' : '',
-			disable ? 'readonly' : '',
-			labelPosition !== 'left' ? 'label-top' : 'label-left',
-			'w-full',
-			tooltip ? 'tooltip' : '',
-		]"
-		ref="textInput"
+	<FormField
+		:label="label"
+		:label-position="labelPosition"
+		:label-alignment="alignment"
+		:hide-label="hideLabel"
+		:label-width="labelWidth"
+		:label-style="styleLabel"
 	>
-		<div :class="getClassLabel()" :style="styleLabel" @click="clickLabel">
-			<span>{{ label }}</span>
-		</div>
-		<div :class="getClassFormKitInput()">
-			<FormKit
-				v-model="text"
-				:type="masked ? 'password' : 'number'"
-				:validation="validates"
-				:placeholder="placeholder"
-				:min="minValue"
-				:max="maxValue"
-				:name="label"
-				validation-visibility="live"
-				:validation-messages="errorsMessage"
-				@input="onChangeText"
-				:wrapper-class="getWrapperClass"
-			>
-				<template v-if="leftIcon" #prefixIcon>
-					<TwIcon :name="leftIcon" class="mx-2" />
-				</template>
-				<template v-if="rightIcon" #suffixIcon>
-					<TwIcon :name="rightIcon" class="mx-2" />
-				</template>
-			</FormKit>
-		</div>
-		<span v-if="tooltip" class="tooltiptext">{{ tooltip }}</span>
-	</div>
+		<FormKit
+			:id="widget.key"
+			v-model="value"
+			:name="name"
+			type="customInput"
+			:input-type="masked ? 'password' : 'number'"
+			:validation="validation.rules"
+			:validation-messages="validation.messages"
+			validation-visibility="live"
+			:placeholder="placeholder"
+			:min="minValue"
+			:max="maxValue"
+			:readonly="readonly"
+			:disabled="disabled"
+			:suffix="suffix"
+			:prefix="prefix"
+			:prefix-icon="prefixIcon"
+			:suffix-icon="suffixIcon"
+			:autofocus="autoFocus"
+			:step="stepInterval"
+			:tooltip="tooltip"
+			:class="getClassInput()"
+			:style="{
+				borderRadius: borderRadius ?? undefined,
+			}"
+			:help="helpText"
+			@input="onChangeText"
+			@blur="onBlurText"
+		></FormKit>
+	</FormField>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted, defineEmits } from 'vue'
+import { ref, defineEmits } from 'vue'
 import { NumberInputWidget } from '~/shared/types'
-
+import { useValidation } from '~/composables/use-validation'
+import { strToSlug } from '~~/utils/str-to-slug'
 interface Props {
 	widget: NumberInputWidget
 }
 
-const emit = defineEmits(['input', 'reset'])
-const text: Ref<string> = ref('')
 const props: any = defineProps<Props>()
-const { getStyles } = useUtils()
-const { usePageStore } = useStore()
-const pageStore = usePageStore()
 // const options = ref(props.widget.options)
-const validates = ref('')
-const errorsMessage: Ref<Record<string, any>> = ref({})
 const {
 	defaultValue,
 	required,
+	hideLabel,
 	minValue,
 	maxValue,
 	placeholder,
-	leftIcon,
-	rightIcon,
+	prefixIcon,
+	readonly,
+	suffixIcon,
 	masked,
-	disable,
-	regex,
-	errorMessage,
+	disabled,
+	validations = [],
+	labelFontStyle,
 	label,
 	labelPosition,
 	alignment,
@@ -78,14 +72,48 @@ const {
 	labelFontFamily,
 	labelWidth,
 	onChange,
+	stepInterval = 1,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	borderRadius,
+	suffix,
+	prefix,
 	shadow,
+	helpText,
 	autoFocus,
-	reset,
 	tooltip,
+	showThousandsSeparator,
+	decimalPlaces,
 } = props.widget.options as NumberInputWidget
-const textInput = ref(null)
+const value = ref(defaultValue)
+const name = strToSlug(props.widget.name || '')
+const { result } = useBindData(defaultValue as string)
+watch([result], () => {
+	value.value = result.value
+})
+// Need advice from Mr. Dat
+const onBlurText = (event) => {
+	const val = event.target.value
+	if (decimalPlaces) {
+		value.value = Number(val).toFixed(decimalPlaces)
+	}
+	if (showThousandsSeparator) {
+		value.value = val.toLocaleString('en-US')
+	}
+}
+
+const { getStyles } = useUtils()
+const { usePageStore } = useStore()
+const pageStore = usePageStore()
+const emit = defineEmits(['input'])
+const { validation } = useValidation(validations, required)
+
+const styleLabel = getStyles({
+	textColor: labelColor,
+	textSize: labelSize,
+	fontFamily: labelFontFamily,
+	textStyle: labelFontStyle,
+})
+
 const onChangeText = (val) => {
 	emit('input', val)
 	if (!onChange) return
@@ -96,67 +124,11 @@ const onChangeText = (val) => {
 	fn(...Object.values(context))
 }
 
-const getWrapperClass = () => {
-	if (!shadow) return {}
-	const res = {}
-	res[`shadow-${shadow}`] = true
-	return res
-}
-
-const styleLabel = getStyles({
-	textColor: labelColor,
-	textSize: labelSize,
-	fontFamily: labelFontFamily,
-})
-const getClassLabel = () => {
-	const classes = { 'label-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${labelWidth || 2}`] = true
-	}
+const getClassInput = () => {
+	const classes = {}
+	if (shadow) classes[`shadow-${shadow}`] = true
 	return classes
 }
-
-const getClassFormKitInput = () => {
-	const classes = { 'form-kit-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${6 - labelWidth || 4}`] = true
-	}
-	return classes
-}
-
-const clickLabel = () => {
-	const input = textInput.value.querySelector('.formkit-input')
-	input.focus()
-}
-
-onMounted(() => {
-	if (required) {
-		validates.value = 'required'
-	}
-	if (regex) {
-		validates.value += `|matches:${new RegExp(regex)}`
-		errorsMessage.value.matches = errorMessage
-	}
-	text.value = defaultValue || ''
-	emit('reset', !!reset)
-	if (autoFocus || disable) {
-		const input = textInput.value.querySelector('.formkit-input')
-		autoFocus && input.focus()
-		if (disable) {
-			input.setAttribute('readonly', true)
-			input.style.backgroundColor = '#E5E8E8'
-			input.blur()
-		}
-	}
-	if (borderRadius) {
-		const inner = textInput.value.querySelector('.formkit-inner')
-		const input = textInput.value.querySelector('.formkit-input')
-		const wrapper = textInput.value.querySelector('.formkit-wrapper')
-		wrapper.style.borderRadius = `${borderRadius}px`
-		inner.style.borderRadius = `${borderRadius}px`
-		if (!leftIcon && !rightIcon) input.style.border = 'none'
-	}
-})
 </script>
 <style lang="scss" scoped>
 .form-number-input {
@@ -203,11 +175,6 @@ onMounted(() => {
 	:deep().formkit-outer {
 		width: 100%;
 	}
-	&.readonly {
-		:deep().formkit-outer {
-			pointer-events: none;
-		}
-	}
 	.label-input {
 		display: flex;
 		justify-content: flex-start;
@@ -220,45 +187,6 @@ onMounted(() => {
 		}
 	}
 
-	&.tooltip {
-		position: relative;
-		word-wrap: break-word;
-		.tooltiptext {
-			visibility: hidden;
-			background-color: black;
-			color: #fff;
-			text-align: center;
-			border-radius: 6px;
-			padding: 5px;
-			position: absolute;
-			z-index: 1000;
-			top: -35px;
-			left: 50%;
-			opacity: 0;
-			transition: opacity 0.3s;
-			font-size: 12px;
-			font-style: normal;
-			font-weight: 400;
-			transform: translateX(-50%);
-			width: max-content;
-			&::after {
-				content: '';
-				position: absolute;
-				top: 100%;
-				left: 50%;
-				margin-left: -5px;
-				border-width: 5px;
-				border-style: solid;
-				border-color: #555 transparent transparent transparent;
-			}
-		}
-		&:hover {
-			.tooltiptext {
-				visibility: visible;
-				opacity: 1;
-			}
-		}
-	}
 	&.label-top {
 		.form-kit-input,
 		.label-input {

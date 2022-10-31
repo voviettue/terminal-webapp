@@ -1,46 +1,53 @@
 <template>
-	<div :class="['flex', 'justify-start', 'items-center']">
+	<div v-tooltip="tooltip" :class="divClass">
 		<button :disabled="disabled" :class="buttonClass" @click="emit('click')">
-			<TwIcon v-if="leftIcon" :name="leftIcon" class="mr-1" />
-			<slot v-else name="leftIcon"></slot>
+			<slot name="left-icon" class="pr-2">
+				<div v-if="leftIcon" class="text-xl flex items-center">
+					<TwIcon :name="leftIcon" class="pr-2 h-max opacity-70"></TwIcon>
+				</div>
+			</slot>
+
 			{{ text }}
 			<slot></slot>
-			<TwIcon v-if="rightIcon" :name="rightIcon" class="ml-1" />
-			<slot v-else name="rightIcon"></slot>
+			<slot name="right-icon" class="pl-2">
+				<div v-if="rightIcon" class="text-xl flex items-center">
+					<TwIcon :name="rightIcon" class="pl-2 h-max opacity-70"></TwIcon>
+				</div>
+			</slot>
 		</button>
 	</div>
 </template>
 <script setup lang="ts">
 interface Props {
-	text?: string
-	variant: string
+	variant?: string
 	disabled?: boolean
-	rightIcon?: string
 	leftIcon?: string
-	shadow?: string
+	rightIcon?: string
 	type?: string
 	size?: string
+	tooltip?: string
+	text?: string
 }
 const props = withDefaults(defineProps<Props>(), {
-	text: '',
 	variant: 'primary',
 	disabled: false,
 	rightIcon: undefined,
 	leftIcon: undefined,
-	shadow: undefined,
 	type: 'solid',
 	size: 'md',
+	tooltip: '',
+	text: '',
 })
 const getTypeButton = () => {
 	const text = props.variant
 	if (props.type === 'solid') return text
 	return `${text}-${props.type}`
 }
+const divClass = ['flex', 'justify-start', 'items-center', 'overflow-hidden']
 const buttonClass = [
 	'btn',
 	`${props.size}`,
 	`${getTypeButton()}`,
-	`shadow-${props.shadow}`,
 	props.disabled ? 'disabled' : '',
 ]
 

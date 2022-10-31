@@ -3,7 +3,9 @@
 		<span
 			v-for="item in items"
 			:key="`text-${item.value}`"
-			class="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-800"
+			:class="`inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-800 shadow-${
+				shadow ?? 'md'
+			}`"
 			:style="{ ...styles, ...item.style }"
 		>
 			{{ item.text }}
@@ -22,6 +24,7 @@ interface Props {
 const props: any = defineProps<Props>()
 const { getStyles, parseJson } = useUtils()
 
+const { shadow } = props.widget.options
 const options = ref(props.widget.options)
 const styles = ref(getStyles(options.value))
 const { delimiter, allowWrap, conditions } = options.value

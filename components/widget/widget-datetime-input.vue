@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { ref, watch, defineEmits } from 'vue'
-import { parse, format } from 'date-fns'
+import { format } from 'date-fns'
 import { DatetimeInputWidget } from '~/shared/types'
 import { useValidation } from '~/composables/use-validation'
 import { strToSlug } from '~~/utils/str-to-slug'
@@ -83,12 +83,24 @@ const {
 	labelFontStyle,
 } = props.widget.options
 
-const value = ref(defaultValue)
+const formatDate = (value: string | number) => {
+	try {
+		return format(
+			new Date(value),
+			timePrecision ? "yyyy-MM-dd'T'HH:mm:ss" : 'yyyy-MM-dd'
+		)
+	} catch (e) {
+		return null
+	}
+}
+
+const value = ref(formatDate(defaultValue) ?? null)
 const name = strToSlug(props.widget.name || '')
 
 const { result } = useBindData(defaultValue)
 watch([result], () => {
-	value.value = result.value
+	const parsedValue = Date.parse(result.value.replaceAll('"', ''))
+	value.value = formatDate(parsedValue)
 })
 
 const { getStyles } = useUtils()
@@ -126,13 +138,11 @@ const getClassInput = () => {
 }
 
 const min = computed(() => {
-	const minDateObj = parse(minDate, 'yyyy-MM-dd', new Date())
-	return format(minDateObj, timePrecision ? "yyyy-MM-dd'T'HH:mm" : 'yyyy-MM-dd')
+	return formatDate(Date.parse(minDate))
 })
 
 const max = computed(() => {
-	const maxDateObj = parse(maxDate, 'yyyy-MM-dd', new Date())
-	return format(maxDateObj, timePrecision ? "yyyy-MM-dd'T'HH:mm" : 'yyyy-MM-dd')
+	return formatDate(Date.parse(maxDate))
 })
 
 const step = computed(() => {

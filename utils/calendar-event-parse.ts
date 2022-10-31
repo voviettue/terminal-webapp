@@ -45,6 +45,7 @@ export function calendarEventParse(item: any, options: any) {
 	return {
 		id: item?.id,
 		title,
+		item,
 		start: startDate,
 		end: endDate,
 		allDay,
@@ -57,7 +58,7 @@ function renderDisplayTemplate(
 	item: Record<string, any>,
 	widgets: Record<string, any>
 ) {
-	const template = widgets?.displayTemplate
+	const template = widgets?.displayTemplate || ''
 	let backgroundColor = null
 	let textColor = null
 

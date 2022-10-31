@@ -174,6 +174,7 @@ const view: Ref<string> = ref('')
 const calendarScreens: Ref<string> = ref('')
 
 const { parseJson } = useUtils()
+const { cloneDeep } = useLodash()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const borderRadius = ref('')
@@ -244,7 +245,10 @@ function action(actionName: string, params = null) {
 
 function onItemClick(item) {
 	if (!props.widget?.onItemClick) return
-	const context = { ...pageStore.context, $item: item.event }
+	const context = {
+		...pageStore.context,
+		$item: cloneDeep(item.event?.extendedProps?.item),
+	}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
 	const fn = AsyncFunction(...Object.keys(context), props.widget.onItemClick)
@@ -253,7 +257,7 @@ function onItemClick(item) {
 
 function onDateClick(item) {
 	if (!props.widget?.onDateClick) return
-	const context = { ...pageStore.context, $item: item.event }
+	const context = { ...pageStore.context, $value: item.startStr }
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const AsyncFunction = async function () {}.constructor
 	const fn = AsyncFunction(...Object.keys(context), props.widget.onDateClick)

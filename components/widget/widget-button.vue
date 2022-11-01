@@ -1,44 +1,22 @@
 <template>
-	<!-- <div
-		
-	>
-		<button
-			type="button"
-			:class="[
-				'btn',
-				`${buttonSize || 'md'}`,
-				`${buttonVariant || 'primary'}${outline ? '-outline' : ''}`,
-				`shadow-${shadow || null}`,
-				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
-			]"
-			:style="{ 'border-radius': borderRadius ? borderRadius + 'px' : '0px' }"
+	<div :class="buttonClass">
+		<FormKit
+			type="customButton"
+			:disabled="disabled"
+			:left-icon="leftIcon"
+			:right-icon="rightIcon"
+			:variant="buttonVariant"
+			:size="buttonSize"
+			:style="{
+				borderRadius: borderRadius || '0px',
+			}"
+			:class="[`shadow-${shadow || null}`]"
+			:button-type="buttonType"
 			@click="onButtonClick"
 		>
-			<TwIcon v-if="leftIcon" :name="leftIcon" class="mr-1" />
 			{{ text }}
-			<TwIcon v-if="rightIcon" :name="rightIcon" class="ml-1" />
-		</button>
-	</div> -->
-	<FormField>
-		<div :class="buttonClass">
-			<FormKit
-				type="customButton"
-				:disabled="disabled"
-				:left-icon="leftIcon"
-				:right-icon="rightIcon"
-				:variant="buttonVariant"
-				:size="buttonSize"
-				:style="{
-					borderRadius: borderRadius || '0px',
-				}"
-				:class="[`shadow-${shadow || null}`]"
-				:button-type="buttonType"
-				@click="onButtonClick"
-			>
-				{{ text }}
-			</FormKit>
-		</div>
-	</FormField>
+		</FormKit>
+	</div>
 </template>
 
 <script setup lang="ts">

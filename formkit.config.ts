@@ -100,7 +100,15 @@ export default {
 	},
 	inputs: {
 		dropdown: createInput(DropdownComponent, {
-			props: ['value', 'options', 'allowSearch', 'placeholder', 'disabled'],
+			props: [
+				'value',
+				'options',
+				'placeholder',
+				'disabled',
+				'class',
+				'style',
+				'icon',
+			],
 		}),
 		customInput: createInput(CustomInputComponent, {
 			props: [
@@ -124,6 +132,7 @@ export default {
 				'class',
 				'step',
 				'tooltip',
+				'pattern',
 			],
 		}),
 		customButton: createInput(CustomButtonComponet, {

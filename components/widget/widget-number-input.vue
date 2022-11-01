@@ -1,42 +1,47 @@
 <template>
-	<FormField
-		:label="label"
-		:label-position="labelPosition"
-		:label-alignment="alignment"
-		:hide-label="hideLabel"
-		:label-width="labelWidth"
-		:label-style="styleLabel"
-	>
-		<FormKit
-			:id="widget.key"
-			v-model="value"
-			:name="name"
-			type="customInput"
-			:input-type="masked ? 'password' : 'number'"
-			:validation="validation.rules"
-			:validation-messages="validation.messages"
-			validation-visibility="live"
-			:placeholder="placeholder"
-			:min="minValue"
-			:max="maxValue"
-			:readonly="readonly"
-			:disabled="disabled"
-			:suffix="suffix"
-			:prefix="prefix"
-			:prefix-icon="prefixIcon"
-			:suffix-icon="suffixIcon"
-			:autofocus="autoFocus"
-			:step="stepInterval"
-			:tooltip="tooltip"
-			:class="getClassInput()"
-			:style="{
-				borderRadius: borderRadius ?? undefined,
-			}"
-			:help="helpText"
-			@input="onChangeText"
-			@blur="onBlurText"
-		></FormKit>
-	</FormField>
+	<div ref="refNumber">
+		<FormField
+			ref="refNumber"
+			:label="label"
+			:label-position="labelPosition"
+			:label-alignment="alignment"
+			:hide-label="hideLabel"
+			:label-width="labelWidth"
+			:label-style="styleLabel"
+		>
+			<FormKit
+				:id="id"
+				v-model="value"
+				:name="name"
+				type="customInput"
+				input-type="text"
+				:validation="validation.rules"
+				:validation-messages="validation.messages"
+				validation-visibility="live"
+				:placeholder="placeholder"
+				:min="minValue"
+				:max="maxValue"
+				:readonly="readonly"
+				:disabled="disabled"
+				:suffix="suffix"
+				:prefix="prefix"
+				:prefix-icon="prefixIcon"
+				:suffix-icon="suffixIcon"
+				:autofocus="autoFocus"
+				:step="stepInterval"
+				:tooltip="tooltip"
+				:class="getClassInput()"
+				:style="{
+					borderRadius: borderRadius ?? undefined,
+				}"
+				:help="helpText"
+				pattern="\d*"
+				@input="onChangeText"
+				@blur="onBlurText"
+				@focus="handleFocus"
+			></FormKit>
+		</FormField>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -60,7 +65,6 @@ const {
 	prefixIcon,
 	readonly,
 	suffixIcon,
-	masked,
 	disabled,
 	validations = [],
 	labelFontStyle,
@@ -73,7 +77,6 @@ const {
 	labelWidth,
 	onChange,
 	stepInterval = 1,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	borderRadius,
 	suffix,
 	prefix,
@@ -82,23 +85,33 @@ const {
 	autoFocus,
 	tooltip,
 	showThousandsSeparator,
-	decimalPlaces,
+	decimalPlaces = 0,
 } = props.widget.options as NumberInputWidget
-const value = ref(defaultValue)
-const name = strToSlug(props.widget.name || '')
-const { result } = useBindData(defaultValue as string)
-watch([result], () => {
-	value.value = result.value
-})
-// Need advice from Mr. Dat
-const onBlurText = (event) => {
-	const val = event.target.value
+const formatingNumber = (val) => {
+	let text = ''
 	if (decimalPlaces) {
-		value.value = Number(val).toFixed(decimalPlaces)
+		text = Number.parseFloat(val).toFixed(decimalPlaces)
 	}
 	if (showThousandsSeparator) {
-		value.value = val.toLocaleString('en-US')
+		text = Number.parseFloat(val).toLocaleString('en-US', {
+			maximumFractionDigits: decimalPlaces,
+			minimumFractionDigits: decimalPlaces,
+		})
 	}
+	return text
+}
+
+const value = ref(formatingNumber(defaultValue))
+const name = strToSlug(props.widget.name || '')
+const id = computed(() => props.widget.key)
+const { result } = useBindData(defaultValue as string)
+watch([result], () => {
+	value.value = formatingNumber(result.value)
+})
+
+const onBlurText = (event) => {
+	const val = event.target.value
+	value.value = formatingNumber(val)
 }
 
 const { getStyles } = useUtils()
@@ -106,6 +119,7 @@ const { usePageStore } = useStore()
 const pageStore = usePageStore()
 const emit = defineEmits(['input'])
 const { validation } = useValidation(validations, required)
+const refNumber = ref(null)
 
 const styleLabel = getStyles({
 	textColor: labelColor,
@@ -129,6 +143,27 @@ const getClassInput = () => {
 	if (shadow) classes[`shadow-${shadow}`] = true
 	return classes
 }
+const handleFocus = ($event) => {
+	const val = $event.target.value as string
+	const num = val.replaceAll(',', '')
+	value.value = Number.parseFloat(num).toString()
+}
+onMounted(() => {
+	if (refNumber.value) {
+		const input = refNumber.value.querySelector(`#${props.widget.key}`)
+		input.onkeypress = (event) => {
+			const isNum = event.charCode >= 48 && event.charCode <= 57
+			if (event.target.value.includes('.')) return isNum
+			return isNum || event.charCode === 46
+		}
+		input.onkeyup = (event) => {
+			if (maxValue && Number.parseFloat(event.target.value) > maxValue)
+				event.target.value = maxValue
+			if (minValue && Number.parseFloat(event.target.value) < minValue)
+				event.target.value = minValue
+		}
+	}
+})
 </script>
 <style lang="scss" scoped>
 .form-number-input {

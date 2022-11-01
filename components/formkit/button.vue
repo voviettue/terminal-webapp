@@ -12,7 +12,13 @@
 		:style="context.style"
 		@click="handleClick"
 	>
-		{{ context.text ? '' : context.slots.default()?.[0].children }}
+		<template v-for="[s, v] in Object.entries(slots)" #[s]>
+			<component
+				:is="node"
+				v-for="(node, index) in v()"
+				:key="`node_${index}`"
+			></component>
+		</template>
 	</TwButton>
 </template>
 <script setup lang="ts">
@@ -21,6 +27,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {})
+const slots = props.context.slots as Record<string, () => any>
 const handleClick = ($event) => {
 	if (typeof props.context.attrs.onClick === 'function')
 		props.context.attrs.onClick($event)

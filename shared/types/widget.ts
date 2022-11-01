@@ -224,3 +224,18 @@ export interface DatetimeInputWidget extends InputWidget {
 	maxDate?: string
 	timePrecision?: string
 }
+
+export interface MenuButtonWidget extends Widget {
+	label?: string
+	buttonSize?: string
+	leftIcon?: string
+	rightIcon?: string
+	disabled: boolean
+	buttonVariant?: string
+	borderRadius?: number
+	shadow?: string
+	position: string
+	outline?: boolean
+	buttonType?: string
+	menuItems?: any
+}

@@ -1,5 +1,5 @@
 <template>
-	<div
+	<!-- <div
 		ref="select"
 		:class="[
 			'form-select-input',
@@ -12,22 +12,40 @@
 			<span>{{ label }}</span>
 		</div>
 		<div :class="getClassFormKitInput()">
+			
+		</div>
+	</div> -->
+
+	<FormField
+		:label="label"
+		:label-position="labelPosition"
+		:label-alignment="alignment"
+		:hide-label="hideLabel"
+		:label-width="labelWidth"
+		:label-style="styleLabel"
+	>
+		<div ref="selectRef">
 			<FormKit
-				v-model="text"
+				v-model="value"
 				type="dropdown"
-				:validation="validates"
+				:validation="validation.rules"
+				:validation-messages="validation.messages"
+				validation-visibility="live"
 				:placeholder="placeholder"
 				:options="choices"
 				:name="label"
-				:disabled="disable"
-				:allow-search="allowSearching"
-				validation-visibility="live"
-				:wrapper-class="getWrapperClass"
+				:disabled="disabled"
 				inner-class="!border-none"
+				:help="helpText"
+				:class="classDropDown"
+				:style="{
+					borderRadius: borderRadius,
+				}"
+				:icon="icon"
 				@input="onChangeText"
 			></FormKit>
 		</div>
-	</div>
+	</FormField>
 </template>
 
 <script setup lang="ts">
@@ -44,27 +62,39 @@ const { getStyles } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
 // const options = ref(props.widget.options)
-const validates = ref('')
 const {
 	defaultValue,
 	required,
 	placeholder,
-	disable,
+	disabled,
 	label,
 	labelPosition,
 	alignment,
 	labelColor,
 	labelSize,
 	labelFontFamily,
+	labelFontStyle,
 	labelWidth,
 	onChange,
 	borderRadius,
 	shadow,
 	allowOther,
 	allowSearching,
+	hideLabel,
 	choices,
+	allowNone,
+	validations = [],
+	helpText,
+	icon,
 } = props.widget.options as SelectWidget
-const text: Ref<string | number> = ref(defaultValue)
+const value: Ref<string | number> = ref(defaultValue)
+const { validation } = useValidation(validations, required)
+
+const { result } = useBindData(defaultValue as string)
+watch([result], () => {
+	value.value = result.value
+})
+
 const onChangeText = (val) => {
 	emit('input', val)
 	if (!onChange) return
@@ -75,54 +105,35 @@ const onChangeText = (val) => {
 	fn(...Object.values(context))
 }
 
-const getWrapperClass = () => {
-	const res = { 'border-none': true }
-	if (!shadow) return res
-
-	res[`shadow-${shadow}`] = true
-	return res
-}
-
 const styleLabel = getStyles({
 	textColor: labelColor,
 	textSize: labelSize,
 	fontFamily: labelFontFamily,
+	textStyle: labelFontStyle,
 })
 
-const getClassLabel = () => {
-	const classes = { 'label-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${labelWidth || 2}`] = true
-	}
+const selectRef = ref(null)
+
+const classDropDown = () => {
+	const classes = {}
+	classes[`shadow-${shadow || null}`] = true
 	return classes
 }
-
-const getClassFormKitInput = () => {
-	const classes = { 'form-kit-input': true }
-	if (labelPosition === 'left') {
-		classes[`grid-${6 - labelWidth || 4}`] = true
-	}
-	return classes
-}
-
-const select = ref(null)
 
 onMounted(() => {
-	choices.unshift({
-		text: 'Select',
-		value: null,
-	})
+	if (allowNone && !choices.find((_) => _.value === null))
+		choices.unshift({
+			text: 'Select',
+			value: null,
+		})
 	if (allowOther && !choices.find((_) => _.value === 'other'))
 		choices.push({
 			text: 'Other',
 			value: 'other',
 		})
-	if (!required) {
-		validates.value = 'required'
-	}
-	if (borderRadius) {
-		const input = select.value.querySelector('.input-select')
-		input.style.borderRadius = `${borderRadius}px`
+	if (selectRef.value && !allowSearching) {
+		const input: HTMLElement = selectRef.value.querySelector('.input-select')
+		input.setAttribute('readonly', 'readonly')
 	}
 })
 </script>

@@ -34,10 +34,12 @@
 			:step="step"
 			:min-length="minLength"
 			:max-length="maxLength"
+			:pattern="pattern"
 			class="w-full border-none px-3 py-2 rounded relative focus:border-none outline-none"
 			:class="[readonly ? 'bg-slate-200 ' : '']"
 			:autofocus="autofocus"
 			@blur="emit('blur', $event)"
+			@focus="emit('focus', $event)"
 		/>
 
 		<slot name="suffix-icon" class="pr-2">
@@ -84,6 +86,7 @@ const props = withDefaults(
 		autofocus?: boolean
 		step?: number
 		tooltip?: string
+		pattern?: string
 	}>(),
 	{
 		id: undefined,
@@ -105,11 +108,12 @@ const props = withDefaults(
 		autofocus: false,
 		step: 1,
 		tooltip: '',
+		pattern: '.*',
 	}
 )
 // @TODO: use attributes for min/max/minLength/maxLength/.....
 const attrs = useAttrs()
-const emit = defineEmits(['update:modelValue', 'blur', 'change'])
+const emit = defineEmits(['update:modelValue', 'blur', 'change', 'focus'])
 
 const value = computed({
 	get() {

@@ -5,6 +5,9 @@
 		:allow-search="context.allowSearch"
 		:placeholder="context.placeholder"
 		:disabled="context.disabled"
+		:class="context.class"
+		:style="context.style"
+		:icon="context.icon"
 		@update:model-value="updateValue"
 	/>
 </template>

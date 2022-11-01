@@ -187,6 +187,8 @@ export interface SelectWidget extends InputWidget {
 	allowSearching?: boolean
 	choices: Record<string, string | number>[]
 	alignment?: string
+	allowNone?: boolean
+	icon?: string
 }
 
 export interface TagsWidget extends Widget {

@@ -141,10 +141,15 @@
 			:options="calendarOptions"
 		>
 			<template #eventContent="context">
-				<span v-tooltip="{ content: context.event.title, allowHTML: true }">
-					<strong>{{ getTime(context) }}</strong>
-					<span class="ml-1" v-html="context.event.title"></span>
-				</span>
+				<div
+					v-tooltip="{ content: context.event.title, allowHTML: true }"
+					class="text-truncate"
+				>
+					<span>
+						<strong>{{ getTime(context) }}</strong>
+						<span class="ml-1" v-html="context.event.title"></span>
+					</span>
+				</div>
 			</template>
 		</FullCalendar>
 	</div>

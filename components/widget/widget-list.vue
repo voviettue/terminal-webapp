@@ -6,8 +6,8 @@
 	>
 		<template v-for="(dataItem, index) in data">
 			<RenderWidget
-				v-for="childWidget in childWidgets"
-				:key="`widget-${index}-${childWidget.id}`"
+				v-for="(childWidget, key) in childWidgets"
+				:key="`widget-item-${index}-${key}-${Math.random()}`"
 				:widget="addContext(childWidget, dataItem)"
 			></RenderWidget>
 		</template>

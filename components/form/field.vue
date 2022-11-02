@@ -57,6 +57,7 @@ const formFieldClass = [
 	'w-full',
 	props.labelPosition !== 'left' ? 'label-top' : 'label-left',
 	'form-item',
+	'items-baseline',
 	attrs?.class,
 ]
 </script>

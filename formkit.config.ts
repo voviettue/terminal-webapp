@@ -3,7 +3,6 @@ import { createInput } from '@formkit/vue'
 import DropdownComponent from './components/formkit/dropdown.vue'
 import CustomInputComponent from './components/formkit/input.vue'
 import CustomButtonComponet from './components/formkit/button.vue'
-import rules from './components/widget/custom-rules'
 
 const textClassification = {
 	outer: '',
@@ -146,5 +145,4 @@ export default {
 			],
 		}),
 	},
-	rules,
 }

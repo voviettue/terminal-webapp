@@ -106,10 +106,10 @@ const classDropDown = () => {
 }
 
 onMounted(() => {
-	if (allowNone && !choices.find((_) => _.value === null))
+	if (allowNone && !choices.find((_) => _.text === 'Select' && !_.value))
 		choices.unshift({
 			text: 'Select',
-			value: null,
+			value: undefined,
 		})
 	if (allowOther && !choices.find((_) => _.value === 'other'))
 		choices.push({

@@ -1,45 +1,51 @@
 <template>
-	<div ref="refNumber">
-		<FormField
-			:label="label"
-			:label-position="labelPosition"
-			:label-alignment="alignment"
-			:hide-label="hideLabel"
-			:label-width="labelWidth"
-			:label-style="styleLabel"
+	<FormField
+		:label="label"
+		:label-position="labelPosition"
+		:label-alignment="alignment"
+		:hide-label="hideLabel"
+		:label-width="labelWidth"
+		:label-style="styleLabel"
+	>
+		<FormKit
+			v-model="value"
+			type="number"
+			:validation="validation.rules"
+			:validation-messages="validation.messages"
+			:validation-label="label"
+			validation-visibility="dirty"
+			:autofocus="autoFocus"
+			:step="stepInterval"
+			:help="helpText"
 		>
-			<FormKit
-				:id="id"
-				v-model="value"
-				:name="name"
-				type="customInput"
-				input-type="text"
-				:validation="validation.rules"
-				:validation-messages="validation.messages"
-				:validation-label="label"
-				:placeholder="placeholder"
-				validation-visibility="dirty"
-				:readonly="readonly"
-				:disabled="disabled"
-				:suffix="suffix"
-				:prefix="prefix"
-				:prefix-icon="prefixIcon"
-				:suffix-icon="suffixIcon"
-				:autofocus="autoFocus"
-				:step="stepInterval"
-				:tooltip="tooltip"
-				:class="getClassInput()"
-				:style="{
-					borderRadius: borderRadius ?? undefined,
-				}"
-				:help="helpText"
-				pattern="\d*"
-				@input="onChangeText"
-				@blur="onBlurText"
-				@focus="handleFocus"
-			></FormKit>
-		</FormField>
-	</div>
+			<template #inner>
+				<div ref="refNumber">
+					<TwInput
+						:id="id"
+						v-model="formatedValue"
+						:name="name"
+						type="text"
+						:placeholder="placeholder"
+						:readonly="readonly"
+						:disabled="disabled"
+						:suffix="suffix"
+						:prefix="prefix"
+						:prefix-icon="prefixIcon"
+						:suffix-icon="suffixIcon"
+						:tooltip="tooltip"
+						:class="getClassInput()"
+						:style="{
+							borderRadius: borderRadius ?? undefined,
+						}"
+						pattern="\d*"
+						@input="onChangeText"
+						@blur="onBlurText"
+						@focus="handleFocus"
+					></TwInput>
+				</div>
+			</template>
+		</FormKit>
+	</FormField>
 </template>
 
 <script setup lang="ts">
@@ -98,20 +104,36 @@ const formatingNumber = (val) => {
 	}
 	return text
 }
-
-const value = ref(formatingNumber(defaultValue))
+const convertNumber = (val: string): number => {
+	const num = val.replaceAll(',', '')
+	return Number.parseFloat(num)
+}
+const value = ref(defaultValue)
+const formatedValue = ref(formatingNumber(defaultValue))
 const name = convertInputName(props.widget.name)
 const id = computed(() => props.widget.key)
 const { result } = useBindData(defaultValue as string)
 watch([result], () => {
-	value.value = formatingNumber(result.value)
+	value.value = result.value
+	formatedValue.value = formatingNumber(result.value)
 })
+
+watch(
+	() => formatedValue.value,
+	(newValue) => {
+		value.value = convertNumber(newValue)
+	}
+)
 
 const onBlurText = (event) => {
 	const val = event.target.value
-	value.value = formatingNumber(val)
+	formatedValue.value = formatingNumber(val)
 }
 
+const handleFocus = ($event) => {
+	const val = $event.target.value as string
+	formatedValue.value = convertNumber(val).toString()
+}
 const { getStyles } = useUtils()
 const { usePageStore } = useStore()
 const pageStore = usePageStore()
@@ -141,11 +163,7 @@ const getClassInput = () => {
 	if (shadow) classes[`shadow-${shadow}`] = true
 	return classes
 }
-const handleFocus = ($event) => {
-	const val = $event.target.value as string
-	const num = val.replaceAll(',', '')
-	value.value = Number.parseFloat(num).toString()
-}
+
 onMounted(() => {
 	if (refNumber.value) {
 		const input = refNumber.value.querySelector(`#${props.widget.key}`)
@@ -160,9 +178,6 @@ onMounted(() => {
 			if (!/^[0-9]+((.){1}[0-9]+)?$/i.test(text)) return false
 		}
 	}
-	validation.value.rules = validation.value.rules
-		.replace('min', 'minValue')
-		.replace('max', 'maxValue')
 })
 </script>
 <style lang="scss" scoped>

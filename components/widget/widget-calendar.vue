@@ -41,15 +41,15 @@
 					v-if="calendarScreens !== 'tablet' && calendarScreens !== 'mobile'"
 					class="select-view md:ml-4 md:ml-4 md:flex md:items-center"
 				>
-					<FormKit
-						v-model="view"
-						type="select"
-						name="calendarView"
+					<Dropdown
+						:value="view"
 						:options="[
-							{ label: 'Month view', value: 'dayGridMonth' },
-							{ label: 'Week view', value: 'timeGridWeek' },
-							{ label: 'Day view', value: 'timeGridDay' },
+							{ text: 'Month view', value: 'dayGridMonth' },
+							{ text: 'Week view', value: 'timeGridWeek' },
+							{ text: 'Day view', value: 'timeGridDay' },
 						]"
+						:allow-search="true"
+						@update:model-value="updateView"
 					/>
 				</div>
 				<Menu
@@ -166,6 +166,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import format from 'date-fns/format'
 import startOfDay from 'date-fns/startOfDay'
 import { calendarEventParse } from '../../utils/calendar-event-parse'
+import Dropdown from '../tw/dropdown.vue'
 import { CalendarWidget } from '~/shared/types'
 
 interface Props {
@@ -214,10 +215,6 @@ const calendarApi = computed(() => {
 	return calendar.value?.getApi()
 })
 
-watch(view, (val) => {
-	if (val) action('changeView', val)
-})
-
 watch(calendarScreens, (val) => {
 	calendarOptions.value.contentHeight = val === 'mobile' ? 350 : null
 })
@@ -236,6 +233,10 @@ watch(
 	},
 	{ immediate: true }
 )
+
+function updateView(val) {
+	if (val) action('changeView', val)
+}
 
 function getTitle() {
 	title.value = calendar.value?.calendar?.view?.title
@@ -303,12 +304,14 @@ function setCalendarScreens(width) {
 	}
 }
 
-onMounted(() => {
+onBeforeMount(() => {
+	view.value = props.widget?.defaultView || 'dayGridMonth'
 	borderRadius.value = (props.widget?.borderRadius || 0) + 'px'
-	view.value = props.widget?.defaultView
 	getTitle()
 	setCalendarScreens(calendar.value?.$el.offsetWidth)
+})
 
+onMounted(() => {
 	window.addEventListener('resize', _resizeHandler)
 })
 

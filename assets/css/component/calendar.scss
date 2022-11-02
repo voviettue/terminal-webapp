@@ -197,3 +197,19 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.select-view {
+	max-width: 8.5rem;
+	:deep(input) {
+		border-radius: 6px;
+		border-color: #e5e7eb;
+		&:focus-visible, &:focus {
+			outline: none;
+			border-color: #e5e7eb;
+			--tw-ring-opacity: 0;
+		}
+	}
+	&:focus-visible {
+		outline: none;
+	}
+}

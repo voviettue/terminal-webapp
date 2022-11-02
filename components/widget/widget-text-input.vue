@@ -25,7 +25,7 @@
 			:prefix="prefix"
 			:prefix-icon="prefixIcon"
 			:suffix-icon="suffixIcon"
-			:autofocus="autoFocus"
+			:autofocus="autofocus"
 			:tooltip="tooltip"
 			:class="getClassInput()"
 			:style="{
@@ -71,7 +71,7 @@ const {
 	onChange,
 	borderRadius,
 	shadow,
-	autoFocus,
+	autofocus,
 	tooltip,
 	hideLabel,
 	readonly,

@@ -14,7 +14,6 @@
 			:validation-messages="validation.messages"
 			:validation-label="label"
 			validation-visibility="dirty"
-			:autofocus="autoFocus"
 			:step="stepInterval"
 			:help="helpText"
 		>
@@ -34,6 +33,7 @@
 						:suffix-icon="suffixIcon"
 						:tooltip="tooltip"
 						:class="getClassInput()"
+						:autofocus="autofocus"
 						:style="{
 							borderRadius: borderRadius ?? undefined,
 						}"
@@ -85,7 +85,7 @@ const {
 	prefix,
 	shadow,
 	helpText,
-	autoFocus,
+	autofocus,
 	tooltip,
 	showThousandsSeparator,
 	decimalPlaces = 3,

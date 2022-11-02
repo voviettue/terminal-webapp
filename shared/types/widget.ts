@@ -104,6 +104,7 @@ export interface ButtonWidget extends Widget {
 	outline?: boolean
 	onClick?: string
 	buttonType?: string
+	tooltip?: string
 }
 export interface IconButtonWidget extends Widget {
 	icon: string

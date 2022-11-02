@@ -7,7 +7,7 @@ interface Validation {
 
 export const useValidation = (
 	validations: Record<string, any>[],
-	required: boolean
+	required?: boolean
 ) => {
 	const validation: Ref<Validation> = ref({ rules: '', messages: {} })
 	const booleanRules = ['accepted', 'email', 'number', 'required', 'url']

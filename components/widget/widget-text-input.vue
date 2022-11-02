@@ -15,7 +15,7 @@
 			:input-type="masked ? 'password' : 'text'"
 			:validation="validation.rules"
 			:validation-messages="validation.messages"
-			validation-visibility="live"
+			validation-visibility="dirty"
 			:placeholder="placeholder"
 			:maxlength="maxLength"
 			:minlength="minLength"

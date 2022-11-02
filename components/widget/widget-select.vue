@@ -14,13 +14,12 @@
 				type="dropdown"
 				:validation="validation.rules"
 				:validation-messages="validation.messages"
-				validation-visibility="live"
 				:placeholder="placeholder"
 				:options="choices"
 				:disabled="disabled"
 				inner-class="!border-none"
 				:help="helpText"
-				:class="classDropDown"
+				:class="classDropDown()"
 				:style="{
 					borderRadius: borderRadius,
 				}"

@@ -1,7 +1,6 @@
 <template>
 	<div ref="refNumber">
 		<FormField
-			ref="refNumber"
 			:label="label"
 			:label-position="labelPosition"
 			:label-alignment="alignment"
@@ -17,10 +16,9 @@
 				input-type="text"
 				:validation="validation.rules"
 				:validation-messages="validation.messages"
-				validation-visibility="live"
+				:validation-label="label"
 				:placeholder="placeholder"
-				:min="minValue"
-				:max="maxValue"
+				validation-visibility="dirty"
 				:readonly="readonly"
 				:disabled="disabled"
 				:suffix="suffix"
@@ -57,11 +55,9 @@ interface Props {
 const props: any = defineProps<Props>()
 // const options = ref(props.widget.options)
 const {
-	defaultValue,
+	defaultValue = 0,
 	required,
 	hideLabel,
-	minValue,
-	maxValue,
 	placeholder,
 	prefixIcon,
 	readonly,
@@ -86,15 +82,16 @@ const {
 	autoFocus,
 	tooltip,
 	showThousandsSeparator,
-	decimalPlaces = 0,
+	decimalPlaces = 3,
 } = props.widget.options as NumberInputWidget
 const formatingNumber = (val) => {
-	let text = ''
+	let text: string = val || 0
+	text = text.toString().replaceAll(',', '')
 	if (decimalPlaces) {
-		text = Number.parseFloat(val).toFixed(decimalPlaces)
+		text = Number.parseFloat(text).toFixed(decimalPlaces)
 	}
 	if (showThousandsSeparator) {
-		text = Number.parseFloat(val).toLocaleString('en-US', {
+		text = Number.parseFloat(text).toLocaleString('en-US', {
 			maximumFractionDigits: decimalPlaces,
 			minimumFractionDigits: decimalPlaces,
 		})
@@ -157,13 +154,15 @@ onMounted(() => {
 			if (event.target.value.includes('.')) return isNum
 			return isNum || event.charCode === 46
 		}
-		input.onkeyup = (event) => {
-			if (maxValue && Number.parseFloat(event.target.value) > maxValue)
-				event.target.value = maxValue
-			if (minValue && Number.parseFloat(event.target.value) < minValue)
-				event.target.value = minValue
+		input.onpaste = (event) => {
+			let text = event?.clipboardData?.getData('Text') || ''
+			text = text.replaceAll(',', '')
+			if (!/^[0-9]+((.){1}[0-9]+)?$/i.test(text)) return false
 		}
 	}
+	validation.value.rules = validation.value.rules
+		.replace('min', 'minValue')
+		.replace('max', 'maxValue')
 })
 </script>
 <style lang="scss" scoped>

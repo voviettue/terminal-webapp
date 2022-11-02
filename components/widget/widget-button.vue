@@ -7,6 +7,7 @@
 			:right-icon="rightIcon"
 			:variant="buttonVariant"
 			:size="buttonSize"
+			:tooltip="tooltip"
 			:style="{
 				borderRadius: borderRadius || '0px',
 			}"
@@ -41,6 +42,7 @@ const {
 	onClick,
 	disabled,
 	buttonType,
+	tooltip,
 } = (props.widget?.options || {}) as Partial<ButtonWidget>
 
 const { result: text } = useBindData(label, props.widget?.context)

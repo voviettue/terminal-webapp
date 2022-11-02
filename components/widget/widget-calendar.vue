@@ -41,14 +41,13 @@
 					v-if="calendarScreens !== 'tablet' && calendarScreens !== 'mobile'"
 					class="select-view md:ml-4 md:ml-4 md:flex md:items-center"
 				>
-					<Dropdown
-						:value="view"
+					<TwSelect
+						:model-value="view"
 						:options="[
 							{ text: 'Month view', value: 'dayGridMonth' },
 							{ text: 'Week view', value: 'timeGridWeek' },
 							{ text: 'Day view', value: 'timeGridDay' },
 						]"
-						:allow-search="true"
 						@update:model-value="updateView"
 					/>
 				</div>
@@ -166,7 +165,6 @@ import interactionPlugin from '@fullcalendar/interaction'
 import format from 'date-fns/format'
 import startOfDay from 'date-fns/startOfDay'
 import { calendarEventParse } from '../../utils/calendar-event-parse'
-import Dropdown from '../tw/dropdown.vue'
 import { CalendarWidget } from '~/shared/types'
 
 interface Props {

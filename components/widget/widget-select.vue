@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted, defineEmits } from 'vue'
 import { SelectWidget } from '~/shared/types'
-import { strToSlug } from '~~/utils/str-to-slug'
+import { convertInputName } from '~~/utils/convert-input-name'
 
 interface Props {
 	widget: SelectWidget
@@ -79,7 +79,7 @@ watch([result], () => {
 	value.value = result.value
 })
 
-const name = strToSlug(props.widget.name || '')
+const name = convertInputName(props.widget.name)
 
 const onChangeText = (val) => {
 	emit('input', val)

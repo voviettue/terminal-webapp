@@ -43,7 +43,7 @@ import { ref, watch, defineEmits } from 'vue'
 import { format } from 'date-fns'
 import { DatetimeInputWidget } from '~/shared/types'
 import { useValidation } from '~/composables/use-validation'
-import { strToSlug } from '~~/utils/str-to-slug'
+import { convertInputName } from '~~/utils/convert-input-name'
 
 interface Props {
 	widget: DatetimeInputWidget
@@ -95,7 +95,7 @@ const formatDate = (value: string | number) => {
 }
 
 const value = ref(formatDate(defaultValue) ?? null)
-const name = strToSlug(props.widget.name || '')
+const name = convertInputName(props.widget.name)
 
 const { result } = useBindData(defaultValue)
 watch([result], () => {

@@ -41,7 +41,7 @@
 import { ref, watch, defineEmits } from 'vue'
 import { TextInputWidget } from '~/shared/types'
 import { useValidation } from '~/composables/use-validation'
-import { strToSlug } from '~~/utils/str-to-slug'
+import { convertInputName } from '~~/utils/convert-input-name'
 
 interface Props {
 	widget: TextInputWidget
@@ -82,7 +82,7 @@ const {
 } = props.widget.options
 
 const value = ref(defaultValue)
-const name = strToSlug(props.widget.name || '')
+const name = convertInputName(props.widget.name)
 
 const { result } = useBindData(defaultValue)
 watch([result], () => {

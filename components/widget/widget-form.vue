@@ -48,7 +48,7 @@ const { cloneDeep } = useLodash()
 const { executeAction } = useContext()
 
 const widgets: Widget[] = inject('widgets')
-const values = ref(null)
+const values = ref({})
 
 const options = props.widget.options
 const {
@@ -70,7 +70,7 @@ const { result: rawValue } = useBindData(defaultValue, props.widget?.context)
 const initialValues = parseJson(rawValue.value, {})
 
 watchEffect(() => {
-	values.value = parseJson(rawValue.value, undefined)
+	values.value = parseJson(rawValue.value, {})
 })
 
 const items = widgets.filter((e) => e.parent === props.widget.id)

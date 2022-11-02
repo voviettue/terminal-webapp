@@ -48,7 +48,8 @@
 import { ref, defineEmits } from 'vue'
 import { NumberInputWidget } from '~/shared/types'
 import { useValidation } from '~/composables/use-validation'
-import { strToSlug } from '~~/utils/str-to-slug'
+import { convertInputName } from '~~/utils/convert-input-name'
+
 interface Props {
 	widget: NumberInputWidget
 }
@@ -102,7 +103,7 @@ const formatingNumber = (val) => {
 }
 
 const value = ref(formatingNumber(defaultValue))
-const name = strToSlug(props.widget.name || '')
+const name = convertInputName(props.widget.name)
 const id = computed(() => props.widget.key)
 const { result } = useBindData(defaultValue as string)
 watch([result], () => {

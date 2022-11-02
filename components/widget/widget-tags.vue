@@ -3,7 +3,7 @@
 		<span
 			v-for="item in items"
 			:key="`text-${item.value}`"
-			:class="`inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-800 shadow-${
+			:class="`inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-800 drop-shadow-${
 				shadow ?? 'md'
 			}`"
 			:style="{ ...styles, ...item.style }"

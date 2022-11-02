@@ -100,19 +100,10 @@ export default {
 	},
 	inputs: {
 		dropdown: createInput(DropdownComponent, {
-			props: [
-				'value',
-				'options',
-				'placeholder',
-				'disabled',
-				'class',
-				'style',
-				'icon',
-			],
+			props: ['options', 'placeholder', 'disabled', 'class', 'style', 'icon'],
 		}),
 		customInput: createInput(CustomInputComponent, {
 			props: [
-				'value',
 				'placeholder',
 				'inputType',
 				'autocomplete',

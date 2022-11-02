@@ -1,6 +1,11 @@
 <template>
 	<div v-tooltip="tooltip" :class="divClass">
-		<button :disabled="disabled" :class="buttonClass" @click="emit('click')">
+		<button
+			type="button"
+			:disabled="disabled"
+			:class="buttonClass"
+			@click="emit('click')"
+		>
 			<slot name="left-icon" class="pr-2">
 				<div v-if="leftIcon" class="text-xl flex items-center">
 					<TwIcon :name="leftIcon" class="pr-2 h-max opacity-70"></TwIcon>
@@ -19,11 +24,19 @@
 </template>
 <script setup lang="ts">
 interface Props {
-	variant?: string
+	variant?:
+		| 'primary'
+		| 'secondary'
+		| 'success'
+		| 'warning'
+		| 'danger'
+		| 'info'
+		| 'light'
+		| 'dark'
+	type?: 'solid' | 'outline' | 'link' | 'ghost'
 	disabled?: boolean
 	leftIcon?: string
 	rightIcon?: string
-	type?: string
 	size?: string
 	tooltip?: string
 	text?: string

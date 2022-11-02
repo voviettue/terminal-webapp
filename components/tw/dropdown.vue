@@ -84,7 +84,11 @@ const emit = defineEmits(['update:modelValue'])
 
 const query = ref('')
 const selectedOption = ref(null)
-selectedOption.value = props.options.find((e) => e.value === props.value)
+
+watchEffect(() => {
+	selectedOption.value = props.options.find((e) => e.value === props.value)
+})
+
 const filteredOptions = computed(() =>
 	props.options.filter((e) =>
 		e.text?.toLowerCase().includes(query.value?.toLowerCase())

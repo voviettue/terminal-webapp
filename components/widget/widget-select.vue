@@ -1,21 +1,4 @@
 <template>
-	<!-- <div
-		ref="select"
-		:class="[
-			'form-select-input',
-			alignment === 'right' ? 'align-right' : '',
-			labelPosition !== 'left' ? 'label-top' : 'label-left',
-			'w-full',
-		]"
-	>
-		<div :class="getClassLabel()" :style="styleLabel">
-			<span>{{ label }}</span>
-		</div>
-		<div :class="getClassFormKitInput()">
-			
-		</div>
-	</div> -->
-
 	<FormField
 		:label="label"
 		:label-position="labelPosition"
@@ -27,13 +10,13 @@
 		<div ref="selectRef">
 			<FormKit
 				v-model="value"
+				:name="name"
 				type="dropdown"
 				:validation="validation.rules"
 				:validation-messages="validation.messages"
 				validation-visibility="live"
 				:placeholder="placeholder"
 				:options="choices"
-				:name="label"
 				:disabled="disabled"
 				inner-class="!border-none"
 				:help="helpText"
@@ -51,6 +34,7 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted, defineEmits } from 'vue'
 import { SelectWidget } from '~/shared/types'
+import { strToSlug } from '~~/utils/str-to-slug'
 
 interface Props {
 	widget: SelectWidget
@@ -94,6 +78,8 @@ const { result } = useBindData(defaultValue as string)
 watch([result], () => {
 	value.value = result.value
 })
+
+const name = strToSlug(props.widget.name || '')
 
 const onChangeText = (val) => {
 	emit('input', val)

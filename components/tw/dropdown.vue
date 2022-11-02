@@ -97,6 +97,7 @@ const dropdownClass = [
 	'flex',
 	'justify-start',
 	'items-center',
+	'bg-white',
 ]
 const query = ref('')
 const selectedOption = ref(null)

@@ -1,6 +1,5 @@
 <template>
 	<FormField
-		v-tooltip="tooltip"
 		:label="label"
 		:label-position="labelPosition"
 		:label-alignment="alignment"
@@ -28,6 +27,7 @@
 			:prefix-icon="prefixIcon"
 			:suffix-icon="suffixIcon"
 			:autofocus="autoFocus"
+			:tooltip="tooltip"
 			:class="getClassInput()"
 			:style="{
 				borderRadius: borderRadius ?? undefined,
@@ -49,7 +49,7 @@ interface Props {
 	widget: DatetimeInputWidget
 }
 
-const emit = defineEmits(['input', 'reset'])
+const emit = defineEmits(['input'])
 const props: any = defineProps<Props>()
 const {
 	defaultValue,
@@ -83,12 +83,22 @@ const {
 	labelFontStyle,
 } = props.widget.options
 
-const formatDate = (value: string | number) => {
+const formatDateTime = (value: string | number, validationFormat = false) => {
 	try {
-		return format(
-			new Date(value),
-			timePrecision ? "yyyy-MM-dd'T'HH:mm:ss" : 'yyyy-MM-dd'
-		)
+		switch (timePrecision) {
+			case 'hh:mm':
+				return format(
+					new Date(value),
+					`yyyy-MM-dd${validationFormat ? ' ' : "'T'"}HH:mm`
+				)
+			case 'hh:mm:ss':
+				return format(
+					new Date(value),
+					`yyyy-MM-dd${validationFormat ? ' ' : "'T'"}HH:mm:ss`
+				)
+			default:
+				return format(new Date(value), 'yyyy-MM-dd')
+		}
 	} catch (e) {
 		return null
 	}
@@ -100,7 +110,7 @@ const name = convertInputName(props.widget.name)
 const { result } = useBindData(defaultValue)
 watch([result], () => {
 	const parsedValue = Date.parse(result.value.replaceAll('"', ''))
-	value.value = formatDate(parsedValue)
+	value.value = formatDateTime(parsedValue)
 })
 
 const { getStyles } = useUtils()
@@ -129,7 +139,14 @@ const styleLabel = getStyles({
 	textStyle: labelFontStyle,
 })
 
-const { validation } = useValidation(validations, required)
+const bindValidations = validations.map((el: any) => {
+	const { result: bindValue } = useBindData(el.value)
+	return {
+		...el,
+		value: formatDateTime(bindValue.value, true),
+	}
+})
+const { validation } = useValidation(bindValidations, required)
 
 const getClassInput = () => {
 	const classes = {}
@@ -138,11 +155,11 @@ const getClassInput = () => {
 }
 
 const min = computed(() => {
-	return formatDate(Date.parse(minDate))
+	return formatDateTime(Date.parse(minDate))
 })
 
 const max = computed(() => {
-	return formatDate(Date.parse(maxDate))
+	return formatDateTime(Date.parse(maxDate))
 })
 
 const step = computed(() => {
@@ -154,120 +171,3 @@ const step = computed(() => {
 	}
 })
 </script>
-<style lang="scss" scoped>
-.form-text-input {
-	display: grid;
-	grid-template-columns: repeat(6, minmax(0, 1fr));
-	column-gap: 24px;
-	row-gap: 10px;
-	.grid-1 {
-		grid-column: span 1 / span 6;
-	}
-	.grid-2 {
-		grid-column: span 2 / span 6;
-	}
-	.grid-3 {
-		grid-column: span 3 / span 6;
-	}
-	.grid-4 {
-		grid-column: span 4 / span 6;
-	}
-	.grid-5 {
-		grid-column: span 5 / span 6;
-	}
-	&.has-icon {
-		:deep().formkit-input {
-			border-radius: 0px;
-			border-top: none;
-			border-bottom: none;
-		}
-	}
-	:deep().formkit-message {
-		// position: absolute;
-		width: 100%;
-	}
-	:deep().formkit-inner {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		border: 1px solid #ccc;
-		border-radius: 0px;
-		.formkit-input {
-			border-radius: 0px;
-		}
-	}
-	:deep().formkit-outer {
-		width: 100%;
-	}
-
-	&.readonly {
-		:deep().formkit-outer {
-			pointer-events: none;
-		}
-	}
-	.label-input {
-		display: flex;
-		justify-content: flex-start;
-		align-items: flex-start;
-		padding-top: 5px;
-	}
-	&.align-right.label-left {
-		.label-input {
-			justify-content: flex-end;
-		}
-	}
-
-	&.tooltip {
-		position: relative;
-		word-wrap: break-word;
-		.tooltiptext {
-			visibility: hidden;
-			background-color: black;
-			color: #fff;
-			text-align: center;
-			border-radius: 6px;
-			padding: 5px;
-			position: absolute;
-			z-index: 1000;
-			top: -35px;
-			left: 50%;
-			opacity: 0;
-			transition: opacity 0.3s;
-			font-size: 12px;
-			font-style: normal;
-			font-weight: 400;
-			transform: translateX(-50%);
-			width: max-content;
-			&::after {
-				content: '';
-				position: absolute;
-				top: 100%;
-				left: 50%;
-				margin-left: -5px;
-				border-width: 5px;
-				border-style: solid;
-				border-color: #555 transparent transparent transparent;
-			}
-		}
-		&:hover {
-			.tooltiptext {
-				visibility: visible;
-				opacity: 1;
-			}
-		}
-	}
-	&.label-top {
-		.form-kit-input,
-		.label-input {
-			grid-column: span 6 / span 6;
-		}
-		.label-input {
-			align-items: center;
-			padding: 0;
-		}
-		.tooltiptext {
-			top: -15px;
-		}
-	}
-}
-</style>

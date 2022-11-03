@@ -104,7 +104,7 @@ const formatDateTime = (value: string | number, validationFormat = false) => {
 	}
 }
 
-const value = ref(formatDate(defaultValue) ?? null)
+const value = ref(formatDateTime(defaultValue) ?? null)
 const name = convertInputName(props.widget.name)
 
 const { result } = useBindData(defaultValue)

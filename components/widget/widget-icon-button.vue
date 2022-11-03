@@ -1,29 +1,20 @@
 <template>
-	<div
-		:class="[
-			'flex',
-			'py-4',
-			position === 'left'
-				? 'justify-start'
-				: position === 'right'
-				? 'justify-end'
-				: 'justify-center',
-		]"
-	>
-		<button
-			type="button"
-			:class="[
-				'btn icon',
-				`${buttonSize || 'sm'}`,
-				`${buttonVariant || 'primary'}${outline ? '-outline' : ''}`,
-				`shadow-${shadow || 'md'}`,
-				disable ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
-			]"
-			:style="{ 'border-radius': (borderRadius || 0) + 'px' }"
+	<div :class="buttonClass">
+		<FormKit
+			type="customButton"
+			:disabled="disabled"
+			:variant="buttonVariant"
+			:size="buttonSize"
+			:tooltip="tooltip"
+			:style="{
+				borderRadius: borderRadius || '0px',
+			}"
+			:class="[`shadow-${shadow || null}`, 'icon']"
+			:button-type="buttonType"
 			@click="onButtonClick"
 		>
-			<TwIcon :name="icon" />
-		</button>
+			<TwIcon :name="icon"></TwIcon>
+		</FormKit>
 	</div>
 </template>
 
@@ -40,13 +31,24 @@ const {
 	icon,
 	buttonVariant,
 	position,
-	outline,
 	buttonSize,
 	shadow,
 	borderRadius,
 	onClick,
-	disable,
+	disabled,
+	buttonType,
+	tooltip,
 } = (props.widget?.options || {}) as Partial<IconButtonWidget>
+
+const buttonClass = [
+	'w-full',
+	'flex',
+	position === 'left'
+		? 'justify-start'
+		: position === 'right'
+		? 'justify-end'
+		: 'justify-center',
+]
 
 function onButtonClick() {
 	if (!onClick) return

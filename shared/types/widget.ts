@@ -106,16 +106,8 @@ export interface ButtonWidget extends Widget {
 	buttonType?: string
 	tooltip?: string
 }
-export interface IconButtonWidget extends Widget {
+export interface IconButtonWidget extends Partial<ButtonWidget> {
 	icon: string
-	buttonSize?: string
-	disable: boolean
-	buttonVariant?: string
-	borderRadius?: number
-	shadow?: string
-	position: string
-	outline?: boolean
-	onClick?: string
 }
 
 export interface CalendarWidget extends Widget {

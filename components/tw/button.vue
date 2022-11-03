@@ -51,6 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
 	tooltip: '',
 	text: '',
 })
+const attrs = useAttrs()
 const getTypeButton = () => {
 	const text = props.variant
 	if (props.type === 'solid') return text
@@ -62,6 +63,7 @@ const buttonClass = [
 	`${props.size}`,
 	`${getTypeButton()}`,
 	props.disabled ? 'disabled' : '',
+	((attrs?.class as string) || '')?.includes('icon') ? 'icon ' : '',
 ]
 
 const emit = defineEmits(['click'])

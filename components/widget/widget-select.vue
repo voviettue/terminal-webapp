@@ -14,13 +14,12 @@
 				type="dropdown"
 				:validation="validation.rules"
 				:validation-messages="validation.messages"
-				validation-visibility="live"
 				:placeholder="placeholder"
 				:options="choices"
 				:disabled="disabled"
 				inner-class="!border-none"
 				:help="helpText"
-				:class="classDropDown"
+				:class="classDropDown()"
 				:style="{
 					borderRadius: borderRadius,
 				}"
@@ -107,10 +106,10 @@ const classDropDown = () => {
 }
 
 onMounted(() => {
-	if (allowNone && !choices.find((_) => _.value === null))
+	if (allowNone && !choices.find((_) => _.text === 'Select' && !_.value))
 		choices.unshift({
 			text: 'Select',
-			value: null,
+			value: undefined,
 		})
 	if (allowOther && !choices.find((_) => _.value === 'other'))
 		choices.push({

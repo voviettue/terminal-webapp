@@ -104,6 +104,7 @@ export interface ButtonWidget extends Widget {
 	outline?: boolean
 	onClick?: string
 	buttonType?: string
+	tooltip?: string
 }
 export interface IconButtonWidget extends Widget {
 	icon: string
@@ -152,6 +153,7 @@ export interface InputWidget extends Widget {
 	validations?: Record<string, any>[]
 	prefixIcon?: string
 	suffixIcon?: string
+	autofocus?: boolean
 }
 
 export interface TextInputWidget extends InputWidget {
@@ -162,7 +164,6 @@ export interface TextInputWidget extends InputWidget {
 	regex?: string
 	errorMessage?: string
 	alignment?: string
-	autoFocus?: boolean
 	reset?: boolean
 	tooltip?: string
 }
@@ -175,7 +176,6 @@ export interface NumberInputWidget extends InputWidget {
 	regex?: string
 	errorMessage?: string
 	alignment?: string
-	autoFocus?: boolean
 	reset?: boolean
 	decimalPlaces?: number
 	showThousandsSeparator?: boolean

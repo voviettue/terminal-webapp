@@ -40,7 +40,7 @@ const labelWidth = props.labelPosition === 'top' ? 6 : props.labelWidth
 const inputWidth = props.labelPosition === 'top' ? 6 : 6 - labelWidth
 
 const labelClass = {
-	'flex items-start': true,
+	'flex items-center ': true,
 	[`grid-${labelWidth}`]: true,
 	'justify-end': props.labelAlignment === 'right',
 	'!justify-start':

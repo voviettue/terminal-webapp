@@ -3,6 +3,7 @@ import { createInput } from '@formkit/vue'
 import DropdownComponent from './components/formkit/dropdown.vue'
 import CustomInputComponent from './components/formkit/input.vue'
 import CustomButtonComponet from './components/formkit/button.vue'
+
 const textClassification = {
 	outer: '',
 	label: 'block text-sm font-medium text-gray-700 mb-1',
@@ -140,6 +141,7 @@ export default {
 				'text',
 				'style',
 				'class',
+				'tooltip',
 			],
 		}),
 	},

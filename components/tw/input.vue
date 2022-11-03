@@ -11,7 +11,7 @@
 			</div>
 		</slot>
 		<slot name="prefix-icon" class="pl-2">
-			<div v-if="prefixIcon" class="text-xl flex items-center">
+			<div v-if="prefixIcon" class="text-base flex items-center">
 				<TwIcon
 					v-if="prefixIcon"
 					:name="prefixIcon"
@@ -43,7 +43,7 @@
 		/>
 
 		<slot name="suffix-icon" class="pr-2">
-			<div v-if="suffixIcon" class="text-xl flex items-center">
+			<div v-if="suffixIcon" class="text-base flex items-center">
 				<TwIcon
 					v-if="suffixIcon"
 					:name="suffixIcon"

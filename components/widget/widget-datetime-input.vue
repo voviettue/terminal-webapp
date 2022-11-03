@@ -15,6 +15,7 @@
 			:input-type="timePrecision ? 'datetime-local' : 'date'"
 			:validation="validation.rules"
 			:validation-messages="validation.messages"
+			:validation-label="label"
 			validation-visibility="live"
 			:placeholder="placeholder"
 			:min="min"

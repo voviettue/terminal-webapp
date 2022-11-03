@@ -131,7 +131,7 @@ select {
 	background-size: 1.5em 1.5em;
 	padding-right: 2rem;
 	-webkit-print-color-adjust: exact;
-	color-adjust: exact;
+	print-color-adjust: exact;
 	appearance: none;
 	font-family: 'Inter';
 }

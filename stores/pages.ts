@@ -37,7 +37,9 @@ export const usePageStore = defineStore({
 						],
 					},
 				})
-				this.pages = data ?? ([] as Page[])
+				this.pages = data
+					? data.sort((a: any, b: any) => (a.sort ?? 1000) - (b.sort ?? 1000))
+					: ([] as Page[])
 			} catch (error) {
 				this.error = error
 			} finally {

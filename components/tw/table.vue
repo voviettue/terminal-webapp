@@ -178,7 +178,9 @@ function sortIcon(header: any) {
 }
 
 function alignHeightTable() {
-	const h = table.value.offsetHeight
+	if (!table.value) return
+
+	const h = table.value?.offsetHeight ?? 0
 	if (!minHeight.value || h > parseInt(minHeight.value)) {
 		minHeight.value = `${h}px`
 	}

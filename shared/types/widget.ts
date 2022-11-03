@@ -229,5 +229,6 @@ export interface MenuButtonWidget extends Widget {
 	position: string
 	outline?: boolean
 	buttonType?: string
+	tooltip?: string
 	menuItems?: any
 }

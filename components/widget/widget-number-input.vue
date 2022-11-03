@@ -121,11 +121,11 @@ const formatingNumber = (val) => {
 	return text
 }
 const convertNumber = (val: string): number | string => {
-	const num = val.replaceAll(',', '')
+	const num = (val || '').replaceAll(',', '')
 	if (!num) return null
 	return Number.parseFloat(num)
 }
-const value = ref(defaultValue)
+const value = ref(convertNumber(defaultValue as string))
 const formatedValue = ref(formatingNumber(defaultValue))
 const name = convertInputName(props.widget.name)
 const id = computed(() => props.widget.key)

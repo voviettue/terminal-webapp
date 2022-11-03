@@ -41,7 +41,22 @@
 						@input="onChangeText"
 						@blur="onBlurText"
 						@focus="handleFocus"
-					></TwInput>
+					>
+						<template #step-number>
+							<div class="flex flex-col justify-center border-l">
+								<TwIcon
+									name="keyboard_arrow_up"
+									class="border-b text-base"
+									@click.stop="handleClickIcon('up')"
+								></TwIcon>
+								<TwIcon
+									name="keyboard_arrow_down"
+									class="text-base"
+									@click.stop="handleClickIcon('down')"
+								></TwIcon>
+							</div>
+						</template>
+					</TwInput>
 				</div>
 			</template>
 		</FormKit>
@@ -61,7 +76,7 @@ interface Props {
 const props: any = defineProps<Props>()
 // const options = ref(props.widget.options)
 const {
-	defaultValue = 0,
+	defaultValue,
 	required,
 	hideLabel,
 	placeholder,
@@ -91,7 +106,8 @@ const {
 	decimalPlaces = 3,
 } = props.widget.options as NumberInputWidget
 const formatingNumber = (val) => {
-	let text: string = val || 0
+	if (val === null || val === '') return val
+	let text: string = val
 	text = text.toString().replaceAll(',', '')
 	if (decimalPlaces) {
 		text = Number.parseFloat(text).toFixed(decimalPlaces)
@@ -104,8 +120,9 @@ const formatingNumber = (val) => {
 	}
 	return text
 }
-const convertNumber = (val: string): number => {
+const convertNumber = (val: string): number | string => {
 	const num = val.replaceAll(',', '')
+	if (!num) return null
 	return Number.parseFloat(num)
 }
 const value = ref(defaultValue)
@@ -130,9 +147,27 @@ const onBlurText = (event) => {
 	formatedValue.value = formatingNumber(val)
 }
 
+const handleClickIcon = (event) => {
+	let data = value.value as number | null
+	if (data === null) return
+	switch (event) {
+		case 'up': {
+			data += stepInterval
+			break
+		}
+		case 'down': {
+			data -= stepInterval
+			break
+		}
+	}
+	value.value = data
+	formatedValue.value = formatingNumber(data)
+}
+
 const handleFocus = ($event) => {
 	const val = $event.target.value as string
-	formatedValue.value = convertNumber(val).toString()
+	const converted = convertNumber(val)
+	formatedValue.value = converted ? converted.toString() : ''
 }
 const { getStyles } = useUtils()
 const { usePageStore } = useStore()

@@ -109,9 +109,8 @@ const formatingNumber = (val) => {
 	if (val === null || val === '') return val
 	let text: string = val
 	text = text.toString().replaceAll(',', '')
-	if (decimalPlaces) {
-		text = Number.parseFloat(text).toFixed(decimalPlaces)
-	}
+	text = Number.parseFloat(text).toFixed(decimalPlaces || 0)
+
 	if (showThousandsSeparator) {
 		text = Number.parseFloat(text).toLocaleString('en-US', {
 			maximumFractionDigits: decimalPlaces,
@@ -121,11 +120,11 @@ const formatingNumber = (val) => {
 	return text
 }
 const convertNumber = (val: string): number | string => {
-	const num = (val || '').replaceAll(',', '')
+	const num = (val || '').toString().replaceAll(',', '')
 	if (!num) return null
 	return Number.parseFloat(num)
 }
-const value = ref(convertNumber(defaultValue as string))
+const value = ref(null)
 const formatedValue = ref(formatingNumber(defaultValue))
 const name = convertInputName(props.widget.name)
 const id = computed(() => props.widget.key)

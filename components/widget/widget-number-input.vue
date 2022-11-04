@@ -15,6 +15,7 @@
 			:validation-label="label"
 			validation-visibility="dirty"
 			:step="stepInterval"
+			:name="name"
 			:help="helpText"
 		>
 			<template #inner>
@@ -22,7 +23,6 @@
 					<TwInput
 						:id="id"
 						v-model="formatedValue"
-						:name="name"
 						type="text"
 						:placeholder="placeholder"
 						:readonly="readonly"
@@ -120,7 +120,7 @@ const formatingNumber = (val) => {
 	return text
 }
 const convertNumber = (val: string): number | string => {
-	const num = (val || '').toString().replaceAll(',', '')
+	const num = (val ?? '').toString().replaceAll(',', '')
 	if (!num) return null
 	return Number.parseFloat(num)
 }
@@ -142,11 +142,14 @@ watch(
 )
 
 const onBlurText = (event) => {
-	const val = event.target.value
+	let val = event.target.value
+	if (val === '-') {
+		val = ''
+	}
 	formatedValue.value = formatingNumber(val)
 }
 
-const handleClickIcon = (event) => {
+const handleClickIcon = (event, key?) => {
 	let data = value.value as number | null
 	if (data === null) return
 	switch (event) {
@@ -160,13 +163,17 @@ const handleClickIcon = (event) => {
 		}
 	}
 	value.value = data
-	formatedValue.value = formatingNumber(data)
+	formatedValue.value = key
+		? convertNumber(data.toFixed(decimalPlaces || 0)) !== null
+			? convertNumber(data.toFixed(decimalPlaces || 0)).toString()
+			: ''
+		: formatingNumber(data)
 }
 
 const handleFocus = ($event) => {
 	const val = $event.target.value as string
 	const converted = convertNumber(val)
-	formatedValue.value = converted ? converted.toString() : ''
+	formatedValue.value = converted !== null ? converted.toString() : ''
 }
 const { getStyles } = useUtils()
 const { usePageStore } = useStore()
@@ -203,13 +210,34 @@ onMounted(() => {
 		const input = refNumber.value.querySelector(`#${props.widget.key}`)
 		input.onkeypress = (event) => {
 			const isNum = event.charCode >= 48 && event.charCode <= 57
-			if (event.target.value.includes('.')) return isNum
-			return isNum || event.charCode === 46
+			const res = {
+				num: isNum,
+				dot: event.charCode === 46,
+				minus: event.charCode === 45,
+			}
+			if (event.target.value.includes('.')) delete res.dot
+			if (event.target.value.includes('-')) delete res.minus
+			return Object.values(res).some((b) => b)
 		}
+
+		input.onkeyup = (event) => {
+			if (event.keyCode === 38) {
+				handleClickIcon('up', true)
+				return
+			}
+			if (event.keyCode === 40) {
+				handleClickIcon('down', true)
+				return
+			}
+			const text = event.target.value
+			if (!/^-([0-9])?/i.test(text))
+				event.target.value = text.replaceAll('-', '')
+		}
+
 		input.onpaste = (event) => {
 			let text = event?.clipboardData?.getData('Text') || ''
 			text = text.replaceAll(',', '')
-			if (!/^[0-9]+((.){1}[0-9]+)?$/i.test(text)) return false
+			if (!/^(-)?[0-9]+((.){1}[0-9]+)?$/i.test(text)) return false
 		}
 	}
 })

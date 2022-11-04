@@ -12,7 +12,7 @@ const textClassification = {
 		'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
 	help: 'text-xs text-gray-500',
 	messages: 'list-none p-0 mt-1 mb-0',
-	message: 'bg-red-100 p-2 rounded-md text-red-500 mb-1 text-xs',
+	message: 'p-2 rounded-md text-red-500 mb-1 text-xs',
 }
 const buttonClassification = {
 	wrapper: 'mb-1',

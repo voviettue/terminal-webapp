@@ -16,6 +16,8 @@
 						v-if="!hideReset"
 						:variant="resetVariant"
 						:type="resetType"
+						:style="resetStyles"
+						:class="{ [`shadow-${resetShadow}`]: !!resetShadow }"
 						@click="onResetHandler"
 					>
 						{{ resetLabel }}
@@ -23,6 +25,8 @@
 					<TwButton
 						v-if="!hideSubmit"
 						:variant="submitVariant"
+						:style="submitStyles"
+						:class="{ [`shadow-${submitShadow}`]: !!submitShadow }"
 						:type="submitType"
 						@click="onSubmitHandler"
 					>
@@ -58,11 +62,15 @@ const {
 	resetLabel = 'Reset',
 	resetType = 'solid',
 	resetVariant = 'secondary',
+	resetBorderRadius,
+	resetShadow,
 	onReset,
 	hideSubmit = false,
 	submitLabel = 'Submit',
 	submitType,
 	submitVariant,
+	submitBorderRadius,
+	submitShadow,
 	onSubmit,
 } = options
 const { result: rawValue } = useBindData(defaultValue, props.widget?.context)
@@ -75,6 +83,14 @@ watchEffect(() => {
 
 const items = widgets.filter((e) => e.parent === props.widget.id)
 const styles = getStyles(options)
+const resetStyles = getStyles({
+	borderRadius: resetBorderRadius,
+	shadow: resetShadow,
+})
+const submitStyles = getStyles({
+	borderRadius: submitBorderRadius,
+	shadow: submitShadow,
+})
 
 async function onResetHandler() {
 	if (onReset) {

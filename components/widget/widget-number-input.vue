@@ -15,6 +15,7 @@
 			:validation-label="label"
 			validation-visibility="dirty"
 			:step="stepInterval"
+			:name="name"
 			:help="helpText"
 		>
 			<template #inner>
@@ -22,7 +23,6 @@
 					<TwInput
 						:id="id"
 						v-model="formatedValue"
-						:name="name"
 						type="text"
 						:placeholder="placeholder"
 						:readonly="readonly"
@@ -41,7 +41,22 @@
 						@input="onChangeText"
 						@blur="onBlurText"
 						@focus="handleFocus"
-					></TwInput>
+					>
+						<template #step-number>
+							<div class="flex flex-col justify-center border-l">
+								<TwIcon
+									name="keyboard_arrow_up"
+									class="border-b text-base"
+									@click.stop="handleClickIcon('up')"
+								></TwIcon>
+								<TwIcon
+									name="keyboard_arrow_down"
+									class="text-base"
+									@click.stop="handleClickIcon('down')"
+								></TwIcon>
+							</div>
+						</template>
+					</TwInput>
 				</div>
 			</template>
 		</FormKit>
@@ -61,7 +76,7 @@ interface Props {
 const props: any = defineProps<Props>()
 // const options = ref(props.widget.options)
 const {
-	defaultValue = 0,
+	defaultValue,
 	required,
 	hideLabel,
 	placeholder,
@@ -91,11 +106,11 @@ const {
 	decimalPlaces = 3,
 } = props.widget.options as NumberInputWidget
 const formatingNumber = (val) => {
-	let text: string = val || 0
+	if (val === null || val === '') return val
+	let text: string = val
 	text = text.toString().replaceAll(',', '')
-	if (decimalPlaces) {
-		text = Number.parseFloat(text).toFixed(decimalPlaces)
-	}
+	text = Number.parseFloat(text).toFixed(decimalPlaces || 0)
+
 	if (showThousandsSeparator) {
 		text = Number.parseFloat(text).toLocaleString('en-US', {
 			maximumFractionDigits: decimalPlaces,
@@ -104,11 +119,12 @@ const formatingNumber = (val) => {
 	}
 	return text
 }
-const convertNumber = (val: string): number => {
-	const num = val.replaceAll(',', '')
+const convertNumber = (val: string): number | string => {
+	const num = (val ?? '').toString().replaceAll(',', '')
+	if (!num) return null
 	return Number.parseFloat(num)
 }
-const value = ref(defaultValue)
+const value = ref(null)
 const formatedValue = ref(formatingNumber(defaultValue))
 const name = convertInputName(props.widget.name)
 const id = computed(() => props.widget.key)
@@ -126,13 +142,38 @@ watch(
 )
 
 const onBlurText = (event) => {
-	const val = event.target.value
+	let val = event.target.value
+	if (val === '-') {
+		val = ''
+	}
 	formatedValue.value = formatingNumber(val)
+}
+
+const handleClickIcon = (event, key?) => {
+	let data = value.value as number | null
+	if (data === null) return
+	switch (event) {
+		case 'up': {
+			data += stepInterval
+			break
+		}
+		case 'down': {
+			data -= stepInterval
+			break
+		}
+	}
+	value.value = data
+	formatedValue.value = key
+		? convertNumber(data.toFixed(decimalPlaces || 0)) !== null
+			? convertNumber(data.toFixed(decimalPlaces || 0)).toString()
+			: ''
+		: formatingNumber(data)
 }
 
 const handleFocus = ($event) => {
 	const val = $event.target.value as string
-	formatedValue.value = convertNumber(val).toString()
+	const converted = convertNumber(val)
+	formatedValue.value = converted !== null ? converted.toString() : ''
 }
 const { getStyles } = useUtils()
 const { usePageStore } = useStore()
@@ -169,13 +210,34 @@ onMounted(() => {
 		const input = refNumber.value.querySelector(`#${props.widget.key}`)
 		input.onkeypress = (event) => {
 			const isNum = event.charCode >= 48 && event.charCode <= 57
-			if (event.target.value.includes('.')) return isNum
-			return isNum || event.charCode === 46
+			const res = {
+				num: isNum,
+				dot: event.charCode === 46,
+				minus: event.charCode === 45,
+			}
+			if (event.target.value.includes('.')) delete res.dot
+			if (event.target.value.includes('-')) delete res.minus
+			return Object.values(res).some((b) => b)
 		}
+
+		input.onkeyup = (event) => {
+			if (event.keyCode === 38) {
+				handleClickIcon('up', true)
+				return
+			}
+			if (event.keyCode === 40) {
+				handleClickIcon('down', true)
+				return
+			}
+			const text = event.target.value
+			if (!/^-([0-9])?/i.test(text))
+				event.target.value = text.replaceAll('-', '')
+		}
+
 		input.onpaste = (event) => {
 			let text = event?.clipboardData?.getData('Text') || ''
 			text = text.replaceAll(',', '')
-			if (!/^[0-9]+((.){1}[0-9]+)?$/i.test(text)) return false
+			if (!/^(-)?[0-9]+((.){1}[0-9]+)?$/i.test(text)) return false
 		}
 	}
 })

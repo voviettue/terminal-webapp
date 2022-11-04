@@ -51,7 +51,7 @@
 				></TwIcon>
 			</div>
 		</slot>
-
+		<slot name="step-number"></slot>
 		<slot name="suffix" class="px-2">
 			<div
 				v-if="suffix"

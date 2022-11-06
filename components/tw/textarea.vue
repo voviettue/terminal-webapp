@@ -1,34 +1,27 @@
+<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-	<div
-		:class="[
-			'flex',
-			'justify-start',
-			'items-center',
-			'w-full',
-			'bg-white',
-			disabled
-				? 'bg-slate-200 opacity-50 pointer-events-none cursor-not-allowed'
-				: '',
-		]"
-	>
-		<textarea
-			v-model="text"
-			:rows="rows"
-			:placeholder="placeholder"
-			:autocomplete="autocompleted"
-			:name="name"
-			:readonly="readonly"
-			class="w-full border border-solid border-slate-400 px-3 py-2 rounded"
-			:class="[readonly ? 'bg-slate-200 ' : '']"
-			@onBlur="emit('blur', $event.target.value)"
-			@input="handleInput($event)"
-		></textarea>
-		<slot></slot>
-	</div>
+	<textarea
+		:id="id"
+		v-model="value"
+		v-tooltip="tooltip"
+		:style="attrs?.style"
+		:rows="rows"
+		:placeholder="placeholder"
+		:autocomplete="autocompleted"
+		:disabled="disabled"
+		:name="name"
+		:readonly="readonly"
+		:class="textareaClass"
+		:autofocus="autofocus"
+		@blur="emit('blur', $event)"
+		@focus="emit('focus', $event)"
+	></textarea>
+	<span v-if="showWorkLimit" class="work-limit">{{ workLength }}</span>
 </template>
 <script setup lang="ts">
 const props = withDefaults(
 	defineProps<{
+		id?: string
 		modelValue?: string
 		placeholder?: string
 		rows?: number
@@ -36,8 +29,12 @@ const props = withDefaults(
 		name?: string
 		readonly?: boolean
 		disabled?: boolean
+		showWorkLimit?: boolean
+		tooltip?: string
+		autofocus?: boolean
 	}>(),
 	{
+		id: undefined,
 		modelValue: '',
 		placeholder: '',
 		autocompleted: 'off',
@@ -45,13 +42,41 @@ const props = withDefaults(
 		readonly: false,
 		disabled: false,
 		rows: 3,
+		showWorkLimit: false,
+		tooltip: '',
+		autofocus: false,
 	}
 )
-const text = ref(props.modelValue || '')
-const emit = defineEmits(['update:modelValue', 'blur', 'change'])
-const handleInput = (event) => {
-	emit('update:modelValue', event.target.value)
-	emit('change', event.target.value)
-}
+const value = computed({
+	get: () => {
+		return props.modelValue
+	},
+	set: (newValue) => {
+		emit('update:modelValue', newValue)
+		emit('change', newValue)
+	},
+})
+const workLength = computed(() => {
+	return value.value?.length
+})
+
+const emit = defineEmits(['update:modelValue', 'blur', 'change', 'focus'])
+const attrs = useAttrs()
+const textareaClass = [
+	props.readonly ? 'bg-slate-200 ' : '',
+	'w-full',
+	'px-4',
+	'py-2',
+	'border',
+	'border-gray-300',
+	'relative',
+	attrs?.class,
+]
 </script>
-<style scoped></style>
+<style lang="scss" scoped>
+.work-limit {
+	position: absolute;
+	top: calc(50% - 14px);
+	right: 20px;
+}
+</style>

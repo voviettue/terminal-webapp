@@ -106,7 +106,7 @@ const {
 	decimalPlaces = 3,
 } = props.widget.options as NumberInputWidget
 const formatingNumber = (val) => {
-	if (val === null || val === '') return val
+	if (val === null || val === '' || val === undefined) return null
 	let text: string = val
 	text = text.toString().replaceAll(',', '')
 	text = Number.parseFloat(text).toFixed(decimalPlaces || 0)

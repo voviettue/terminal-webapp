@@ -19,6 +19,7 @@ import WidgetTags from '~~/components/widget/widget-tags.vue'
 import widgetTabs from '~/components/widget/widget-tabs.vue'
 import WidgetDatetimeInput from '~~/components/widget/widget-datetime-input.vue'
 import WidgetMenuButton from '~~/components/widget/widget-menu-button.vue'
+import WidgetTextare from '~/components/widget/widget-textarea.vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-container', WidgetContainer)
@@ -42,4 +43,5 @@ export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.component('widget-tabs', widgetTabs)
 	nuxtApp.vueApp.component('widget-datetime-input', WidgetDatetimeInput)
 	nuxtApp.vueApp.component('widget-menu-button', WidgetMenuButton)
+	nuxtApp.vueApp.component('widget-textarea', WidgetTextare)
 })

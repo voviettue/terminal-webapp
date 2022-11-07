@@ -36,7 +36,7 @@ const { result: rawData } = useBindData(
 	props.widget?.context
 )
 const data = computed(() => {
-	return parseJson(rawData.value, [])
+	return parseJson(rawData.value, [{}])
 })
 
 function addContext(childWidget: Widget, dataItem: any) {

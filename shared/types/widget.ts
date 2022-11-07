@@ -146,6 +146,8 @@ export interface InputWidget extends Widget {
 	prefixIcon?: string
 	suffixIcon?: string
 	autofocus?: boolean
+	tooltip?: string
+	alignment?: string
 }
 
 export interface TextInputWidget extends InputWidget {
@@ -155,19 +157,13 @@ export interface TextInputWidget extends InputWidget {
 	masked?: boolean
 	regex?: string
 	errorMessage?: string
-	alignment?: string
 	reset?: boolean
-	tooltip?: string
 }
 
 export interface NumberInputWidget extends InputWidget {
-	minValue?: number
-	maxValue?: number
-	tooltip?: string
 	masked?: boolean
 	regex?: string
 	errorMessage?: string
-	alignment?: string
 	reset?: boolean
 	decimalPlaces?: number
 	showThousandsSeparator?: boolean
@@ -181,6 +177,11 @@ export interface SelectWidget extends InputWidget {
 	alignment?: string
 	allowNone?: boolean
 	icon?: string
+}
+
+export interface TextareaInput extends InputWidget {
+	showWorkLimit?: boolean
+	trim?: boolean
 }
 
 export interface TagsWidget extends Widget {

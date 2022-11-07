@@ -3,6 +3,7 @@ import { createInput } from '@formkit/vue'
 import DropdownComponent from './components/formkit/dropdown.vue'
 import CustomInputComponent from './components/formkit/input.vue'
 import CustomButtonComponet from './components/formkit/button.vue'
+import CustomTextAreaComponent from './components/formkit/textarea.vue'
 
 const textClassification = {
 	outer: '',
@@ -142,6 +143,19 @@ export default {
 				'style',
 				'class',
 				'tooltip',
+			],
+		}),
+		customTextarea: createInput(CustomTextAreaComponent, {
+			props: [
+				'disabled',
+				'tooltip',
+				'autocompleted',
+				'placeholder',
+				'rows',
+				'showWorkLimit',
+				'style',
+				'class',
+				'autofocus',
 			],
 		}),
 	},
